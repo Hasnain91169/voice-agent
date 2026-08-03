@@ -1,0 +1,10 @@
+flowchart LR
+  scenarios[Scenario YAML] --> caller[LLM simulated caller]
+  caller --> textmode[Text mode: agent layer]
+  caller --> audiomode[Audio mode: loopback transport]
+  audiomode --> pipeline[VAD + endpointer + echo gate + barge-in]
+  textmode --> judge[LLM judge]
+  pipeline --> judge
+  judge --> verdict[handled_well + goal_met + grounded]
+  scenarios --> deterministic[deterministic checks]
+  deterministic --> verdict

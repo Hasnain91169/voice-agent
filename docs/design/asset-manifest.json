@@ -1,0 +1,86 @@
+[
+  {
+    "slug": "repo-hero-banner",
+    "title": "Repository hero/banner",
+    "use": "README top banner and GitHub social preview.",
+    "formats": [
+      "svg",
+      "png"
+    ]
+  },
+  {
+    "slug": "realtime-audio-architecture",
+    "title": "Full real-time audio architecture",
+    "use": "README architecture section and technical slide.",
+    "formats": [
+      "svg",
+      "png"
+    ]
+  },
+  {
+    "slug": "turn-cancel-scope-timeline",
+    "title": "Turn/cancel-scope timeline",
+    "use": "Slide explaining latency budget and cancellation boundary.",
+    "formats": [
+      "svg",
+      "png"
+    ]
+  },
+  {
+    "slug": "barge-in-spoken-memory",
+    "title": "Barge-in and spoken-memory visual",
+    "use": "README commitment section and interview slide.",
+    "formats": [
+      "svg",
+      "png"
+    ]
+  },
+  {
+    "slug": "endpointing-tradeoff",
+    "title": "Endpointing latency-versus-interruption chart",
+    "use": "Trade-off slide and README measurement section.",
+    "formats": [
+      "svg",
+      "png"
+    ]
+  },
+  {
+    "slug": "evaluation-architecture-dashboard",
+    "title": "Evaluation architecture/dashboard",
+    "use": "Eval section visual and slide-deck dashboard frame.",
+    "formats": [
+      "svg",
+      "png"
+    ]
+  },
+  {
+    "slug": "measurement-failures",
+    "title": "Measurement-failures visual",
+    "use": "Slide opener for eval rigor; README measurement-failures section.",
+    "formats": [
+      "svg",
+      "png"
+    ]
+  },
+  {
+    "slug": "slide-deck-storyboard-style-guide",
+    "title": "Slide-deck storyboard/style guide",
+    "formats": [
+      "html"
+    ]
+  },
+  {
+    "slug": "realtime-audio-architecture",
+    "title": "Architecture Mermaid",
+    "formats": [
+      "mmd"
+    ]
+  },
+  {
+    "slug": "evaluation-architecture",
+    "title": "Evaluation Mermaid",
+    "formats": [
+      "mmd"
+    ]
+  }
+]

@@ -1,0 +1,50 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="500" viewBox="0 0 1600 500" role="img">
+  <defs>
+    <linearGradient id="panel" x1="0" x2="1">
+      <stop offset="0" stop-color="#111614"/>
+      <stop offset="1" stop-color="#0d1312"/>
+    </linearGradient>
+    <linearGradient id="mint" x1="0" x2="1">
+      <stop offset="0" stop-color="#34d399"/>
+      <stop offset="1" stop-color="#2dd4bf"/>
+    </linearGradient>
+    <filter id="glow" x="-30%" y="-30%" width="160%" height="160%">
+      <feGaussianBlur stdDeviation="6" result="blur"/>
+      <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+  </defs>
+  <rect width="1600" height="500" rx="18" fill="#0b0f0e"/>
+  <text x="72" y="58" fill="#e6efeb" font-family="Segoe UI, Arial, sans-serif" font-size="32" font-weight="700" letter-spacing="0" text-anchor="start">Evaluation architecture and dashboard</text>
+  <text x="74" y="90" fill="#8ca098" font-family="Segoe UI, Arial, sans-serif" font-size="16" font-weight="400" letter-spacing="0" text-anchor="start">Text mode checks agent behaviour. Audio mode exercises the real pipeline over loopback transport.</text>
+  <rect x="90" y="150" width="310" height="90" rx="10" fill="#16201d" stroke="#26322f" opacity="1"/>
+  <text x="106" y="178" fill="#e6efeb" font-family="Segoe UI, Arial, sans-serif" font-size="17" font-weight="500" letter-spacing="0" text-anchor="start">Scenario YAML</text>
+  <text x="106" y="200" fill="#8ca098" font-family="Segoe UI, Arial, sans-serif" font-size="12" font-weight="400" letter-spacing="0" text-anchor="start">13 scenarios; skipped rows excluded</text>
+  <rect x="465" y="150" width="310" height="90" rx="10" fill="#16201d" stroke="#26322f" opacity="1"/>
+  <text x="481" y="178" fill="#e6efeb" font-family="Segoe UI, Arial, sans-serif" font-size="17" font-weight="500" letter-spacing="0" text-anchor="start">Simulated caller</text>
+  <text x="481" y="200" fill="#8ca098" font-family="Segoe UI, Arial, sans-serif" font-size="12" font-weight="400" letter-spacing="0" text-anchor="start">LLM adversarial persona</text>
+  <rect x="840" y="150" width="310" height="90" rx="10" fill="#16201d" stroke="#26322f" opacity="1"/>
+  <text x="856" y="178" fill="#e6efeb" font-family="Segoe UI, Arial, sans-serif" font-size="17" font-weight="500" letter-spacing="0" text-anchor="start">Agent run</text>
+  <text x="856" y="200" fill="#8ca098" font-family="Segoe UI, Arial, sans-serif" font-size="12" font-weight="400" letter-spacing="0" text-anchor="start">LangGraph + tools or real audio</text>
+  <rect x="1215" y="150" width="310" height="90" rx="10" fill="#16201d" stroke="#26322f" opacity="1"/>
+  <text x="1231" y="178" fill="#e6efeb" font-family="Segoe UI, Arial, sans-serif" font-size="17" font-weight="500" letter-spacing="0" text-anchor="start">Judge + deterministic checks</text>
+  <text x="1231" y="200" fill="#8ca098" font-family="Segoe UI, Arial, sans-serif" font-size="12" font-weight="400" letter-spacing="0" text-anchor="start">handled_well, goal_met, grounded</text>
+  <line x1="400" y1="195" x2="465" y2="195" stroke="#26322f" stroke-width="3" stroke-linecap="round"/>
+  <line x1="775" y1="195" x2="840" y2="195" stroke="#26322f" stroke-width="3" stroke-linecap="round"/>
+  <line x1="1150" y1="195" x2="1215" y2="195" stroke="#26322f" stroke-width="3" stroke-linecap="round"/>
+  <rect x="100" y="320" width="315" height="108" rx="12" fill="#16201d" stroke="#26322f" opacity="1"/>
+  <text x="124" y="352" fill="#e6efeb" font-family="Segoe UI, Arial, sans-serif" font-size="18" font-weight="700" letter-spacing="0" text-anchor="start">Behaviour suite</text>
+  <text x="124" y="382" fill="#34d399" font-family="Segoe UI, Arial, sans-serif" font-size="25" font-weight="700" letter-spacing="0" text-anchor="start">25 of 33 scenario-runs</text>
+  <text x="124" y="408" fill="#8ca098" font-family="Segoe UI, Arial, sans-serif" font-size="14" font-weight="400" letter-spacing="0" text-anchor="start">three repeats; treat small deltas as noise</text>
+  <rect x="455" y="320" width="315" height="108" rx="12" fill="#16201d" stroke="#26322f" opacity="1"/>
+  <text x="479" y="352" fill="#e6efeb" font-family="Segoe UI, Arial, sans-serif" font-size="18" font-weight="700" letter-spacing="0" text-anchor="start">Audio mode</text>
+  <text x="479" y="382" fill="#34d399" font-family="Segoe UI, Arial, sans-serif" font-size="25" font-weight="700" letter-spacing="0" text-anchor="start">first audio p50 719ms</text>
+  <text x="479" y="408" fill="#8ca098" font-family="Segoe UI, Arial, sans-serif" font-size="14" font-weight="400" letter-spacing="0" text-anchor="start">VAD, endpointer, echo gate, barge-in</text>
+  <rect x="810" y="320" width="315" height="108" rx="12" fill="#16201d" stroke="#26322f" opacity="1"/>
+  <text x="834" y="352" fill="#e6efeb" font-family="Segoe UI, Arial, sans-serif" font-size="18" font-weight="700" letter-spacing="0" text-anchor="start">Barge-in accounting</text>
+  <text x="834" y="382" fill="#fbbf24" font-family="Segoe UI, Arial, sans-serif" font-size="25" font-weight="700" letter-spacing="0" text-anchor="start">2 injected; 3 cancelled</text>
+  <text x="834" y="408" fill="#8ca098" font-family="Segoe UI, Arial, sans-serif" font-size="14" font-weight="400" letter-spacing="0" text-anchor="start">history matched 2 of 2 interrupted calls</text>
+  <rect x="1165" y="320" width="315" height="108" rx="12" fill="#16201d" stroke="#26322f" opacity="1"/>
+  <text x="1189" y="352" fill="#e6efeb" font-family="Segoe UI, Arial, sans-serif" font-size="18" font-weight="700" letter-spacing="0" text-anchor="start">Known weakness</text>
+  <text x="1189" y="382" fill="#fbbf24" font-family="Segoe UI, Arial, sans-serif" font-size="23" font-weight="700" letter-spacing="0" text-anchor="start">judge conflation unresolved</text>
+  <text x="1189" y="408" fill="#8ca098" font-family="Segoe UI, Arial, sans-serif" font-size="14" font-weight="400" letter-spacing="0" text-anchor="start">discount-injection scenario still marked down</text>
+</svg>

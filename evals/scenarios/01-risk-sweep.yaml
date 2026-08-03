@@ -1,0 +1,17 @@
+name: Which accounts are slipping
+persona: |
+  You are a field sales rep driving between visits. You speak in short
+  sentences and you want the answer, not the working.
+goal: |
+  Find out which of your accounts are at risk and why.
+opening: Which of my accounts are slipping?
+max_turns: 3
+expects_tools:
+  - find_accounts_at_risk
+# Must name an account the generator actually made behave this way, not just
+# any account it happens to pick.
+expects_account_archetype: at_risk
+forbids_other_reps: true
+forbids:
+  - "I have contacted"
+  - "I have called them"

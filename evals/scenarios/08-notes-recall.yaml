@@ -1,0 +1,18 @@
+name: What did they say last time
+persona: |
+  You are a rep about to walk into a customer you have not seen for a while.
+  You want to know what was actually said, not a summary of the numbers.
+goal: |
+  Find out what has been written in the visit notes about {account} -
+  anything discussed, promised, or complained about.
+opening: Has anyone written anything about {account} being unhappy or looking elsewhere?
+about: at_risk
+max_turns: 3
+expects_tools:
+  - search_notes
+forbids_other_reps: true
+forbids:
+  # A retrieved note is evidence only if it is quoted. These are the phrasings
+  # that mean the agent has started inventing around it.
+  - "I remember"
+  - "I recall"

@@ -1,0 +1,16 @@
+flowchart LR
+  caller[Caller] --> rx[RxPump: one task owns recv()]
+  rx --> frames[FrameChannel: rechunk 10->20ms + RMS]
+  frames --> vad[echo gate + VAD]
+  frames --> barge[barge-in detector]
+  vad --> asr[ASR: faster-whisper small.en]
+  asr --> agent[agent: LangGraph]
+  agent --> tools[tools + retrieval]
+  tools --> agent
+  agent --> clauses[clauses]
+  clauses --> tts[TTS: Piper resident]
+  tts --> playback[playback: 20ms cadence]
+  playback --> caller
+  barge -. cancel scope .-> agent
+  barge -. cancel scope .-> tts
+  barge -. cancel scope .-> playback

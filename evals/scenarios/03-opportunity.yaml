@@ -1,0 +1,14 @@
+name: What should I pitch
+persona: |
+  You are a rep looking for something to sell. You push back on vague answers
+  and want a number if there is one.
+goal: |
+  Find out what to sell this account that they are not already buying.
+opening: I'm seeing {account} later. What should I be pitching them?
+about: category_gap
+max_turns: 3
+expects_tools:
+  - find_opportunities
+# The gap is resolved from the data at check time, not written in here.
+expects_category_gap_for: "{account}"
+forbids_other_reps: true

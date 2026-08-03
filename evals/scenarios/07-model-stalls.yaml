@@ -1,0 +1,13 @@
+name: Model stalls mid-answer
+persona: |
+  You are a rep in a hurry. Silence makes you say hello again.
+goal: |
+  Get a briefing on any account.
+opening: Give me a quick read on {account}.
+about: healthy
+max_turns: 3
+faults:
+  llm_stall_turn: 1
+  llm_stall_seconds: 2.5
+expects_tools:
+  - brief_account

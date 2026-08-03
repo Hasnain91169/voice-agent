@@ -1,0 +1,1042 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Voice Agent</title>
+<link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+<!--
+  A console for watching a call happen, not a control panel.
+
+  Every number on this page comes from the pipeline and arrives over the same
+  websocket as the audio — binary frames are speech, text frames are events.
+  Nothing here is computed in the browser except layout.
+
+  Two labels are deliberately plainer than they could be. The VAD is described
+  as "energy, calibrated", because that is what it is: a hand-written detector
+  whose thresholds come from the noise floor measured at the start of this call.
+  Turn-taking is described by its actual hangover in milliseconds. Naming them
+  after libraries this project does not use would look better and be false.
+
+  The verification panel is split for the same reason. Correctness cannot be
+  computed live — it comes from an offline suite with scripted scenarios and
+  known ground truth — so the live column shows only what *is* exactly
+  computable: which figures the agent spoke, and whether its tools supplied
+  them. The offline column shows the last recorded run of the real suite, with
+  the command that produced it.
+-->
+<style>
+  :root {
+    --bg: #0b0f0e; --panel: #111614; --line: #1e2724; --ink: #e6efeb;
+    --dim: #7d918a; --accent: #34d399; --warn: #fbbf24; --bad: #f87171;
+    --mono: ui-monospace, "Cascadia Mono", Menlo, Consolas, monospace;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; background: var(--bg); color: var(--ink);
+    font: 14px/1.5 ui-sans-serif, system-ui, -apple-system, sans-serif;
+    display: grid; grid-template-columns: 186px 1fr; min-height: 100vh;
+  }
+  nav { background: var(--panel); border-right: 1px solid var(--line); padding: 18px 0; }
+  .brand { display: flex; align-items: center; gap: 10px; padding: 0 18px 18px; font-weight: 600; }
+  nav a { display: block; padding: 9px 18px; color: var(--dim); text-decoration: none;
+          font-size: 13px; border-left: 2px solid transparent; }
+  nav a.on { color: var(--ink); background: #16201d; border-left-color: var(--accent); }
+  main { padding: 16px 20px 26px; display: flex; flex-direction: column; gap: 13px; min-width: 0; }
+  header { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+  .grow { flex: 1; }
+  select, button {
+    font: inherit; border-radius: 8px; border: 1px solid var(--line);
+    background: #16201d; color: var(--ink); padding: 7px 12px;
+  }
+  select { max-width: 260px; }
+  button { cursor: pointer; font-weight: 600; }
+  button:disabled, select:disabled { opacity: .45; cursor: not-allowed; }
+  .go { background: var(--accent); color: #06251a; border-color: transparent; }
+  .end { background: #b93b3b; color: #fff; border-color: transparent; }
+  .card { background: var(--panel); border: 1px solid var(--line); border-radius: 12px; padding: 14px 16px; }
+  .stage { display: flex; align-items: center; gap: 18px; flex-wrap: wrap; }
+  .language-hint {
+    flex-basis: 100%; display: flex; align-items: center; gap: 9px;
+    border: 1px solid #25483f; border-radius: 10px; padding: 9px 11px;
+    background: #111f1b; color: #cfe2dc; font-size: 13px;
+  }
+  .language-hint i {
+    width: 9px; height: 9px; border-radius: 50%; background: var(--accent);
+    box-shadow: 0 0 0 0 rgba(52,211,153,.36); animation: pulse 1.35s ease-out infinite;
+  }
+  .orb { width: 72px; height: 72px; border-radius: 50%; flex: none; display: grid; place-items: center;
+         border: 1px solid #21403a; background: radial-gradient(circle, #12261f, #0d1614); transition: box-shadow .2s; }
+  .orb.live { box-shadow: 0 0 0 4px rgba(52,211,153,.12), 0 0 22px rgba(52,211,153,.35); }
+  .stage h1 { margin: 0; font-size: 19px; }
+  .stage p { margin: 2px 0 6px; color: var(--dim); font-size: 13px; }
+  #wave { width: 100%; height: 48px; display: block; }
+  .pill { font-size: 12px; color: var(--dim); display: inline-flex; align-items: center; gap: 6px; }
+  .dot { width: 7px; height: 7px; border-radius: 50%; background: var(--dim); }
+  .dot.live { background: var(--accent); }
+  .dot.error { background: var(--bad); }
+  .metrics { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 10px; }
+  .metric { background: var(--panel); border: 1px solid var(--line); border-radius: 10px; padding: 10px 12px; }
+  .metric b { display: block; font-size: 17px; font-variant-numeric: tabular-nums; }
+  .metric span { color: var(--dim); font-size: 11px; text-transform: uppercase; letter-spacing: .05em; }
+  .metric.over b { color: var(--warn); }
+  .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(285px, 1fr)); gap: 12px; align-items: start; }
+  .card h2 { margin: 0 0 10px; font-size: 12px; letter-spacing: .05em; text-transform: uppercase; color: var(--dim); }
+  .suggestions { display: flex; flex-wrap: wrap; gap: 8px; }
+  .suggestions span {
+    border: 1px solid #253530; border-radius: 999px; padding: 6px 10px;
+    color: #b7c8c2; background: #141d1a; font-size: 12px;
+  }
+  .flow { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
+  .flow-step {
+    position: relative; overflow: hidden; min-height: 58px; border: 1px solid var(--line);
+    border-radius: 10px; padding: 9px 10px; background: #121a17; color: var(--dim);
+  }
+  .flow-step::before {
+    content: ""; position: absolute; inset: 0; opacity: 0;
+    background: linear-gradient(110deg, transparent 0%, rgba(52,211,153,.18) 45%, transparent 70%);
+    transform: translateX(-100%);
+  }
+  .flow-step.on { color: var(--ink); border-color: #2f6b5a; background: #14231f; }
+  .flow-step.on::before { opacity: 1; animation: sweep 1.2s linear infinite; }
+  .flow-step b { display: block; position: relative; font-size: 12px; }
+  .flow-step span { display: block; position: relative; font-size: 11px; margin-top: 2px; }
+  .flow-step b span { display: inline; font-size: 12px; margin-top: 0; }
+  .flow-dot {
+    width: 8px; height: 8px; border-radius: 50%; background: #33413d;
+    display: inline-block; margin-right: 6px; vertical-align: 1px;
+  }
+  .flow-step.on .flow-dot {
+    background: var(--accent); box-shadow: 0 0 0 0 rgba(52,211,153,.35);
+    animation: pulse 1s ease-out infinite;
+  }
+  .step.on { background: #15221f; border-radius: 8px; padding-inline: 8px; }
+  .step.on .tick { animation: pulse 1s ease-out infinite; }
+  .tool-popover {
+    overflow: hidden; max-height: 0; opacity: 0; transform: translateY(-8px) scale(.98);
+    transition: max-height .34s ease, opacity .24s ease, transform .34s ease, margin-top .34s ease;
+  }
+  .tool-popover.show { max-height: 190px; opacity: 1; transform: translateY(0) scale(1); margin-top: 10px; }
+  .tool-popover-inner {
+    position: relative; border: 1px solid #285b50; border-radius: 10px; padding: 10px 12px;
+    background: #101d19; box-shadow: 0 10px 28px rgba(0,0,0,.22);
+  }
+  .tool-popover-inner::before {
+    content: ""; position: absolute; inset: 0; pointer-events: none;
+    background: linear-gradient(110deg, transparent, rgba(52,211,153,.13), transparent);
+    transform: translateX(-100%); animation: sweep 1.4s linear infinite;
+  }
+  .tool-popover-title {
+    position: relative; display: flex; justify-content: space-between; gap: 10px;
+    color: var(--ink); font-size: 12px; font-weight: 700;
+  }
+  .tool-popover-name { color: var(--accent); font-family: var(--mono); font-size: 12px; }
+  .tool-graph {
+    position: relative; display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px;
+    margin-top: 10px;
+  }
+  .tool-node {
+    border: 1px solid #24413a; border-radius: 8px; padding: 8px; min-height: 48px;
+    background: #121a17; color: #a9bdb6; font-size: 11px;
+  }
+  .tool-node b { display: block; color: #dce8e4; font-size: 12px; margin-bottom: 2px; }
+  .tool-node.active { border-color: #34d399; animation: nodeGlow 1.2s ease-in-out infinite; }
+  @keyframes nodeGlow {
+    0%, 100% { box-shadow: 0 0 0 rgba(52,211,153,0); }
+    50% { box-shadow: 0 0 16px rgba(52,211,153,.28); }
+  }
+  @keyframes pulse {
+    0% { box-shadow: 0 0 0 0 rgba(52,211,153,.38); }
+    100% { box-shadow: 0 0 0 12px rgba(52,211,153,0); }
+  }
+  @keyframes sweep {
+    from { transform: translateX(-100%); }
+    to { transform: translateX(100%); }
+  }
+  @media (max-width: 720px) {
+    .flow { grid-template-columns: repeat(2, 1fr); }
+  }
+  .scroll { max-height: 290px; overflow-y: auto; }
+  .msg { margin-bottom: 10px; }
+  .msg .who { font-size: 11px; color: var(--dim); text-transform: uppercase; letter-spacing: .05em; }
+  .msg .body { background: #16201d; border-radius: 8px; padding: 8px 10px; margin-top: 3px; white-space: pre-wrap; }
+  .msg.agent .body { background: #142420; }
+  .cut { color: var(--warn); font-style: italic; }
+  .step { display: flex; align-items: center; gap: 9px; padding: 6px 0; border-bottom: 1px solid #18201e; }
+  .step:last-child { border-bottom: 0; }
+  .step .name { flex: 1; min-width: 0; }
+  .step .name small { display: block; color: var(--dim); font-size: 11.5px; overflow: hidden; text-overflow: ellipsis; }
+  .tick { width: 8px; height: 8px; border-radius: 50%; background: #263230; flex: none; }
+  .step.on .tick { background: var(--accent); box-shadow: 0 0 8px rgba(52,211,153,.8); }
+  .val { color: var(--dim); font-size: 12px; font-variant-numeric: tabular-nums; }
+  .split { border-top: 1px dashed var(--line); margin-top: 12px; padding-top: 10px; }
+  .kv { display: flex; justify-content: space-between; gap: 10px; padding: 4px 0; }
+  .kv span { color: var(--dim); }
+  .kv b { font-variant-numeric: tabular-nums; text-align: right; }
+  .good { color: var(--accent); }
+  .flag { color: var(--warn); }
+  .note { color: var(--dim); font-size: 11.5px; margin: 8px 0 0; line-height: 1.45; }
+  #log { font-family: var(--mono); font-size: 11.5px; }
+  #log div { display: flex; gap: 8px; padding: 1px 0; }
+  #log .t { color: #55635f; flex: none; }
+  #log .k { color: var(--accent); flex: none; min-width: 76px; }
+  footer { display: flex; gap: 16px; flex-wrap: wrap; color: var(--dim); font-size: 11.5px; }
+  footer b { color: #a9bdb6; font-weight: 500; }
+</style>
+</head>
+<body>
+<nav>
+  <div class="brand">
+    <svg width="18" height="18" viewBox="0 0 18 18"><rect x="1" y="6" width="2" height="6" rx="1" fill="#34d399"/><rect x="5" y="2" width="2" height="14" rx="1" fill="#34d399"/><rect x="9" y="4" width="2" height="10" rx="1" fill="#34d399"/><rect x="13" y="7" width="2" height="4" rx="1" fill="#34d399"/></svg>
+    <span data-i18n="brand">Voice Agent</span>
+  </div>
+  <a href="#" class="on" data-i18n="nav_agent">Agent</a>
+  <a href="/docs">API</a>
+</nav>
+
+<main>
+  <header>
+    <label class="pill" for="model" data-i18n="model">Model</label>
+    <select id="model" disabled><option>loading…</option></select>
+    <span class="grow"></span>
+    <span class="pill"><span class="dot" id="health-dot"></span><span id="health-text">checking…</span></span>
+  </header>
+
+  <section class="card stage">
+    <div class="orb" id="orb">
+      <svg width="26" height="26" viewBox="0 0 18 18"><rect x="1" y="6" width="2" height="6" rx="1" fill="#34d399"/><rect x="5" y="2" width="2" height="14" rx="1" fill="#34d399"/><rect x="9" y="4" width="2" height="10" rx="1" fill="#34d399"/><rect x="13" y="7" width="2" height="4" rx="1" fill="#34d399"/></svg>
+    </div>
+    <div style="flex:1;min-width:230px">
+      <h1 data-i18n="brand">Voice Agent</h1>
+      <p id="status">Idle — press start and speak</p>
+      <canvas id="wave"></canvas>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:8px">
+      <button class="go" id="start" data-i18n="start_call">Start call</button>
+      <button class="end" id="stop" disabled data-i18n="end_call">End call</button>
+    </div>
+    <div class="language-hint">
+      <i></i>
+      <span data-i18n="language_hint">Soll ich Deutsch sprechen? Sprich einfach Deutsch.</span>
+    </div>
+  </section>
+
+  <section class="metrics">
+    <div class="metric"><span>ASR</span><b id="m-asr">—</b></div>
+    <div class="metric"><span data-i18n="first_token">First token</span><b id="m-ttft">—</b></div>
+    <div class="metric" id="m-audio-card"><span data-i18n="first_audio">First audio</span><b id="m-audio">—</b></div>
+    <div class="metric"><span data-i18n="language">Language</span><b id="m-lang">—</b></div>
+    <div class="metric"><span data-i18n="barge_in">Barge-in</span><b id="m-barge">—</b></div>
+  </section>
+
+  <section class="card">
+    <h2 data-i18n="activity_now">Happening now</h2>
+    <div class="flow" aria-label="Live pipeline activity">
+      <div class="flow-step" data-flow="listening">
+        <b><i class="flow-dot"></i><span data-i18n="flow_listening">Listening</span></b>
+        <span data-i18n="flow_listening_note">mic frames and VAD</span>
+      </div>
+      <div class="flow-step" data-flow="asr">
+        <b><i class="flow-dot"></i><span data-i18n="flow_asr">Recognising</span></b>
+        <span data-i18n="flow_asr_note">transcript and language</span>
+      </div>
+      <div class="flow-step" data-flow="tool">
+        <b><i class="flow-dot"></i><span data-i18n="flow_tool">Using tools</span></b>
+        <span data-i18n="flow_tool_note">CRM, ERP and notes</span>
+      </div>
+      <div class="flow-step" data-flow="tts">
+        <b><i class="flow-dot"></i><span data-i18n="flow_tts">Speaking</span></b>
+        <span data-i18n="flow_tts_note">clauses to speech</span>
+      </div>
+    </div>
+  </section>
+
+  <section class="card">
+    <h2 data-i18n="try_asking">Try asking</h2>
+    <div class="suggestions" aria-label="Suggested voice prompts">
+      <span data-i18n="ask_summary">Give me a summary of all my accounts.</span>
+      <span data-i18n="ask_risk">Which accounts are slipping?</span>
+      <span data-i18n="ask_good_news">Tell me the good news across my patch.</span>
+      <span data-i18n="ask_brief">Brief me on Marchwood Timber and Board.</span>
+      <span data-i18n="ask_pitch">What should I pitch them next?</span>
+      <span data-i18n="ask_notes">Search my notes for unhappy customers.</span>
+      <span data-i18n="ask_followup">Log a follow up for tomorrow.</span>
+    </div>
+  </section>
+
+  <section class="grid">
+    <div class="card">
+      <h2 data-i18n="live_transcript">Live transcript</h2>
+      <div class="scroll" id="transcript"></div>
+    </div>
+
+    <div class="card">
+      <h2 data-i18n="pipeline">Pipeline</h2>
+      <div class="step" data-step="asr"><i class="tick"></i><div class="name"><span data-i18n="speech_recognition">Speech recognition</span><small id="s-asr">faster-whisper</small></div><div class="val" id="v-asr"></div></div>
+      <div class="step" data-step="llm"><i class="tick"></i><div class="name"><span data-i18n="reasoning">Reasoning</span><small data-i18n="reasoning_note">LangGraph, tool loop</small></div><div class="val" id="v-llm"></div></div>
+      <div class="step" data-step="tool"><i class="tick"></i><div class="name"><span data-i18n="tools">Tools</span><small id="s-tool">idle</small></div><div class="val" id="v-tool"></div></div>
+      <div class="step" data-step="tts"><i class="tick"></i><div class="name"><span data-i18n="speech_synthesis">Speech synthesis</span><small data-i18n="tts_note">Piper, per clause</small></div><div class="val" id="v-tts"></div></div>
+      <div class="step" data-step="turn"><i class="tick"></i><div class="name"><span data-i18n="turn_taking">Turn-taking</span><small id="s-turn">calibrating…</small></div><div class="val" id="v-turn"></div></div>
+      <div class="tool-popover" id="tool-popover" aria-live="polite">
+        <div class="tool-popover-inner">
+          <div class="tool-popover-title">
+            <span data-i18n="tool_popover_title">LangGraph tool call</span>
+            <span class="tool-popover-name" id="tool-popover-name">idle</span>
+          </div>
+          <div class="tool-graph">
+            <div class="tool-node active"><b data-i18n="tool_node_agent">Agent</b><span data-i18n="tool_node_agent_note">chooses capability</span></div>
+            <div class="tool-node active"><b data-i18n="tool_node_tool">Tool</b><span id="tool-popover-args">arguments ready</span></div>
+            <div class="tool-node active"><b data-i18n="tool_node_result">Result</b><span data-i18n="tool_node_result_note">fed back to reasoning</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2 data-i18n="verification">Verification</h2>
+      <div class="kv"><span data-i18n="figures_spoken">Figures spoken</span><b id="g-spoken">—</b></div>
+      <div class="kv"><span data-i18n="traced">Traced to a tool result</span><b id="g-traced">—</b></div>
+      <div class="kv"><span data-i18n="untraced">Untraced</span><b id="g-untraced">—</b></div>
+      <p class="note" data-i18n="verification_note">
+        Computed here, deterministically: every number and date the agent said,
+        checked against what its tools returned this turn. Not a correctness
+        score — “did this come from somewhere”.
+      </p>
+      <div class="split">
+        <div class="kv"><span data-i18n="eval_suite">Eval suite (offline)</span><b id="e-score">no run recorded</b></div>
+        <p class="note" id="e-note" data-i18n="eval_note">
+          Correctness needs scripted scenarios and known ground truth, so it
+          cannot be computed for a live call. This is the last recorded run.
+        </p>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2 data-i18n="events">Events</h2>
+      <div class="scroll" id="log"></div>
+    </div>
+  </section>
+
+  <footer>
+    <span>VAD <b id="f-vad">energy, calibrated</b></span>
+    <span><span data-i18n="endpoint">Endpoint</span> <b id="f-endpoint">—</b></span>
+    <span><span data-i18n="noise_floor">Noise floor</span> <b id="f-floor">—</b></span>
+    <span>Audio <b>16 kHz mono · 20 ms frames</b></span>
+    <span><span data-i18n="memory">Memory</span> <b data-i18n="memory_value">session + extracted facts</b></span>
+    <span><span data-i18n="budget">Budget</span> <b id="f-budget">—</b></span>
+  </footer>
+</main>
+
+<script>
+const SAMPLE_RATE = 16000;
+const el = (id) => document.getElementById(id);
+let socket, ctx, micStream, source, workletNode, playHead = 0, playing = false;
+const wave = new Float32Array(180);
+let wavePos = 0;
+let currentLanguage = 'en';
+let evalSummary = null;
+let healthState = { ok: false, detail: 'checking' };
+let toolPopoverTimer = null;
+
+const COPY = {
+  en: {
+    brand: 'Voice Agent',
+    nav_agent: 'Agent',
+    model: 'Model',
+    checking: 'checking…',
+    start_call: 'Start call',
+    end_call: 'End call',
+    language_hint: 'Soll ich Deutsch sprechen? Sprich einfach Deutsch.',
+    first_token: 'First token',
+    first_audio: 'First audio',
+    language: 'Language',
+    barge_in: 'Barge-in',
+    activity_now: 'Happening now',
+    flow_listening: 'Listening',
+    flow_listening_note: 'mic frames and VAD',
+    flow_asr: 'Recognising',
+    flow_asr_note: 'transcript and language',
+    flow_tool: 'Thinking/tools',
+    flow_tool_note: 'reasoning, CRM and notes',
+    flow_tts: 'Speaking',
+    flow_tts_note: 'clauses to speech',
+    try_asking: 'Try asking',
+    ask_summary: 'Give me a summary of all my accounts.',
+    ask_risk: 'Which accounts are slipping?',
+    ask_good_news: 'Tell me the good news across my patch.',
+    ask_brief: 'Brief me on Marchwood Timber and Board.',
+    ask_pitch: 'What should I pitch them next?',
+    ask_notes: 'Search my notes for unhappy customers.',
+    ask_followup: 'Log a follow up for tomorrow.',
+    live_transcript: 'Live transcript',
+    pipeline: 'Pipeline',
+    speech_recognition: 'Speech recognition',
+    reasoning: 'Reasoning',
+    reasoning_note: 'LangGraph, tool loop',
+    tools: 'Tools',
+    idle: 'idle',
+    speech_synthesis: 'Speech synthesis',
+    tts_note: 'Piper, per clause',
+    turn_taking: 'Turn-taking',
+    tool_popover_title: 'LangGraph tool call',
+    tool_node_agent: 'Agent',
+    tool_node_agent_note: 'chooses capability',
+    tool_node_tool: 'Tool',
+    tool_node_result: 'Result',
+    tool_node_result_note: 'fed back to reasoning',
+    tool_args_ready: 'arguments ready',
+    verification: 'Verification',
+    figures_spoken: 'Figures spoken',
+    traced: 'Traced to a tool result',
+    untraced: 'Untraced',
+    verification_note: 'Computed here, deterministically: every number and date the agent said, checked against what its tools returned this turn. Not a correctness score — “did this come from somewhere”.',
+    eval_suite: 'Eval suite (offline)',
+    eval_note: 'Correctness needs scripted scenarios and known ground truth, so it cannot be computed for a live call. This is the last recorded run.',
+    events: 'Events',
+    endpoint: 'Endpoint',
+    noise_floor: 'Noise floor',
+    memory: 'Memory',
+    memory_value: 'session + extracted facts',
+    budget: 'Budget',
+    status_idle: 'Idle — press start and speak',
+    status_requesting: 'requesting token',
+    status_microphone: 'opening microphone',
+    status_listening: 'listening',
+    status_speaking: 'agent speaking',
+    status_failed: 'failed',
+    status_error: 'connection error',
+    status_switching: 'switching model',
+    barge_armed: 'armed',
+    barge_cancelled: 'cancelled',
+    running: 'running',
+    none: 'none',
+    no_models: 'no models available',
+    server_unreachable: 'server unreachable',
+    ready: 'ready',
+    warming_up: 'warming up',
+    unreachable: 'unreachable',
+    eval_recorded: 'computed for a live call. Last recorded {date} with {command}.',
+    detected: 'detected',
+    hangover: 'ms hangover',
+    first_audio_budget: 'ms first audio',
+  },
+  de: {
+    brand: 'Sprachagent',
+    nav_agent: 'Agent',
+    model: 'Modell',
+    checking: 'prüfe…',
+    start_call: 'Anruf starten',
+    end_call: 'Anruf beenden',
+    language_hint: 'Want me to speak English? Just start speaking English.',
+    first_token: 'Erstes Token',
+    first_audio: 'Erstes Audio',
+    language: 'Sprache',
+    barge_in: 'Unterbrechung',
+    activity_now: 'Gerade aktiv',
+    flow_listening: 'Hört zu',
+    flow_listening_note: 'Mikrofonframes und VAD',
+    flow_asr: 'Erkennt Sprache',
+    flow_asr_note: 'Transkript und Sprache',
+    flow_tool: 'Denkt/Tools',
+    flow_tool_note: 'Reasoning, CRM und Notizen',
+    flow_tts: 'Spricht',
+    flow_tts_note: 'Satzteile zu Sprache',
+    try_asking: 'Beispielfragen',
+    ask_summary: 'Gib mir eine Zusammenfassung aller meiner Kunden.',
+    ask_risk: 'Welche Kunden rutschen gerade ab?',
+    ask_good_news: 'Sag mir die gute Nachricht in meinem Gebiet.',
+    ask_brief: 'Brief mich zu Marchwood Timber and Board.',
+    ask_pitch: 'Was sollte ich ihnen als Nächstes anbieten?',
+    ask_notes: 'Durchsuche meine Notizen nach unzufriedenen Kunden.',
+    ask_followup: 'Lege eine Wiedervorlage für morgen an.',
+    live_transcript: 'Live-Transkript',
+    pipeline: 'Pipeline',
+    speech_recognition: 'Spracherkennung',
+    reasoning: 'Reasoning',
+    reasoning_note: 'LangGraph, Tool-Schleife',
+    tools: 'Tools',
+    idle: 'inaktiv',
+    speech_synthesis: 'Sprachsynthese',
+    tts_note: 'Piper, pro Satzteil',
+    turn_taking: 'Turn-Taking',
+    tool_popover_title: 'LangGraph-Toolaufruf',
+    tool_node_agent: 'Agent',
+    tool_node_agent_note: 'wählt Fähigkeit',
+    tool_node_tool: 'Tool',
+    tool_node_result: 'Ergebnis',
+    tool_node_result_note: 'zurück ins Reasoning',
+    tool_args_ready: 'Argumente bereit',
+    verification: 'Verifikation',
+    figures_spoken: 'Gesagte Zahlen',
+    traced: 'Auf Tool-Ergebnis zurückgeführt',
+    untraced: 'Nicht zurückgeführt',
+    verification_note: 'Hier deterministisch berechnet: jede Zahl und jedes Datum, das der Agent gesagt hat, geprüft gegen die Tool-Ergebnisse dieses Turns. Kein Korrektheitswert, sondern: kam das von irgendwoher?',
+    eval_suite: 'Eval-Suite (offline)',
+    eval_note: 'Korrektheit braucht geskriptete Szenarien und Ground Truth, deshalb wird sie nicht live für einen Anruf berechnet. Das ist der letzte gespeicherte Lauf.',
+    events: 'Ereignisse',
+    endpoint: 'Endpoint',
+    noise_floor: 'Rauschpegel',
+    memory: 'Gedächtnis',
+    memory_value: 'Sitzung + extrahierte Fakten',
+    budget: 'Budget',
+    status_idle: 'Bereit — Start drücken und sprechen',
+    status_requesting: 'Token wird angefordert',
+    status_microphone: 'Mikrofon wird geöffnet',
+    status_listening: 'hört zu',
+    status_speaking: 'Agent spricht',
+    status_failed: 'fehlgeschlagen',
+    status_error: 'Verbindungsfehler',
+    status_switching: 'Modell wird gewechselt',
+    barge_armed: 'bereit',
+    barge_cancelled: 'abgebrochen',
+    running: 'läuft',
+    none: 'keine',
+    no_models: 'keine Modelle verfügbar',
+    server_unreachable: 'Server nicht erreichbar',
+    ready: 'bereit',
+    warming_up: 'wärmt auf',
+    unreachable: 'nicht erreichbar',
+    eval_recorded: 'für einen Live-Anruf berechnet. Letzter Lauf am {date} mit {command}.',
+    detected: 'erkannt',
+    hangover: 'ms Nachlauf',
+    first_audio_budget: 'ms erstes Audio',
+  },
+};
+
+function t(key) {
+  return (COPY[currentLanguage] && COPY[currentLanguage][key]) || COPY.en[key] || key;
+}
+
+function format(key, fields) {
+  return t(key).replace(/\{(\w+)\}/g, (_, name) => fields[name] ?? '');
+}
+
+function setLanguage(language) {
+  const next = String(language || 'en').toLowerCase().startsWith('de') ? 'de' : 'en';
+  if (next === currentLanguage) return;
+  currentLanguage = next;
+  document.documentElement.lang = next;
+  document.querySelectorAll('[data-i18n]').forEach((node) => {
+    node.textContent = t(node.dataset.i18n);
+  });
+  if (!el('v-tool').textContent) el('s-tool').textContent = t('idle');
+  if (!el('tool-popover-args').dataset.live) el('tool-popover-args').textContent = t('tool_args_ready');
+  renderHealth();
+  renderEvalSummary();
+  setStatus(
+    socket && socket.readyState === WebSocket.OPEN
+      ? (playing ? 'status_speaking' : 'status_listening')
+      : 'status_idle',
+    socket && socket.readyState === WebSocket.OPEN ? 'live' : undefined,
+  );
+}
+
+function renderEvalSummary() {
+  if (!evalSummary) return;
+  el('e-score').textContent = `${evalSummary.passed}/${evalSummary.of} over ${evalSummary.runs} runs`;
+  el('e-note').textContent =
+    t('eval_note') + ' ' +
+    format('eval_recorded', {
+      date: evalSummary.recorded_at.slice(0, 10),
+      command: evalSummary.command,
+    });
+}
+
+function renderHealth() {
+  el('health-dot').className = 'dot ' + (healthState.ok ? 'live' : 'error');
+  if (healthState.ok) {
+    el('health-text').textContent = t('ready');
+  } else {
+    el('health-text').textContent =
+      healthState.detail === 'warming up' ? t('warming_up') :
+      healthState.detail === 'checking' ? t('checking') :
+      healthState.detail === 'unreachable' ? t('unreachable') : healthState.detail;
+  }
+}
+
+const workletSource = `
+class Capture extends AudioWorkletProcessor {
+  constructor() {
+    super();
+    this.buf = new Int16Array(320);
+    this.n = 0;
+    this.peak = 0;
+    this.play = [];
+    this.playPos = 0;
+    this.playRatio = ${SAMPLE_RATE} / sampleRate;
+    this.capturePos = 0;
+    this.captureRatio = sampleRate / ${SAMPLE_RATE};
+    this.port.onmessage = ({ data }) => {
+      if (!data.playback) return;
+      const pcm = new Int16Array(data.playback);
+      for (let i = 0; i < pcm.length; i++) this.play.push(pcm[i] / 0x8000);
+    };
+  }
+
+  nextPlaybackSample() {
+    if (!this.play.length) return 0;
+
+    const left = Math.floor(this.playPos);
+    if (left >= this.play.length) {
+      this.play = [];
+      this.playPos = 0;
+      return 0;
+    }
+
+    const right = Math.min(left + 1, this.play.length - 1);
+    const frac = this.playPos - left;
+    const sample = this.play[left] * (1 - frac) + this.play[right] * frac;
+    this.playPos += this.playRatio;
+
+    const consumed = Math.floor(this.playPos);
+    if (consumed > 0) {
+      this.play.splice(0, Math.min(consumed, this.play.length));
+      this.playPos -= consumed;
+    }
+
+    return sample;
+  }
+
+  captureSample(sample) {
+    const s = Math.max(-1, Math.min(1, sample));
+    if (Math.abs(s) > this.peak) this.peak = Math.abs(s);
+    this.buf[this.n++] = s < 0 ? s * 0x8000 : s * 0x7fff;
+    if (this.n === 320) {
+      const pcm = this.buf.slice();
+      this.port.postMessage({ pcm, peak: this.peak }, [pcm.buffer]);
+      this.n = 0;
+      this.peak = 0;
+    }
+  }
+
+  process(inputs, outputs) {
+    const channels = outputs[0] || [];
+    const frames = channels[0]?.length || 0;
+    for (let i = 0; i < frames; i++) {
+      const sample = this.nextPlaybackSample();
+      for (const channel of channels) {
+        channel[i] = sample;
+      }
+    }
+
+    const input = inputs[0][0];
+    if (!input) return true;
+
+    while (this.capturePos < input.length) {
+      const left = Math.floor(this.capturePos);
+      const right = Math.min(left + 1, input.length - 1);
+      const frac = this.capturePos - left;
+      this.captureSample(input[left] * (1 - frac) + input[right] * frac);
+      this.capturePos += this.captureRatio;
+    }
+    this.capturePos -= input.length;
+    return true;
+  }
+}
+registerProcessor('capture', Capture);
+`;
+
+// ────────────────────────────────────────────────────────────── presentation
+
+function setStatus(key, kind) {
+  el('status').textContent = t(key);
+  el('orb').classList.toggle('live', kind === 'live');
+}
+
+function setPhase(phase) {
+  document.querySelectorAll('.flow-step').forEach((node) => {
+    node.classList.toggle('on', node.dataset.flow === phase);
+  });
+}
+
+function showToolPopover(name, args) {
+  const popover = el('tool-popover');
+  el('tool-popover-name').textContent = name;
+  const argText = Object.keys(args || {}).length ? JSON.stringify(args) : t('tool_args_ready');
+  el('tool-popover-args').textContent = argText;
+  el('tool-popover-args').dataset.live = Object.keys(args || {}).length ? 'true' : '';
+  popover.classList.add('show');
+  clearTimeout(toolPopoverTimer);
+  toolPopoverTimer = setTimeout(() => popover.classList.remove('show'), 3200);
+}
+
+function hideToolPopover() {
+  clearTimeout(toolPopoverTimer);
+  el('tool-popover').classList.remove('show');
+  el('tool-popover-args').dataset.live = '';
+}
+
+function logEvent(kind, detail) {
+  const row = document.createElement('div');
+  row.innerHTML = '<span class="t"></span><span class="k"></span><span class="d"></span>';
+  row.querySelector('.t').textContent = new Date().toISOString().substr(11, 12);
+  row.querySelector('.k').textContent = kind;
+  row.querySelector('.d').textContent = detail ?? '';
+  el('log').prepend(row);
+  while (el('log').childElementCount > 200) el('log').lastElementChild.remove();
+}
+
+let openAgentBody = null;   // the bubble currently being spoken into
+
+function bubble(who) {
+  const wrap = document.createElement('div');
+  wrap.className = 'msg ' + who;
+  const label = document.createElement('div');
+  label.className = 'who';
+  label.textContent = who;
+  const body = document.createElement('div');
+  body.className = 'body';
+  wrap.append(label, body);
+  el('transcript').append(wrap);
+  el('transcript').scrollTop = el('transcript').scrollHeight;
+  return body;
+}
+
+function say(who, text) {
+  bubble(who).textContent = text;
+}
+
+// The agent's side arrives a clause at a time, as each one is queued for
+// speech. Waiting for the end of the turn would show text before it had been
+// spoken — and after an interruption, words nobody heard.
+function speakInto(text) {
+  if (!openAgentBody) openAgentBody = bubble('agent');
+  openAgentBody.textContent += (openAgentBody.textContent ? ' ' : '') + text;
+  el('transcript').scrollTop = el('transcript').scrollHeight;
+}
+
+function closeBubble(cut) {
+  if (openAgentBody && cut) {
+    const mark = document.createElement('span');
+    mark.className = 'cut';
+    mark.textContent = '  — cut off here';
+    openAgentBody.append(mark);
+  }
+  openAgentBody = null;
+}
+
+function activate(step) {
+  document.querySelectorAll('.step').forEach((node) => {
+    node.classList.toggle('on', node.dataset.step === step);
+  });
+}
+
+function drawWave() {
+  const canvas = el('wave');
+  const width = canvas.clientWidth || 300;
+  if (canvas.width !== width) { canvas.width = width; canvas.height = 48; }
+  const g = canvas.getContext('2d');
+  g.clearRect(0, 0, width, 48);
+  g.strokeStyle = '#34d399';
+  g.lineWidth = 1.5;
+  g.beginPath();
+  for (let i = 0; i < wave.length; i++) {
+    const v = wave[(wavePos + i) % wave.length];
+    const x = (i / wave.length) * width;
+    const y = 24 - v * 21;
+    i ? g.lineTo(x, y) : g.moveTo(x, y);
+  }
+  g.stroke();
+  requestAnimationFrame(drawWave);
+}
+requestAnimationFrame(drawWave);
+
+// ─────────────────────────────────────────────────────────────────── events
+
+function onEvent(event) {
+  switch (event.type) {
+    case 'calibrated':
+      el('f-endpoint').textContent = event.endpoint_ms + ' ' + t('hangover');
+      el('f-floor').textContent = event.floor + ' rms';
+      el('f-vad').textContent = event.vad;
+      el('s-turn').textContent = event.vad + ' · start ' + event.start + ' / stop ' + event.stop;
+      el('m-barge').textContent = t('barge_armed');
+      logEvent('calibrated', `floor ${event.floor}, start ${event.start}, stop ${event.stop}`);
+      break;
+
+    case 'asr':
+      setLanguage(event.language);
+      activate('asr');
+      setPhase('asr');
+      say('caller', event.text);
+      el('m-asr').textContent = event.ms + ' ms';
+      el('m-lang').textContent = String(event.language).toUpperCase();
+      el('v-asr').textContent = Math.round(event.confidence * 100) + '%';
+      el('s-asr').textContent = 'faster-whisper · ' + t('detected') + ' ' + event.language;
+      logEvent('asr', `${event.language} ${Math.round(event.confidence * 100)}% — ${event.text}`);
+      break;
+
+    case 'turn_start':
+      activate('llm');
+      setPhase('tool');
+      el('v-tool').textContent = '';
+      hideToolPopover();
+      closeBubble(false);
+      break;
+
+    case 'clause':
+      activate('tts');
+      setPhase('tts');
+      speakInto(event.text);
+      break;
+
+    case 'tool_call':
+      activate('tool');
+      setPhase('tool');
+      el('s-tool').textContent = event.name;
+      el('v-tool').textContent = t('running');
+      showToolPopover(event.name, event.arguments);
+      logEvent('tool', event.name + ' ' + JSON.stringify(event.arguments));
+      break;
+
+    case 'barge_in':
+      el('m-barge').textContent = t('barge_cancelled');
+      logEvent('barge-in', `cancelled after ${event.played_ms} ms of speech`);
+      break;
+
+    case 'grounding': {
+      el('g-spoken').textContent = event.spoken;
+      el('g-traced').textContent = event.traced;
+      const flagged = event.untraced.length;
+      const cell = el('g-untraced');
+      cell.textContent = flagged ? event.untraced.join(', ') : t('none');
+      cell.className = flagged ? 'flag' : 'good';
+      logEvent('grounding', `${event.traced}/${event.spoken} traced` + (flagged ? ' — ' + event.untraced.join(', ') : ''));
+      break;
+    }
+
+    case 'turn_complete': {
+      setLanguage(event.language);
+      activate(null);
+      setPhase('listening');
+      hideToolPopover();
+      const cut = event.barged_in && event.spoken_chars < event.generated_chars;
+      // The bubble has been filling clause by clause; this only closes it. If
+      // the turn produced nothing — a recovery line, or a cancel before the
+      // first clause — there is nothing open, so show what was committed.
+      if (openAgentBody) {
+        closeBubble(cut);
+      } else if (event.spoken) {
+        say('agent', event.spoken);
+      }
+      el('m-ttft').textContent = event.llm_first_token_ms + ' ms';
+      el('m-audio').textContent = event.first_audio_ms + ' ms';
+      el('m-audio-card').classList.toggle('over', event.first_audio_ms > event.budget_ms);
+      el('f-budget').textContent = event.budget_ms + ' ' + t('first_audio_budget');
+      el('v-llm').textContent = event.llm_first_token_ms + ' ms';
+      el('v-tts').textContent = event.first_audio_ms + ' ms';
+      if (cut) {
+        logEvent('truncated', `committed ${event.spoken_chars} of ${event.generated_chars} chars — history holds what was heard`);
+      }
+      logEvent('turn', `#${event.turn} ${event.language} ${event.first_audio_ms} ms` + (event.events.length ? ' · ' + event.events.join(',') : ''));
+      break;
+    }
+
+    default:
+      logEvent(event.type, JSON.stringify(event));
+  }
+}
+
+// ──────────────────────────────────────────────────────────────────── audio
+
+function schedule(buffer) {
+  if (!ctx || !workletNode) return;
+  const pcm = new Int16Array(buffer);
+  let peak = 0;
+  for (let i = 0; i < pcm.length; i++) {
+    const sample = pcm[i] / 0x8000;
+    if (Math.abs(sample) > peak) peak = Math.abs(sample);
+  }
+  wave[wavePos] = peak; wavePos = (wavePos + 1) % wave.length;
+
+  const now = ctx.currentTime;
+  if (playHead < now) playHead = now + 0.04;
+  playHead += pcm.length / SAMPLE_RATE;
+  workletNode.port.postMessage({ playback: pcm.buffer }, [pcm.buffer]);
+
+  if (!playing) { playing = true; setStatus('status_speaking', 'live'); setPhase('tts'); }
+  clearTimeout(schedule.idle);
+  schedule.idle = setTimeout(() => {
+    playing = false;
+    setStatus('status_listening', 'live');
+    setPhase('listening');
+  }, (playHead - now) * 1000 + 120);
+}
+
+async function start() {
+  el('start').disabled = true;
+  el('model').disabled = true;
+  try {
+    setStatus('status_requesting');
+    const response = await fetch('/api/session', { method: 'POST' });
+    if (!response.ok) throw new Error('session: ' + response.status);
+    const { token } = await response.json();
+
+    setStatus('status_microphone');
+    micStream = await navigator.mediaDevices.getUserMedia({
+      audio: {
+        echoCancellation: true,   // the agent must not hear itself
+        noiseSuppression: true,
+        autoGainControl: true,
+        channelCount: 1,
+        sampleRate: SAMPLE_RATE,
+      },
+    });
+
+    ctx = new AudioContext({ sampleRate: SAMPLE_RATE });
+    if (ctx.sampleRate !== SAMPLE_RATE) {
+      logEvent('warning', `browser gave ${ctx.sampleRate} Hz, not ${SAMPLE_RATE} Hz`);
+    }
+    await ctx.audioWorklet.addModule(
+      URL.createObjectURL(new Blob([workletSource], { type: 'application/javascript' }))
+    );
+
+    const url = new URL('/ws/browser', location.href);
+    url.protocol = location.protocol === 'https:' ? 'wss:' : 'ws:';
+    url.searchParams.set('token', token);
+    socket = new WebSocket(url);
+    socket.binaryType = 'arraybuffer';
+
+    socket.onopen = () => {
+      source = ctx.createMediaStreamSource(micStream);
+      workletNode = new AudioWorkletNode(ctx, 'capture');
+      workletNode.port.onmessage = ({ data }) => {
+        if (socket && socket.readyState === WebSocket.OPEN) socket.send(data.pcm.buffer);
+        wave[wavePos] = data.peak; wavePos = (wavePos + 1) % wave.length;
+      };
+      source.connect(workletNode);
+      // The worklet captures microphone input and plays queued agent audio on
+      // the same real-time audio thread. That avoids scheduling hundreds of
+      // tiny AudioBufferSource nodes, which can leave audible gaps in a long
+      // streamed answer.
+      workletNode.connect(ctx.destination);
+
+      setStatus('status_listening', 'live');
+      setPhase('listening');
+      el('stop').disabled = false;
+      logEvent('system', 'connected — start speaking');
+    };
+
+    // Binary frames are audio; text frames are pipeline events. One socket, no
+    // wrapper, no second connection.
+    socket.onmessage = (event) => {
+      if (typeof event.data === 'string') {
+        try { onEvent(JSON.parse(event.data)); } catch { /* a malformed event is not worth a call */ }
+      } else {
+        schedule(event.data);
+      }
+    };
+    socket.onerror = () => { setStatus('status_error', 'error'); logEvent('error', 'websocket'); };
+    socket.onclose = (event) => {
+      logEvent('system', `closed (${event.code}${event.reason ? ': ' + event.reason : ''})`);
+      stop();
+    };
+  } catch (error) {
+    setStatus('status_failed', 'error');
+    logEvent('error', String(error));
+    el('start').disabled = false;
+    el('model').disabled = false;
+  }
+}
+
+function stop() {
+  if (socket) { try { socket.close(); } catch {} socket = null; }
+  if (workletNode) { workletNode.disconnect(); workletNode = null; }
+  if (source) { source.disconnect(); source = null; }
+  if (micStream) { micStream.getTracks().forEach((t) => t.stop()); micStream = null; }
+  if (ctx) { ctx.close(); ctx = null; }
+  playHead = 0; playing = false;
+  el('start').disabled = false;
+  el('stop').disabled = true;
+  // Re-enabled here rather than in the button handler, because stop() also runs
+  // when the socket closes on its own — otherwise a dropped call would leave
+  // the picker stuck.
+  el('model').disabled = false;
+  activate(null);
+  setPhase(null);
+  setStatus('status_idle');
+}
+
+el('start').addEventListener('click', start);
+el('stop').addEventListener('click', stop);
+
+// ───────────────────────────────────────────────────────────────── startup
+
+async function loadModels() {
+  try {
+    const response = await fetch('/api/models');
+    const { models, current } = await response.json();
+    if (!models.length) {
+      el('model').innerHTML = `<option>${t('no_models')}</option>`;
+      return;
+    }
+    el('model').innerHTML = '';
+    for (const model of models) {
+      const option = document.createElement('option');
+      option.value = model.id;
+      option.textContent = model.label ?? model.id;
+      option.selected = model.id === current;
+      el('model').append(option);
+    }
+    // Remembered so a failed switch can put the picker back where it was.
+    el('model').dataset.current = current;
+    el('model').disabled = false;
+  } catch {
+    el('model').innerHTML = `<option>${t('server_unreachable')}</option>`;
+  }
+}
+loadModels();
+
+// The model is process-wide, not per call: the agent layer holds it, so the
+// server refuses to swap it underneath a live turn. The picker is therefore
+// disabled while a call is up.
+el('model').addEventListener('change', async () => {
+  const chosen = el('model').value;
+  const previous = el('model').dataset.current || '';
+  el('model').disabled = true;
+  // Switching warms the new model before returning, which on a cold local model
+  // takes seconds — so say so rather than appearing to hang.
+  setStatus('status_switching');
+  logEvent('model', `switching to ${chosen} (warming up)…`);
+  try {
+    const response = await fetch('/api/model', {
+      method: 'POST',
+      headers: { 'content-type': 'application/json' },
+      body: JSON.stringify({ id: chosen }),
+    });
+    const body = await response.json();
+    if (!response.ok) throw new Error(body.error || response.statusText);
+    el('model').dataset.current = chosen;
+    logEvent('model', 'now running ' + body.current);
+    setStatus('status_idle');
+  } catch (error) {
+    logEvent('model', 'could not switch: ' + error.message);
+    if (previous) el('model').value = previous;   // put the picker back
+    setStatus('status_idle', 'error');
+  } finally {
+    el('model').disabled = false;
+  }
+});
+
+fetch('/health')
+  .then((r) => r.json().then((body) => ({ ok: r.ok, body })))
+  .then(({ ok, body }) => {
+    healthState = { ok, detail: body.detail ?? 'warming up' };
+    renderHealth();
+  })
+  .catch(() => {
+    healthState = { ok: false, detail: 'unreachable' };
+    renderHealth();
+  });
+
+// The offline eval result, kept visibly apart from anything computed live.
+fetch('/api/eval-summary')
+  .then((r) => (r.ok ? r.json() : Promise.reject(new Error('none'))))
+  .then((summary) => {
+    evalSummary = summary;
+    renderEvalSummary();
+  })
+  .catch(() => { /* the panel already says no run is recorded */ });
+</script>
+</body>
+</html>

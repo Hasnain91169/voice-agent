@@ -1,0 +1,487 @@
+{
+ "generated_with": "claude-opus-5",
+ "generated_at": "2026-08-03T08:05:08+00:00",
+ "note": "Questions are paraphrases; distinctive terms are deliberately absent.",
+ "probes": [
+  {
+   "question": "who prefers meeting us out on site rather than sitting in their office",
+   "body": "Rang ahead but he was on site so I went out to him, muddy boots job. Good rapport, he likes that we come out to the work rather than sitting in the office.",
+   "account": "Halliwell Industrial Fasteners",
+   "rep": "Dani Brooks"
+  },
+  {
+   "question": "which customer raised nothing at all and we agreed to keep monthly visits",
+   "body": "No issues raised at all this visit. Just a coffee and a catch up, keep the cadence at monthly.",
+   "account": "Halliwell Industrial Fasteners",
+   "rep": "Dani Brooks"
+  },
+  {
+   "question": "who's gone in for that housing association new build deal that could lift volumes",
+   "body": "They've registered for the new build framework with the housing association. If it lands it's a step up in volume, worth watching from June.",
+   "account": "Halliwell Industrial Fasteners",
+   "rep": "Dani Brooks"
+  },
+  {
+   "question": "who's started doing their own digging work so we could supply drainage and stone",
+   "body": "They've started doing more groundworks off their own bat. Opportunity on drainage and MOT type 1 if we can get the haulage right.",
+   "account": "Kingsmead Trade Supplies",
+   "rep": "Samir Haq"
+  },
+  {
+   "question": "who's waiting on a price for below ground drainage pipework at Tarvin",
+   "body": "He wants a quote on 60 lengths of 110 underground pipe plus bends for the Tarvin job. Promised it by Friday.",
+   "account": "Kingsmead Trade Supplies",
+   "rep": "Samir Haq"
+  },
+  {
+   "question": "who sticks with one make of sealant but might move on price",
+   "body": "Discussed the sealant and adhesives lines, they're loyal to one brand but open to a comparison if the price is right.",
+   "account": "Bramley Builders Merchants",
+   "rep": "Ellie Fenwick"
+  },
+  {
+   "question": "which customer keeps getting asked about car charger fitting and wants our range",
+   "body": "Talked through EV charging install work, they're getting asked about it more. Not our area really but I said I'd find out what we stock.",
+   "account": "Bramley Builders Merchants",
+   "rep": "Ellie Fenwick"
+  },
+  {
+   "question": "who's signed up for the supplier day at the branch in the autumn",
+   "body": "They've booked in for the manufacturer's day at the depot in October. Nia Okafor and two of the lads coming.",
+   "account": "Halliwell Plumbing Supplies",
+   "rep": "Tom Aldridge"
+  },
+  {
+   "question": "who's taken on a new pricing person who came from a plumbers merchant",
+   "body": "New estimator started, Priya Chandran, comes from a plumbing merchant background. Introduced myself, should be a good contact for pricing enquiries.",
+   "account": "Halliwell Plumbing Supplies",
+   "rep": "Tom Aldridge"
+  },
+  {
+   "question": "which contracts manager has picked up the second phase of that flats scheme",
+   "body": "Dave Enright (contracts manager) has taken on the Kirkstall Road flats phase 2, 34 plots, starts mid March. Wants a call on plasterboard and metal stud nearer the time.",
+   "account": "Severn Valley Industrial Fasteners",
+   "rep": "Dani Brooks"
+  },
+  {
+   "question": "which customer's doing the warehouse roof and needs the membrane details sent over",
+   "body": "Site visit at Bury, they're on the roof of a warehouse conversion. Talked single ply and edge trim, sending over spec Thursday.",
+   "account": "Severn Valley Industrial Fasteners",
+   "rep": "Dani Brooks"
+  },
+  {
+   "question": "who looked flat out with work on but had nothing to report",
+   "body": "Nothing to report other than they're busy. Two skips in the yard and a full board of jobs on the wall.",
+   "account": "Coldstream Industrial Fasteners",
+   "rep": "Samir Haq"
+  },
+  {
+   "question": "where did I leave the new insulation literature and brochures for the trade counter",
+   "body": "Dropped off the new insulation guide and a stack of catalogues for the counter at their unit.",
+   "account": "Gledhill Industrial Fasteners",
+   "rep": "Ellie Fenwick"
+  },
+  {
+   "question": "who's steering spend our way to reach the next discount level",
+   "body": "Talked rebate. He knows he's close to the next threshold and is actively steering spend our way to hit it. Good sign.",
+   "account": "Gledhill Industrial Fasteners",
+   "rep": "Ellie Fenwick"
+  },
+  {
+   "question": "who did I sort an urgent same day sheet material drop for",
+   "body": "Asked me for a favour on a one-off, needed 12 sheets of OSB same day. Sorted it through the branch, he was grateful. Bank that.",
+   "account": "Eastvale Timber & Board",
+   "rep": "Tom Aldridge"
+  },
+  {
+   "question": "which customer's buying more drill bits and blades since we fixed the stand",
+   "body": "Been buying more of the power tool accessories since we sorted the display. Small money but it's sticky business.",
+   "account": "Bramley Timber & Board",
+   "rep": "Dani Brooks"
+  },
+  {
+   "question": "who's reordered the outdoor slabs after the first lot flew out",
+   "body": "Bought their first pallet of the porcelain paving, sold through in a fortnight. Reordered two more, said the homeowners love the grey.",
+   "account": "Bramley Timber & Board",
+   "rep": "Dani Brooks"
+  },
+  {
+   "question": "who told me our website's easier to use than their old supplier's",
+   "body": "He commented that our online ordering is easier than the last lot he used. Small thing but he brought it up unprompted.",
+   "account": "Bramley Timber & Board",
+   "rep": "Dani Brooks"
+  },
+  {
+   "question": "which customer's grown their van fleet so we may need to rethink drop times",
+   "body": "Mo Osei mentioned they've taken on two more vans, so delivery windows may need looking at. Nothing urgent but worth flagging to transport.",
+   "account": "Bramley Timber & Board",
+   "rep": "Dani Brooks"
+  },
+  {
+   "question": "how many boards did I quote for the Ashwell Road flats",
+   "body": "Quoted 62 sheets of 12.5mm standard board plus scrim and beads for the Ashwell Road flats. Expect the order Thursday.",
+   "account": "Bramley Industrial Fasteners",
+   "rep": "Samir Haq"
+  },
+  {
+   "question": "Who's safe enough that I just need to keep in touch and show something new now and then",
+   "body": "Overall no risk here, just needs regular contact and the odd new line put in front of them. Next visit six weeks.",
+   "account": "Bramley Industrial Fasteners",
+   "rep": "Samir Haq"
+  },
+  {
+   "question": "Which customer took away board samples for a couple of garden projects this summer",
+   "body": "Left samples of the composite decking. Doing a couple of garden jobs in summer, could be a new line for them.",
+   "account": "Bramley Industrial Fasteners",
+   "rep": "Samir Haq"
+  },
+  {
+   "question": "Where do I leave the van when I call on the lot above the fish shop",
+   "body": "Their office is above a chippy on Bridge Street, parking is a nightmare. Note to self, use the Co-op car park and walk round.",
+   "account": "Jarrow Timber & Board",
+   "rep": "Ellie Fenwick"
+  },
+  {
+   "question": "Whose figures are up again this quarter mostly on the plumbing side",
+   "body": "Spend up again on last quarter, mostly driven by plumbing. Nothing to fix here, just keep showing up.",
+   "account": "Jarrow Timber & Board",
+   "rep": "Ellie Fenwick"
+  },
+  {
+   "question": "Who needs a quote back by Friday on graded carcassing for Radcliffe",
+   "body": "They want a price on 200 lengths of 47x100 C24 for the Radcliffe job. Quote due back by Friday.",
+   "account": "Pennine Electrical Wholesale",
+   "rep": "Tom Aldridge"
+  },
+  {
+   "question": "Which customer won't shift off their paving brand so don't offer alternatives",
+   "body": "They're loyal to Marshalls on paving, won't be moved. Fine, we supply it anyway, just don't push alternatives.",
+   "account": "Pennine Electrical Wholesale",
+   "rep": "Tom Aldridge"
+  },
+  {
+   "question": "Which contact is a big football fan worth inviting to a corporate day",
+   "body": "Danny Pike is a Leeds season ticket holder, east stand. Worth an invite to the hospitality day if we get tickets.",
+   "account": "Pennine Electrical Wholesale",
+   "rep": "Tom Aldridge"
+  },
+  {
+   "question": "Where was the visit just a brew and a chat about the weather",
+   "body": "Nice and relaxed visit, coffee and a moan about the weather. No issues raised at all.",
+   "account": "Inglewood Electrical Wholesale",
+   "rep": "Dani Brooks"
+  },
+  {
+   "question": "Who's abroad for the back half of July and who's covering for her",
+   "body": "Priya Pike off on holiday to Portugal the last two weeks of July, Gary covering. Don't chase anything in that window.",
+   "account": "Inglewood Electrical Wholesale",
+   "rep": "Dani Brooks"
+  },
+  {
+   "question": "What have I promised to bring to that account when I go back in March",
+   "body": "Next visit end of March. Bring the tool promo, the portal login sorted, and a price on the Radcliffe timber package.",
+   "account": "Kingsmead Plumbing Supplies",
+   "rep": "Samir Haq"
+  },
+  {
+   "question": "Which visit was rushed because he was stuck on a call the whole time",
+   "body": "Quick doorstep chat, he was on the phone the whole time. Rebook properly for next month.",
+   "account": "Kingsmead Plumbing Supplies",
+   "rep": "Samir Haq"
+  },
+  {
+   "question": "Who's nearly at their annual rebate target and how much have they got left",
+   "body": "Reminded him about the loyalty rebate threshold, he's about 8k off it with four months to run. He reckons they'll walk it.",
+   "account": "Ashworth Builders Merchants",
+   "rep": "Ellie Fenwick"
+  },
+  {
+   "question": "Whose other half had an operation earlier this year that I should ask about",
+   "body": "Ivy Whitfield's wife had a knee operation in January, all fine now. Remember to ask.",
+   "account": "Ashworth Builders Merchants",
+   "rep": "Ellie Fenwick"
+  },
+  {
+   "question": "Who told me they've got another fitter starting with them next week",
+   "body": "Yard was rammed when I got there, two vans loading at once. Told me they've taken on another fitter starting Monday.",
+   "account": "Ashworth Builders Merchants",
+   "rep": "Ellie Fenwick"
+  },
+  {
+   "question": "Who do I reckon is buying their screws and anchors somewhere local",
+   "body": "Nice easy visit. Coffee in the portacabin, half an hour of football, no issues raised at all.",
+   "account": "Ashworth Builders Merchants",
+   "rep": "Ellie Fenwick"
+  },
+  {
+   "question": "Which rival keeps calling on them trying to take the drainage work",
+   "body": "Fixings spend is lower than it should be for their volume. Suspect they're picking up screws and anchors locally, chase it.",
+   "account": "Kingsmead Timber & Board",
+   "rep": "Tom Aldridge"
+  },
+  {
+   "question": "Who's buying far more fixings than usual and probably stocking their own van",
+   "body": "Mentioned Cawley and Sons have been in twice this month with a rep chasing the drainage. He wasn't interested but they are sniffing round.",
+   "account": "Kingsmead Timber & Board",
+   "rep": "Tom Aldridge"
+  },
+  {
+   "question": "Whose civils work is growing quicker than their building work right now",
+   "body": "Big spend on fixings and consumables this quarter, higher than usual. Suspect they're stocking their own van store rather than buying weekly.",
+   "account": "Jarrow Industrial Fasteners",
+   "rep": "Dani Brooks"
+  },
+  {
+   "question": "When should I ring back about widening out the electrical offer we talked about",
+   "body": "Groundworks side growing faster than the build side. Chambers, pipe and bedding stone all up.",
+   "account": "Jarrow Industrial Fasteners",
+   "rep": "Dani Brooks"
+  },
+  {
+   "question": "Which visit was just coffee in the site cabin and half an hour of football",
+   "body": "Talked through the electrical range extension. He'll look at it properly after the bank holiday, said ring him week of the 12th.",
+   "account": "Kelvin Timber & Board",
+   "rep": "Samir Haq"
+  },
+  {
+   "question": "Did they price that Rochdale education job and when do we hear",
+   "body": "They quoted a school refurb in Rochdale, find out in three weeks. Would be a decent chunk of plasterboard and metal stud if it lands.",
+   "account": "Kelvin Timber & Board",
+   "rep": "Samir Haq"
+  },
+  {
+   "question": "Have they taken more staff on this year including any trainees",
+   "body": "Head count up to 14 from 11 last year. Two new apprentices through the CITB route, both on site with Gary.",
+   "account": "Inglewood Timber & Board",
+   "rep": "Ellie Fenwick"
+  },
+  {
+   "question": "Who actually raises the orders there and who just approves them",
+   "body": "Sharon in their office is the one who actually places the orders - Priya Osei just signs things off. Need to build that relationship more, I've been ignoring her.",
+   "account": "Dunmore Plumbing Supplies",
+   "rep": "Tom Aldridge"
+  },
+  {
+   "question": "Have we arranged to collect the empty pallets from their yard",
+   "body": "Asked about pallet returns, they've got about 20 stacked up. Arranged collection with transport for next Tuesday.",
+   "account": "Dunmore Plumbing Supplies",
+   "rep": "Tom Aldridge"
+  },
+  {
+   "question": "Has their monthly sheet board usage gone up much on last year",
+   "body": "Talked timber. They're taking around 40 sheets of 18mm OSB a month now, up from about 25 last year.",
+   "account": "Northgate Electrical Wholesale",
+   "rep": "Dani Brooks"
+  },
+  {
+   "question": "Are they expecting a slow couple of weeks between jobs soon",
+   "body": "Quiet fortnight coming as they've a gap between jobs. Expect the order rate to dip briefly then pick up from the 20th.",
+   "account": "Northgate Electrical Wholesale",
+   "rep": "Dani Brooks"
+  },
+  {
+   "question": "When is the gaffer off on holiday and who covers ordering",
+   "body": "Alex Marsh away in Lanzarote first two weeks of August. Deal with Sharon or Karl in that window.",
+   "account": "Northgate Builders Merchants",
+   "rep": "Samir Haq"
+  },
+  {
+   "question": "Do they need anything else for that house extension thats nearly done",
+   "body": "Extension job on Willow Drive finishing next week, snagging only. Nothing more needed from us on that one.",
+   "account": "Northgate Builders Merchants",
+   "rep": "Samir Haq"
+  },
+  {
+   "question": "Have I arranged to show him how the web ordering works",
+   "body": "Talked through the new online ordering portal, he's keen but wants a walkthrough. Booked in for the 22nd, 9am at their office.",
+   "account": "Northgate Builders Merchants",
+   "rep": "Samir Haq"
+  },
+  {
+   "question": "Does he still rate the rep who had that area before me",
+   "body": "He knows our rep patch changed and said he liked the old fella, Tony. Building trust from scratch a bit here.",
+   "account": "Dunmore Industrial Fasteners",
+   "rep": "Ellie Fenwick"
+  },
+  {
+   "question": "What has he got running at Beeston and when does it end",
+   "body": "He's still got the Beeston care home extension running but it's small beer, two lads on it and it finishes end of April.",
+   "account": "Dunmore Industrial Fasteners",
+   "rep": "Ellie Fenwick"
+  },
+  {
+   "question": "Is the young lad doing college and who is funding it",
+   "body": "Ryan the apprentice is doing his level 2 at West Notts, Dave's paying for it himself. Nice detail, ask next visit.",
+   "account": "Jarrow Trade Supplies",
+   "rep": "Tom Aldridge"
+  },
+  {
+   "question": "Which product lines are actually growing with them right now",
+   "body": "Fixings and consumables are the only line growing. Suggests they're finishing work, not starting it.",
+   "account": "Jarrow Trade Supplies",
+   "rep": "Tom Aldridge"
+  },
+  {
+   "question": "Could we push tool hire with him when material sales are slow",
+   "body": "Talked about the Hilti breaker he hires off us occasionally. Might be worth a hire package to keep him engaged when materials are low.",
+   "account": "Jarrow Trade Supplies",
+   "rep": "Tom Aldridge"
+  },
+  {
+   "question": "Have they cut back any temporary labour on site lately",
+   "body": "Sean the foreman was in the yard, said they've laid off one of the agency lads and the other is down to three days.",
+   "account": "Northgate Plumbing Supplies",
+   "rep": "Dani Brooks"
+  },
+  {
+   "question": "Has he had a tool sat on hire ages without using it",
+   "body": "They've still got the Hilti breaker on hire from us since August and barely used it. Worth offering to take it back before he asks, would go down well.",
+   "account": "Northgate Plumbing Supplies",
+   "rep": "Dani Brooks"
+  },
+  {
+   "question": "Do we still get on well even with his workload problems",
+   "body": "Good rapport still there, he made me a brew and we talked about Forest for twenty minutes. Relationship is fine, it's the workload that's the problem.",
+   "account": "Coldstream Electrical Wholesale",
+   "rep": "Samir Haq"
+  },
+  {
+   "question": "Have they changed how far ahead they buy their regular materials",
+   "body": "Karen in the office says they've stopped ordering ahead and are buying week to week now. Worth quoting tighter on the regular lines.",
+   "account": "Gledhill Timber & Board",
+   "rep": "Ellie Fenwick"
+  },
+  {
+   "question": "What condition is his van in and is he replacing it",
+   "body": "Van is looking tired, the Transit has done 190k and he said he can't justify changing it yet.",
+   "account": "Gledhill Timber & Board",
+   "rep": "Ellie Fenwick"
+  },
+  {
+   "question": "Why are those Wharf Lane plots paused and what was he relying on",
+   "body": "Wharf Lane plots 6 to 9 are on hold until the developer sorts the drainage adoption. That was his bread and butter through the winter.",
+   "account": "Dunmore Electrical Wholesale",
+   "rep": "Tom Aldridge"
+  },
+  {
+   "question": "who's bidding on that Sutton education job and when does it close",
+   "body": "He's tendering for a school refurb in Sutton, closes 12th March. Long shot but I said I'd help with a materials schedule.",
+   "account": "Dunmore Electrical Wholesale",
+   "rep": "Tom Aldridge"
+  },
+  {
+   "question": "why has that builder's wood buying grown, have they picked up more plots",
+   "body": "Their timber usage has gone up if anything, they've won two more housing plots off Barratt. So it's not that the work's dried up.",
+   "account": "Marchwood Timber & Board",
+   "rep": "Dani Brooks"
+  },
+  {
+   "question": "what happened when I offered him a meal or a walk round the job",
+   "body": "Tried to book a lunch, got a no. Tried a site visit, got a maybe. Not much to work with.",
+   "account": "Marchwood Timber & Board",
+   "rep": "Dani Brooks"
+  },
+  {
+   "question": "which customer's stopped buying since the spring board delivery and won't explain why",
+   "body": "Third visit running where nobody's ordered anything since the March plasterboard drop. Something's gone wrong and no one will say what.",
+   "account": "Marchwood Timber & Board",
+   "rep": "Dani Brooks"
+  },
+  {
+   "question": "could that autumn price change notice be why the account went silent",
+   "body": "Quiet since the pricing letter went out in October. I reckon that was the trigger even though nobody's said it outright.",
+   "account": "Marchwood Timber & Board",
+   "rep": "Dani Brooks"
+  },
+  {
+   "question": "did I ever get through when I tried calling him last week",
+   "body": "Rang Monday, went to voicemail. Rang Thursday, voicemail again. Tried the mobile Friday morning and he picked up then said he was driving.",
+   "account": "Coldstream Timber & Board",
+   "rep": "Samir Haq"
+  },
+  {
+   "question": "what did the customer do with the product book and billing paperwork I left",
+   "body": "Left the new catalogue and the account statement. He put both straight in the drawer without looking.",
+   "account": "Coldstream Timber & Board",
+   "rep": "Samir Haq"
+  },
+  {
+   "question": "does it look like that customer has already made their mind up",
+   "body": "Feels like they've already decided and are just being polite. Need to give them a reason to reconsider fast.",
+   "account": "Halliwell Timber & Board",
+   "rep": "Ellie Fenwick"
+  },
+  {
+   "question": "how long did the buyer give me and did he seem interested",
+   "body": "He was polite, gave me twelve minutes, never once opened his diary. Body language said get on with it.",
+   "account": "Halliwell Timber & Board",
+   "rep": "Ellie Fenwick"
+  },
+  {
+   "question": "when do I need to get in front of them before that Doncaster education bid",
+   "body": "They're tendering for the Doncaster school in September. If we're not in front of them by August we're not in it at all.",
+   "account": "Halliwell Timber & Board",
+   "rep": "Ellie Fenwick"
+  },
+  {
+   "question": "any reply on the fastenings pricing I sent almost a fortnight back",
+   "body": "Sent quote for the fixings package 12 days ago, no response, no acknowledgement. Chased twice.",
+   "account": "Harrowby Industrial Fasteners",
+   "rep": "Tom Aldridge"
+  },
+  {
+   "question": "how many of our metal stock cages are still sitting at their place",
+   "body": "Still got our stillages in their yard, four of them. He made a point of mentioning it which felt pointed.",
+   "account": "Harrowby Industrial Fasteners",
+   "rep": "Tom Aldridge"
+  },
+  {
+   "question": "are we supplying anything on that Kirkstall Road apartment scheme",
+   "body": "They're on the Kirkstall Road flats job, six blocks, started April. Not a single order off us for it. That hurts.",
+   "account": "Harrowby Industrial Fasteners",
+   "rep": "Tom Aldridge"
+  },
+  {
+   "question": "when am I due back there and am I taking something written",
+   "body": "Diarised to go back in three weeks with a proper written proposal rather than another chat. Last roll of the dice really.",
+   "account": "Harrowby Industrial Fasteners",
+   "rep": "Tom Aldridge"
+  },
+  {
+   "question": "did the buyer say he'd use just one merchant if the numbers worked",
+   "body": "Jordan Pike said outright he'd rather deal with one supplier if the price stacked up. That's the opening, need a proper comparison sheet.",
+   "account": "Lowther Timber & Board",
+   "rep": "Dani Brooks"
+  },
+  {
+   "question": "which easy switch lines should I go after first with that customer",
+   "body": "Sealants and adhesives worth attacking first. Low value, low risk for them to switch, gets us on the invoice weekly.",
+   "account": "Kelvin Trade Supplies",
+   "rep": "Samir Haq"
+  },
+  {
+   "question": "any real reason their fastenings order goes to the rival merchant instead of us",
+   "body": "Asked why the fixings goes to Cawley and Sons and honestly nobody could tell me. Habit, driver knows the trade counter lad, that's about it.",
+   "account": "Kelvin Trade Supplies",
+   "rep": "Samir Haq"
+  },
+  {
+   "question": "who asked about renting a cutting machine for two days in late February",
+   "body": "Dean asked about hire on a floor saw for two days end of Feb. Passed to the hire desk, need to chase.",
+   "account": "Eastvale Builders Merchants",
+   "rep": "Ellie Fenwick"
+  },
+  {
+   "question": "which bagged materials do we already hold with no competition risk",
+   "body": "Powder products, sand and cement, plaster, all ours and no threat there as far as I can see.",
+   "account": "Gledhill Plumbing Supplies",
+   "rep": "Tom Aldridge"
+  },
+  {
+   "question": "why are they nervous about leaving tools on the Thornhill Grange job",
+   "body": "Site cabin at Thornhill Grange got broken into over Christmas, lost a couple of Makitas. They're twitchy about leaving anything on site now.",
+   "account": "Gledhill Plumbing Supplies",
+   "rep": "Tom Aldridge"
+  }
+ ]
+}

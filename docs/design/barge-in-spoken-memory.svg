@@ -1,0 +1,44 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="560" viewBox="0 0 1600 560" role="img">
+  <defs>
+    <linearGradient id="panel" x1="0" x2="1">
+      <stop offset="0" stop-color="#111614"/>
+      <stop offset="1" stop-color="#0d1312"/>
+    </linearGradient>
+    <linearGradient id="mint" x1="0" x2="1">
+      <stop offset="0" stop-color="#34d399"/>
+      <stop offset="1" stop-color="#2dd4bf"/>
+    </linearGradient>
+    <filter id="glow" x="-30%" y="-30%" width="160%" height="160%">
+      <feGaussianBlur stdDeviation="6" result="blur"/>
+      <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+  </defs>
+  <rect width="1600" height="560" rx="18" fill="#0b0f0e"/>
+  <text x="72" y="58" fill="#e6efeb" font-family="Segoe UI, Arial, sans-serif" font-size="32" font-weight="700" letter-spacing="0" text-anchor="start">Barge-in and spoken memory</text>
+  <text x="74" y="90" fill="#8ca098" font-family="Segoe UI, Arial, sans-serif" font-size="16" font-weight="400" letter-spacing="0" text-anchor="start">The hard part is not stopping audio. It is remembering only what the caller actually heard.</text>
+  <rect x="90" y="150" width="360" height="88" rx="10" fill="#16201d" stroke="#26322f" opacity="1"/>
+  <text x="106" y="178" fill="#e6efeb" font-family="Segoe UI, Arial, sans-serif" font-size="17" font-weight="500" letter-spacing="0" text-anchor="start">Generated assistant turn</text>
+  <text x="106" y="200" fill="#8ca098" font-family="Segoe UI, Arial, sans-serif" font-size="12" font-weight="400" letter-spacing="0" text-anchor="start">Full response exists in memory only as draft</text>
+  <rect x="90" y="300" width="360" height="88" rx="10" fill="#16201d" stroke="#26322f" opacity="1"/>
+  <text x="106" y="328" fill="#e6efeb" font-family="Segoe UI, Arial, sans-serif" font-size="17" font-weight="500" letter-spacing="0" text-anchor="start">Playback tracker</text>
+  <text x="106" y="350" fill="#8ca098" font-family="Segoe UI, Arial, sans-serif" font-size="12" font-weight="400" letter-spacing="0" text-anchor="start">bytes sent -&gt; words heard</text>
+  <rect x="580" y="150" width="430" height="88" rx="10" fill="#16201d" stroke="#26322f" opacity="1"/>
+  <text x="596" y="178" fill="#e6efeb" font-family="Segoe UI, Arial, sans-serif" font-size="17" font-weight="500" letter-spacing="0" text-anchor="start">Caller talks over the agent</text>
+  <text x="596" y="200" fill="#8ca098" font-family="Segoe UI, Arial, sans-serif" font-size="12" font-weight="400" letter-spacing="0" text-anchor="start">2 interruptions injected; 3 turns cancelled by pipeline</text>
+  <rect x="580" y="300" width="430" height="88" rx="10" fill="#16201d" stroke="#26322f" opacity="1"/>
+  <text x="596" y="328" fill="#e6efeb" font-family="Segoe UI, Arial, sans-serif" font-size="17" font-weight="500" letter-spacing="0" text-anchor="start">Barge-in stop</text>
+  <text x="596" y="350" fill="#8ca098" font-family="Segoe UI, Arial, sans-serif" font-size="12" font-weight="400" letter-spacing="0" text-anchor="start">p50 328ms from talked over to last frame</text>
+  <rect x="1130" y="150" width="360" height="88" rx="10" fill="#16201d" stroke="#26322f" opacity="1"/>
+  <text x="1146" y="178" fill="#e6efeb" font-family="Segoe UI, Arial, sans-serif" font-size="17" font-weight="500" letter-spacing="0" text-anchor="start">Conversation history</text>
+  <text x="1146" y="200" fill="#8ca098" font-family="Segoe UI, Arial, sans-serif" font-size="12" font-weight="400" letter-spacing="0" text-anchor="start">history matched heard text in 2 of 2 interrupted calls</text>
+  <rect x="1130" y="300" width="360" height="88" rx="10" fill="#16201d" stroke="#26322f" opacity="1"/>
+  <text x="1146" y="328" fill="#e6efeb" font-family="Segoe UI, Arial, sans-serif" font-size="17" font-weight="500" letter-spacing="0" text-anchor="start">Known measurement fix</text>
+  <text x="1146" y="350" fill="#8ca098" font-family="Segoe UI, Arial, sans-serif" font-size="12" font-weight="400" letter-spacing="0" text-anchor="start">injected != cancelled; finishing normally looks similar</text>
+  <line x1="450" y1="194" x2="580" y2="194" stroke="#26322f" stroke-width="3" stroke-linecap="round"/>
+  <line x1="450" y1="344" x2="580" y2="344" stroke="#26322f" stroke-width="3" stroke-linecap="round"/>
+  <line x1="1010" y1="194" x2="1130" y2="194" stroke="#34d399" stroke-width="3" stroke-linecap="round"/>
+  <line x1="1010" y1="344" x2="1130" y2="344" stroke="#fbbf24" stroke-width="3" stroke-linecap="round"/>
+  <rect x="210" y="436" width="1180" height="76" rx="12" fill="#111614" stroke="#26322f" opacity="1"/>
+  <text x="240" y="468" fill="#8ca098" font-family="Segoe UI, Arial, sans-serif" font-size="15" font-weight="400" letter-spacing="0" text-anchor="start">Rule</text>
+  <text x="240" y="494" fill="#34d399" font-family="Segoe UI, Arial, sans-serif" font-size="22" font-weight="700" letter-spacing="0" text-anchor="start">Commit the truncated text the caller heard, not the full generated answer.</text>
+</svg>

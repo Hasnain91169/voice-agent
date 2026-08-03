@@ -1,0 +1,69 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="960" height="260" viewBox="0 0 960 260" role="img" aria-labelledby="title desc">
+  <title id="title">Live voice-agent pipeline animation</title>
+  <desc id="desc">An animated diagram showing listening, recognition, tool use and speech synthesis.</desc>
+  <defs>
+    <linearGradient id="panel" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#101815"/>
+      <stop offset="1" stop-color="#0b0f0e"/>
+    </linearGradient>
+    <filter id="glow" x="-40%" y="-40%" width="180%" height="180%">
+      <feGaussianBlur stdDeviation="4" result="blur"/>
+      <feMerge>
+        <feMergeNode in="blur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+    <style>
+      text { font-family: Inter, Segoe UI, Arial, sans-serif; }
+      .card { fill: #111614; stroke: #1e2724; stroke-width: 2; }
+      .label { fill: #e6efeb; font-size: 20px; font-weight: 700; }
+      .note { fill: #7d918a; font-size: 14px; }
+      .line { stroke: #253530; stroke-width: 4; stroke-linecap: round; }
+      .pulse { fill: #34d399; filter: url(#glow); }
+      .quiet { fill: #253530; }
+    </style>
+  </defs>
+
+  <rect width="960" height="260" rx="18" fill="url(#panel)"/>
+  <text x="42" y="46" fill="#e6efeb" font-size="24" font-weight="800">Live voice-agent loop</text>
+  <text x="42" y="72" fill="#7d918a" font-size="15">The browser dashboard animates this same sequence from websocket events.</text>
+
+  <line class="line" x1="190" y1="142" x2="770" y2="142"/>
+  <circle class="quiet" cx="190" cy="142" r="8"/>
+  <circle class="quiet" cx="383" cy="142" r="8"/>
+  <circle class="quiet" cx="577" cy="142" r="8"/>
+  <circle class="quiet" cx="770" cy="142" r="8"/>
+
+  <g transform="translate(90 105)">
+    <rect class="card" width="200" height="96" rx="12"/>
+    <text class="label" x="24" y="40">Listening</text>
+    <text class="note" x="24" y="65">VAD finds a turn</text>
+  </g>
+  <g transform="translate(283 105)">
+    <rect class="card" width="200" height="96" rx="12"/>
+    <text class="label" x="24" y="40">Recognising</text>
+    <text class="note" x="24" y="65">ASR detects language</text>
+  </g>
+  <g transform="translate(477 105)">
+    <rect class="card" width="200" height="96" rx="12"/>
+    <text class="label" x="24" y="40">Thinking/tools</text>
+    <text class="note" x="24" y="65">LangGraph + CRM</text>
+  </g>
+  <g transform="translate(670 105)">
+    <rect class="card" width="200" height="96" rx="12"/>
+    <text class="label" x="24" y="40">Speaking</text>
+    <text class="note" x="24" y="65">TTS streams clauses</text>
+  </g>
+
+  <circle class="pulse" cx="190" cy="142" r="10">
+    <animate attributeName="cx" values="190;383;577;770;190" dur="5.6s" repeatCount="indefinite"/>
+  </circle>
+  <circle fill="none" stroke="#34d399" stroke-width="3" opacity=".75" cx="190" cy="142" r="16">
+    <animate attributeName="cx" values="190;383;577;770;190" dur="5.6s" repeatCount="indefinite"/>
+    <animate attributeName="r" values="12;22;12" dur="1.4s" repeatCount="indefinite"/>
+    <animate attributeName="opacity" values=".8;.1;.8" dur="1.4s" repeatCount="indefinite"/>
+  </circle>
+
+  <path d="M 780 202 C 720 235, 245 235, 180 202" fill="none" stroke="#34d399" stroke-width="2" stroke-dasharray="8 10" opacity=".45"/>
+  <text x="366" y="235" fill="#7d918a" font-size="14">barge-in can cancel generation, synthesis and playback together</text>
+</svg>

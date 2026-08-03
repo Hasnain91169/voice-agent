@@ -1,0 +1,48 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="520" viewBox="0 0 1600 520" role="img">
+  <defs>
+    <linearGradient id="panel" x1="0" x2="1">
+      <stop offset="0" stop-color="#111614"/>
+      <stop offset="1" stop-color="#0d1312"/>
+    </linearGradient>
+    <linearGradient id="mint" x1="0" x2="1">
+      <stop offset="0" stop-color="#34d399"/>
+      <stop offset="1" stop-color="#2dd4bf"/>
+    </linearGradient>
+    <filter id="glow" x="-30%" y="-30%" width="160%" height="160%">
+      <feGaussianBlur stdDeviation="6" result="blur"/>
+      <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+  </defs>
+  <rect width="1600" height="520" rx="18" fill="#0b0f0e"/>
+  <text x="72" y="60" fill="#e6efeb" font-family="Segoe UI, Arial, sans-serif" font-size="32" font-weight="700" letter-spacing="0" text-anchor="start">Turn and cancel-scope timeline</text>
+  <text x="74" y="92" fill="#8ca098" font-family="Segoe UI, Arial, sans-serif" font-size="16" font-weight="400" letter-spacing="0" text-anchor="start">Budget is data: 450 + 50 + 200 + 80 + 150 + 70 = 1000ms. External measured p50 is 719ms.</text>
+  <line x1="120" y1="260" x2="1240" y2="260" stroke="#26322f" stroke-width="3" stroke-linecap="round"/>
+  <rect x="120" y="224" width="504" height="72" rx="8" fill="#34d399" stroke="#34d399" opacity="0.18"/>
+  <text x="132" y="252" fill="#e6efeb" font-family="Segoe UI, Arial, sans-serif" font-size="15" font-weight="500" letter-spacing="0" text-anchor="start">Endpoint</text>
+  <text x="132" y="278" fill="#34d399" font-family="Segoe UI, Arial, sans-serif" font-size="14" font-weight="500" letter-spacing="0" text-anchor="start">450ms</text>
+  <rect x="624" y="224" width="56" height="72" rx="8" fill="#60a5fa" stroke="#60a5fa" opacity="0.18"/>
+  <text x="636" y="252" fill="#e6efeb" font-family="Segoe UI, Arial, sans-serif" font-size="15" font-weight="500" letter-spacing="0" text-anchor="start">ASR</text>
+  <text x="636" y="278" fill="#60a5fa" font-family="Segoe UI, Arial, sans-serif" font-size="14" font-weight="500" letter-spacing="0" text-anchor="start">50ms</text>
+  <rect x="680" y="224" width="224" height="72" rx="8" fill="#2dd4bf" stroke="#2dd4bf" opacity="0.18"/>
+  <text x="692" y="252" fill="#e6efeb" font-family="Segoe UI, Arial, sans-serif" font-size="15" font-weight="500" letter-spacing="0" text-anchor="start">LLM first token</text>
+  <text x="692" y="278" fill="#2dd4bf" font-family="Segoe UI, Arial, sans-serif" font-size="14" font-weight="500" letter-spacing="0" text-anchor="start">200ms</text>
+  <rect x="904" y="224" width="89" height="72" rx="8" fill="#fbbf24" stroke="#fbbf24" opacity="0.18"/>
+  <text x="916" y="252" fill="#e6efeb" font-family="Segoe UI, Arial, sans-serif" font-size="15" font-weight="500" letter-spacing="0" text-anchor="start">First clause</text>
+  <text x="916" y="278" fill="#fbbf24" font-family="Segoe UI, Arial, sans-serif" font-size="14" font-weight="500" letter-spacing="0" text-anchor="start">80ms</text>
+  <rect x="993" y="224" width="168" height="72" rx="8" fill="#34d399" stroke="#34d399" opacity="0.18"/>
+  <text x="1005" y="252" fill="#e6efeb" font-family="Segoe UI, Arial, sans-serif" font-size="15" font-weight="500" letter-spacing="0" text-anchor="start">TTS first chunk</text>
+  <text x="1005" y="278" fill="#34d399" font-family="Segoe UI, Arial, sans-serif" font-size="14" font-weight="500" letter-spacing="0" text-anchor="start">150ms</text>
+  <rect x="1161" y="224" width="78" height="72" rx="8" fill="#5f716b" stroke="#5f716b" opacity="0.18"/>
+  <text x="1173" y="252" fill="#e6efeb" font-family="Segoe UI, Arial, sans-serif" font-size="15" font-weight="500" letter-spacing="0" text-anchor="start">Prebuffer</text>
+  <text x="1173" y="278" fill="#5f716b" font-family="Segoe UI, Arial, sans-serif" font-size="14" font-weight="500" letter-spacing="0" text-anchor="start">70ms</text>
+  <line x1="120" y1="346" x2="925" y2="346" stroke="#34d399" stroke-width="5" stroke-linecap="round"/>
+  <text x="120" y="386" fill="#34d399" font-family="Segoe UI, Arial, sans-serif" font-size="18" font-weight="500" letter-spacing="0" text-anchor="start">Measured outside process: first audio p50 719ms across 43 turns</text>
+  <line x1="120" y1="150" x2="625" y2="150" stroke="#fbbf24" stroke-width="4" stroke-linecap="round"/>
+  <text x="120" y="128" fill="#fbbf24" font-family="Segoe UI, Arial, sans-serif" font-size="16" font-weight="500" letter-spacing="0" text-anchor="start">Cancel scope begins after user turn ends</text>
+  <rect x="1090" y="132" width="390" height="172" rx="12" fill="#111614" stroke="#26322f" opacity="1"/>
+  <text x="1115" y="166" fill="#e6efeb" font-family="Segoe UI, Arial, sans-serif" font-size="22" font-weight="700" letter-spacing="0" text-anchor="start">On barge-in</text>
+  <text x="1115" y="198" fill="#8ca098" font-family="Segoe UI, Arial, sans-serif" font-size="16" font-weight="400" letter-spacing="0" text-anchor="start">Cancel LLM streaming</text>
+  <text x="1115" y="224" fill="#8ca098" font-family="Segoe UI, Arial, sans-serif" font-size="16" font-weight="400" letter-spacing="0" text-anchor="start">Cancel TTS clause synthesis</text>
+  <text x="1115" y="250" fill="#8ca098" font-family="Segoe UI, Arial, sans-serif" font-size="16" font-weight="400" letter-spacing="0" text-anchor="start">Cancel playback pacing</text>
+  <text x="1115" y="278" fill="#34d399" font-family="Segoe UI, Arial, sans-serif" font-size="16" font-weight="500" letter-spacing="0" text-anchor="start">Commit only spoken text</text>
+</svg>

@@ -1,0 +1,13 @@
+name: Interrupts then changes subject
+persona: |
+  You are a rep who talks over people constantly. You interrupt, then ask
+  about something completely different from what you first asked.
+goal: |
+  Cut the agent off and have it follow you to the new subject without
+  repeating the answer you already stopped.
+opening: Which of my accounts are slipping?
+max_turns: 3
+interrupt_at: 0
+expects_barge_in: true
+expects_account_archetype: at_risk
+forbids_other_reps: true

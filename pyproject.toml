@@ -1,0 +1,83 @@
+[project]
+name = "voice-agent"
+version = "0.1.0"
+description = "Low-latency agentic voice platform: streaming ASR/TTS, barge-in, LangGraph tool-use, and simulation-based evaluation."
+readme = "README.md"
+requires-python = ">=3.12,<3.14"
+license = { text = "MIT" }
+
+# Core runtime. Deliberately small: the audio path depends on numpy and nothing else.
+# Providers and the agent layer are optional extras so the repo installs and tests
+# without pulling ML wheels or requiring a single API key.
+dependencies = [
+    "numpy>=2.1",
+    "pydantic>=2.9",
+    "pydantic-settings>=2.6",
+    "fastapi>=0.115",
+    "uvicorn[standard]>=0.32",
+    "httpx>=0.28",
+    "python-multipart>=0.0.20",  # FastAPI form parsing; missing in the old requirements.txt
+    "pyjwt[crypto]>=2.10",       # Vonage webhook signature verification
+]
+
+[project.optional-dependencies]
+# Zero-cost local stack. ctranslate2 is pulled in by faster-whisper.
+local = [
+    "faster-whisper>=1.1",
+]
+# GPU ASR. CTranslate2 links against cuBLAS and cuDNN at load time but does not
+# ship them; without these the model constructs fine and then dies on the first
+# inference. Separate from `local` because a CPU-only host should not download
+# ~700 MB of CUDA libraries it cannot use.
+cuda = [
+    "nvidia-cublas-cu12>=12.9",
+    "nvidia-cudnn-cu12>=9.24",
+]
+# Frontier / streaming cloud providers.
+cloud = [
+    "openai>=1.59",
+    "anthropic>=0.42",
+    "deepgram-sdk>=3.8",
+    "elevenlabs>=1.50",
+]
+agent = [
+    "langgraph>=0.2.60",
+    "langgraph-checkpoint-sqlite>=2.0",
+    "langchain-core>=0.3.28",
+]
+dev = [
+    "pytest>=8.3",
+    "pytest-asyncio>=0.25",
+    "ruff>=0.8",
+    "mypy>=1.14",
+    "pyyaml>=6.0",
+]
+
+[project.scripts]
+voice-agent = "voice_agent.server.app:main"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/voice_agent"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+asyncio_mode = "auto"
+filterwarnings = ["error::DeprecationWarning:voice_agent.*"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py312"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B", "ASYNC", "RUF"]
+
+[tool.mypy]
+python_version = "3.12"
+packages = ["voice_agent"]
+strict = true
+# Optional extras are not installed in every environment.
+ignore_missing_imports = true

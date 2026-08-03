@@ -1,0 +1,89 @@
+# --- Secrets: never commit. Nothing here is recoverable once pushed. ---
+.env
+.env.*
+!.env.example
+*.key
+*.pem
+*.p12
+secrets/
+credentials/
+
+# Keys pasted into a text file for convenience are the most common way one
+# reaches a public repo. Match the shapes that habit produces, not just the
+# formal ones above.
+*api*key*
+*api*secret*
+*apikey*
+*token*.txt
+*credential*
+!**/tests/**/*token*.txt
+
+# --- Python ---
+__pycache__/
+*.py[cod]
+*.so
+.Python
+build/
+dist/
+*.egg-info/
+.eggs/
+
+# --- Environments ---
+.venv/
+venv/
+env/
+ENV/
+*-venv/
+pipcache/
+
+# --- Tooling caches ---
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+.coverage
+htmlcov/
+.hypothesis/
+
+# --- Models and vendored binaries: fetched by scripts/fetch_models.py ---
+models/
+voices/
+piper/
+*.onnx
+*.onnx.json
+*.ort
+*.bin
+*.pt
+*.gguf
+
+# --- Audio artefacts and call data (may contain real customer speech) ---
+*.wav
+*.mp3
+*.flac
+*.opus
+transcripts/
+recordings/
+tmp/
+work/
+!tests/fixtures/*.wav
+
+# --- Archives ---
+*.zip
+*.tar
+*.tar.gz
+*.7z
+
+# --- Eval and bench output ---
+evals/results/
+bench/results/
+
+# --- Local databases (seeded by scripts) ---
+*.db
+*.sqlite
+*.sqlite3
+
+# --- Editors / OS ---
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+desktop.ini

@@ -1,0 +1,15 @@
+name: Interrupts mid-answer
+persona: |
+  You are a rep in a hurry who realises halfway through the answer that you
+  asked about the wrong thing. You cut in without waiting, then ask your real
+  question.
+goal: |
+  Interrupt the agent mid-sentence and get an answer to the question you
+  actually meant to ask.
+opening: Brief me on {account} before I get there.
+about: healthy
+max_turns: 3
+# Talk over the agent on its first answer, which is the longest one it gives.
+interrupt_at: 0
+expects_barge_in: true
+forbids_other_reps: true

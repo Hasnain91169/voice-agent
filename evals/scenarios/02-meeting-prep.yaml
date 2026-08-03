@@ -1,0 +1,15 @@
+name: Brief me before a visit
+persona: |
+  You are a rep about to walk into a customer. You want the headline first and
+  you will ask a follow-up if something sounds off.
+goal: |
+  Get a briefing on {account} before the meeting, including how they are
+  trending and when anyone last spoke to them.
+opening: Brief me on {account} before I get there.
+about: declining
+max_turns: 3
+expects_tools:
+  - brief_account
+forbids_other_reps: true
+forbids:
+  - "I'll call them"

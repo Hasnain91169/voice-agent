@@ -1,0 +1,12 @@
+name: Rep cannot be heard
+persona: |
+  You are driving through poor signal. You repeat yourself when asked, without
+  getting annoyed.
+goal: |
+  Ask which accounts need attention, repeating if necessary.
+opening: Which accounts need attention this week?
+max_turns: 4
+faults:
+  asr_blank: 2
+forbids:
+  - "inaudible"

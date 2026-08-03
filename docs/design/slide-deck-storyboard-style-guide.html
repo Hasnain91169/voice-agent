@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="en">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Voice Agent Storyboard and Style Guide</title>
+<style>
+:root{--bg:#0b0f0e;--panel:#111614;--panel2:#16201d;--line:#26322f;--ink:#e6efeb;--dim:#8ca098;--accent:#34d399;--warn:#fbbf24;--bad:#f87171;--blue:#60a5fa}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:14px/1.5 "Segoe UI",system-ui,sans-serif}.wrap{max-width:1180px;margin:auto;padding:42px 28px 80px}h1{font-size:36px;margin:0 0 8px}h2{font-size:18px;margin:34px 0 14px;color:var(--accent)}p{color:var(--dim)}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:14px}.card{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:16px}.swatches{display:flex;gap:10px;flex-wrap:wrap}.swatch{width:118px;height:70px;border-radius:10px;border:1px solid var(--line);padding:10px;display:flex;align-items:end}.mono{font-family:"Cascadia Mono",Consolas,monospace}.slide{min-height:135px}.tag{display:inline-block;border:1px solid var(--line);border-radius:999px;padding:4px 9px;color:var(--dim);margin:4px 4px 0 0}.accent{color:var(--accent)}.warn{color:var(--warn)}
+</style>
+<main class="wrap">
+  <h1>Voice Agent storyboard and style guide</h1>
+  <p>Use the existing dark console language: mint signal color, quiet panels, waveform texture, and precise measured claims. Avoid implying unfinished adapters or telephony are shipped.</p>
+  <h2>Storyboard</h2>
+  <section class="grid">
+    <div class="card slide"><b>1. Hook</b><p>Hero banner: real-time, local-first, measured. Lead with p50 719ms and barge-in 219-328ms, then name the known p95 weakness.</p></div>
+    <div class="card slide"><b>2. Audio path</b><p>Show RxPump ownership, FrameChannel, VAD, ASR, LangGraph, TTS, playback. Mention framework boundary.</p></div>
+    <div class="card slide"><b>3. Turn taking</b><p>Explain the 1000ms budget and why 450ms endpointing shipped.</p></div>
+    <div class="card slide"><b>4. Interruption</b><p>Barge-in is cancellation plus memory discipline: commit what was heard.</p></div>
+    <div class="card slide"><b>5. Evaluation</b><p>Split deterministic checks, model judge, text mode, and audio mode.</p></div>
+    <div class="card slide"><b>6. Measurement honesty</b><p>Close with the failures the harness caught and the unresolved judge issue.</p></div>
+  </section>
+  <h2>Palette</h2>
+  <section class="swatches">
+    <div class="swatch" style="background:#0b0f0e">#0b0f0e</div>
+    <div class="swatch" style="background:#111614">#111614</div>
+    <div class="swatch" style="background:#16201d">#16201d</div>
+    <div class="swatch" style="background:#34d399;color:#06251a">#34d399</div>
+    <div class="swatch" style="background:#fbbf24;color:#211805">#fbbf24</div>
+    <div class="swatch" style="background:#f87171;color:#210707">#f87171</div>
+  </section>
+  <h2>Copy rules</h2>
+  <div class="card">
+    <span class="tag">Use measured numbers exactly</span>
+    <span class="tag">Say p95 is over target</span>
+    <span class="tag">Mark Vonage as not implemented</span>
+    <span class="tag">Do not call German shipped</span>
+    <span class="tag">No fake scorecards</span>
+    <span class="tag">No generic chatbot framing</span>
+  </div>
+  <h2>Typography</h2>
+  <div class="grid">
+    <div class="card"><b>Display</b><p>Segoe UI bold, short nouns: voice-agent, Audio path, Barge-in.</p></div>
+    <div class="card"><b>Body</b><p>Segoe UI regular, one measured claim per line.</p></div>
+    <div class="card"><b>Technical</b><p class="mono">Cascadia Mono for commands, event names, and path labels.</p></div>
+  </div>
+</main>
+</html>

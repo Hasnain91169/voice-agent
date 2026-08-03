@@ -1,0 +1,442 @@
+{
+ "generated_with": "claude-opus-5",
+ "generated_at": "2026-08-03T08:02:18+00:00",
+ "note": "Questions hand-written; relevance labelled by the model, per note.",
+ "probes": [
+  {
+   "topic": "competitor",
+   "question": "has anyone mentioned a competitor or moving their business elsewhere",
+   "relevant": {
+    "Samir Haq": [
+     "Left a copy of the insulation price list. Currently buying most of that elsewhere out of habit rather than price, so there's a gap for us.",
+     "Mentioned Cawley and Sons rep has been in twice this year. Nia Kaur says he's polite but keeps quoting on things they don't buy.",
+     "Asked about our hire desk. They currently go local for breakers and floor saws but would consider us if we can do same day.",
+     "Mentioned they trialled a couple of pallets from Netherfield Supplies on aggregates purely on price. Said the service was poor and he won't repeat it.",
+     "Talked through the fixings deal. He's happy with pricing, said Brackwell's rang him last month and he didn't even bother getting them in.",
+     "They've gone to a national account deal with Cawley and Sons, rebate structure apparently. Need to know the numbers to have any chance.",
+     "Site foreman Gaz let slip Brackwell's have put a container on their compound at Thorpe Park. That's a proper commitment, hard to unpick.",
+     "Drainage is all going elsewhere. Sharon said it's just always been that way, no reason given, nobody has ever asked her to change it.",
+     "Asked why the fixings goes to Cawley and Sons and honestly nobody could tell me. Habit, driver knows the trade counter lad, that's about it.",
+     "Hollis Trade rep was leaving as I pulled in. Didn't look thrilled to see me.",
+     "Feels a bit like they're pricing us against someone else rather than genuinely switching. Worth keeping honest but don't discount to the bone yet.",
+     "He rates the Makita range and buys tools elsewhere out of habit. Small win available if we do a demo day at their yard."
+    ],
+    "Dani Brooks": [
+     "Bought their first cordless SDS off us instead of the shed. Small thing but he's shifting more of his tool spend across.",
+     "He commented that our online ordering is easier than the last lot he used. Small thing but he brought it up unprompted.",
+     "Site visit at Ackworth with their foreman Gary Pilkington. Blocks stacked neat, our labels everywhere, no competitor product visible on site at all.",
+     "They've got a new commercial director, Rachel Pemberton, started March, ex-Travis. Bringing her own supplier list by the sound of it.",
+     "Dave Renshaw the buyer told me straight they've moved most of their electrical spend to Brackwell's since January. Said it's price, but I don't think that's all of it.",
+     "Jordan Pike said outright he'd rather deal with one supplier if the price stacked up. That's the opening, need a proper comparison sheet.",
+     "I get the feeling if we made the switch easy for them, one call, one delivery, they'd take it. Nobody has ever put it to them properly."
+    ],
+    "Tom Aldridge": [
+     "Concrete lintels are the one line they buy elsewhere, purely on lead time. If we can get to 48 hours we'd win it.",
+     "They're loyal to Marshalls on paving, won't be moved. Fine, we supply it anyway, just don't push alternatives.",
+     "Fixings spend is lower than it should be for their volume. Suspect they're picking up screws and anchors locally, chase it.",
+     "Mentioned Cawley and Sons have been in twice this month with a rep chasing the drainage. He wasn't interested but they are sniffing round.",
+     "Danny Marsh mentioned in passing he plays golf with a lad from Ridgemount. Ottley Golf Club. That's the relationship I'm up against.",
+     "Told me our credit limit review last year \"left a bad taste\". They'd asked for 25k, got 15k, went elsewhere for the rest.",
+     "Powder products, sand and cement, plaster, all ours and no threat there as far as I can see.",
+     "Priya Brennan was straight with me, said they'd never had a bad word about us on fixings, it's just who they've always rung. Sounded genuinely open to a comparison if I put the numbers in front of him.",
+     "Fasteners, abrasives and site consumables, that's roughly three grand a month walking past us on my estimate.",
+     "Doing the Meadowbrook Rise site at Kettering, 34 plots, first fix starting Feb. They've asked us to quote timber and fixings only, drainage and below ground going elsewhere as usual."
+    ],
+    "Ellie Fenwick": [
+     "Still no sign of him switching, he was clear he's been with us eleven years. That loyalty is worth protecting through the quiet spell.",
+     "Overheard their estimator on the phone getting a price on drainage from somebody else while I stood there. Didn't even try to hide it.",
+     "Van pulled in while I was there, Ridgemount livery, dropped two boxes of screws and a tub of grab adhesive. Small stuff, but it's every week."
+    ]
+   }
+  },
+  {
+   "topic": "unhappy",
+   "question": "which accounts are unhappy or complaining about something",
+   "relevant": {
+    "Dani Brooks": [
+     "No issues raised at all this visit. Just a coffee and a catch up, keep the cadence at monthly.",
+     "Nice and relaxed visit, coffee and a moan about the weather. No issues raised at all.",
+     "Mo Marsh happy with the switch to the Hanson bagged cement, says less waste than the last lot. Worth pushing the rest of the range.",
+     "Yard manager mentioned a short delivery on 40 lengths of 47x100 C24 back in Feb that never got credited. Need to chase Hayley in accounts and go back with an answer.",
+     "Two invoices in dispute going back to November. Until that's sorted nothing else will move.",
+     "Timber and sheet materials still coming to us solid, 3 deliveries last week alone. No complaints on the boards at all."
+    ],
+    "Samir Haq": [
+     "Nothing needed this visit. Quick ten minutes, order placed for delivery Wednesday am, before 10 as always.",
+     "Called in on Dave Whitlock, buyer, all good. Order book solid through to March, no complaints on service or delivery.",
+     "Bit of a moan about the trade counter queue on Saturday mornings. Not a real issue but worth flagging to branch.",
+     "No complaints, no queries, no returns in three months. Almost suspiciously smooth, but I think they're just well run.",
+     "Not hostile, just indifferent. Indifference is harder to shift than a row."
+    ],
+    "Tom Aldridge": [
+     "Everything about this account is quiet in a good way. No chasing, no arguments, pays on the nail.",
+     "Called in at 9am, Rosa Osei on the phone to a supplier but waved me through, said trade's been solid all quarter and no complaints on service.",
+     "Small gripe about a short delivery on sand back in Feb, sorted at the time, he only mentioned it in passing. Nothing to act on.",
+     "Called in 9:15, Priya Osei on the trade counter phone but waved me through. All good, no issues raised, order book looking healthy.",
+     "Dave Rennie the site foreman rang while I was there chasing a variation that hasn't been signed off in six weeks. Fair bit of muttering about main contractors in general.",
+     "Still got our stillages in their yard, four of them. He made a point of mentioning it which felt pointed.",
+     "Told me our credit limit review last year \"left a bad taste\". They'd asked for 25k, got 15k, went elsewhere for the rest.",
+     "Priya Brennan was straight with me, said they'd never had a bad word about us on fixings, it's just who they've always rung. Sounded genuinely open to a comparison if I put the numbers in front of him."
+    ],
+    "Ellie Fenwick": [
+     "Nothing raised, nothing wrong. Sometimes the best visits are the ones where you just have a brew and go.",
+     "Nice easy visit. Coffee in the portacabin, half an hour of football, no issues raised at all.",
+     "Bit of frustration about a short delivery before Christmas that nobody rang him about. Said it politely but he brought it up again unasked, so it's still sitting with him.",
+     "Atmosphere frosty. Usually get a brew, got left standing at the counter for ten minutes this time.",
+     "Nia Okafor said our reps have changed four times in two years and he's fed up explaining himself. Fair point honestly.",
+     "He's still sore about the scaffold boards that came in wet last summer. Brings it up every visit like clockwork."
+    ]
+   }
+  },
+  {
+   "topic": "delivery",
+   "question": "any problems with deliveries or lead times",
+   "relevant": {
+    "Dani Brooks": [
+     "Landed the drainage schedule for phase two off the back of us getting phase one out on time. Service is genuinely winning here.",
+     "Ivy Pike said our driver Ronnie is the reason they stick with us, always rings ahead and never leaves pallets in the mud. Passed that on to transport.",
+     "Yard manager mentioned a short delivery on 40 lengths of 47x100 C24 back in Feb that never got credited. Need to chase Hayley in accounts and go back with an answer.",
+     "Their tipper is off the road with an MOT issue so they're relying on our deliveries more than usual for the next fortnight. Good chance to prove the service."
+    ],
+    "Samir Haq": [
+     "Called in on Dave Whitlock, buyer, all good. Order book solid through to March, no complaints on service or delivery."
+    ],
+    "Tom Aldridge": [
+     "Concrete lintels are the one line they buy elsewhere, purely on lead time. If we can get to 48 hours we'd win it.",
+     "Small gripe about a short delivery on sand back in Feb, sorted at the time, he only mentioned it in passing. Nothing to act on."
+    ],
+    "Ellie Fenwick": [
+     "He's flagged that the last two loads came slightly short on cement and had to be topped up. Not cross about it but twice now, worth watching.",
+     "Bit of frustration about a short delivery before Christmas that nobody rang him about. Said it politely but he brought it up again unasked, so it's still sitting with him."
+    ]
+   }
+  },
+  {
+   "topic": "pricing",
+   "question": "who has been pushing back on price",
+   "relevant": {
+    "Ellie Fenwick": [
+     "Discussed the sealant and adhesives lines, they're loyal to one brand but open to a comparison if the price is right.",
+     "Warned him prices on rebar are moving in April. He took it well, said he'd rather know early than get a shock on the invoice.",
+     "Says the private clients are all haggling now and half of them go silent after the quote. Nine quotes out, one taken.",
+     "Popped in unannounced this morning, place was buzzing. Kate Osei straight over with a drawing in his hand asking what we could do on 200 sheets of 12.5mm board for a job starting March."
+    ],
+    "Dani Brooks": [
+     "Discussed the price increase letter coming in April. Took it well, just wants a heads up on the timber lines specifically.",
+     "Quiet since the pricing letter went out in October. I reckon that was the trigger even though nobody's said it outright.",
+     "Dave Renshaw the buyer told me straight they've moved most of their electrical spend to Brackwell's since January. Said it's price, but I don't think that's all of it.",
+     "Jordan Pike said outright he'd rather deal with one supplier if the price stacked up. That's the opening, need a proper comparison sheet."
+    ],
+    "Samir Haq": [
+     "Went through the timber pricing, they accept the increases as long as we give a week's notice. Fair enough, no pushback.",
+     "Mentioned they trialled a couple of pallets from Netherfield Supplies on aggregates purely on price. Said the service was poor and he won't repeat it.",
+     "Talked through the fixings deal. He's happy with pricing, said Brackwell's rang him last month and he didn't even bother getting them in.",
+     "They've gone to a national account deal with Cawley and Sons, rebate structure apparently. Need to know the numbers to have any chance.",
+     "Talked plasterboard prices, they know exactly where we sit. Sharp buyers on the lines they know.",
+     "Feels a bit like they're pricing us against someone else rather than genuinely switching. Worth keeping honest but don't discount to the bone yet."
+    ],
+    "Tom Aldridge": [
+     "Reviewed last 12 months spend together, no surprises for either of us. Agreed to keep the same rebate structure for another year.",
+     "Left him the timber cut list pricing anyway. Told him to shout if anything lands, he said he'd rather be busy than haggling, which about sums it up.",
+     "Genuine interest in the rebate structure, first time anyone there has asked. Explained the tiers, he took a photo of the sheet.",
+     "Quoted for 30 tonnes of MOT type 1 and 12 bulk bags of grit sand. He came back asking if there's better if he takes it all in one hit."
+    ]
+   }
+  },
+  {
+   "topic": "credit",
+   "question": "anyone asking about credit terms or payment",
+   "relevant": {
+    "Samir Haq": [
+     "Quiet warning sign - he mentioned a main contractor is 60 days behind paying them. Watch the ledger even though it's clean now.",
+     "Sensible outfit, well run, pay on time. The sort of account you don't want to take for granted.",
+     "Mentioned cashflow is tight until the retention comes back on the Chorley job in January. Bear that in mind before we load them up."
+    ],
+    "Tom Aldridge": [
+     "Nice steady account. No drama, pays on time, orders in a rhythm. Don't over engineer it.",
+     "Payment terms 30 days end of month, never late. Would support an extension if they ask when the bigger jobs land.",
+     "Everything about this account is quiet in a good way. No chasing, no arguments, pays on the nail.",
+     "Told me our credit limit review last year \"left a bad taste\". They'd asked for 25k, got 15k, went elsewhere for the rest.",
+     "Asked me straight out what our best terms would look like if they were spending 15-20k a month. Told him I'd need to talk to credit control, meeting booked.",
+     "Watch the enthusiasm - they've overreached before by all accounts. Ask around before we push the credit limit too far."
+    ],
+    "Dani Brooks": [
+     "Cashflow fine, they pay to terms without chasing. Credit control had them flagged for a review, told Sue in accounts they're safe to increase the limit.",
+     "They want everything on one consolidated statement rather than per site. Told accounts, should be sorted from next month.",
+     "Sharon on the trade counter asked if we can start splitting the invoices by site ref - they're running three jobs now and accounts is getting in a muddle. Passed to Lisa in credit control.",
+     "All invoices clear, nothing overdue. Accounts lady Sue said the new remittance format is much easier.",
+     "They're at about 60 percent of credit limit most months now. Worth flagging to finance for an uplift before it becomes a problem.",
+     "He's chasing £14k off a developer that's 90 days overdue. That's the real reason spend is down, not lack of loyalty.",
+     "Asked about payment terms moving from 30 to 60 days. Need to flag to credit control before he asks formally.",
+     "Two invoices in dispute going back to November. Until that's sorted nothing else will move."
+    ],
+    "Ellie Fenwick": [
+     "Spend sitting around 4k a month, very consistent. Credit limit at 6k, may want lifting before spring.",
+     "Asked about credit terms going to 60 days. Didn't push it hard but it came up twice, so it's on his mind."
+    ]
+   }
+  },
+  {
+   "topic": "staff_change",
+   "question": "has anyone had a change of staff or a new buyer",
+   "relevant": {
+    "Ellie Fenwick": [
+     "New apprentice, Ryan, doing the collections. Told trade counter to look after him and not let him take the wrong beads again.",
+     "Steve's lad Callum has started in the business, doing buying two days a week. Make sure he gets on the mailing list and knows who to ring.",
+     "New estimator started, Priya Chauhan, ex Netherfield Supplies so she knows the market. Worth building a relationship there, she'll be doing all the take offs.",
+     "Yard was rammed when I got there, two vans loading at once. Told me they've taken on another fitter starting Monday.",
+     "He knows our rep patch changed and said he liked the old fella, Tony. Building trust from scratch a bit here.",
+     "Nia Okafor said our reps have changed four times in two years and he's fed up explaining himself. Fair point honestly."
+    ],
+    "Tom Aldridge": [
+     "New estimator started, Priya Chandran, comes from a plumbing merchant background. Introduced myself, should be a good contact for pricing enquiries.",
+     "Contact list is out of date, half the numbers I have are for people who've left. Need to rebuild it from scratch.",
+     "Called in 9.40am, Kev Marsden on site so caught Sharon in the office. She's the one raising most of the orders now, worth building on that.",
+     "Ian Roberts, contracts manager, is the one actually pulling the trigger on orders now. Owner still signs off anything over 10k but Ian does the day to day."
+    ],
+    "Samir Haq": [
+     "Their van driver Kev broke his wrist, off for six weeks. May need more of their stuff delivered rather than collected in the meantime.",
+     "Loyalty is with Malcolm who retired from our Wakefield branch two years ago. Nothing's replaced that."
+    ],
+    "Dani Brooks": [
+     "Sean the foreman was in the yard, said they've laid off one of the agency lads and the other is down to three days.",
+     "They've got a new commercial director, Rachel Pemberton, started March, ex-Travis. Bringing her own supplier list by the sound of it."
+    ]
+   }
+  },
+  {
+   "topic": "big_job",
+   "question": "who has a big job or tender coming up",
+   "relevant": {
+    "Dani Brooks": [
+     "Landed the drainage schedule for phase two off the back of us getting phase one out on time. Service is genuinely winning here.",
+     "They've registered for the new build framework with the housing association. If it lands it's a step up in volume, worth watching from June.",
+     "Good chat about the extension they're pricing in Nantwich, 40 plus plots, decision end of Q3. Worth staying close.",
+     "Dave Enright (contracts manager) has taken on the Kirkstall Road flats phase 2, 34 plots, starts mid March. Wants a call on plasterboard and metal stud nearer the time.",
+     "Their timber usage has gone up if anything, they've won two more housing plots off Barratt. So it's not that the work's dried up."
+    ],
+    "Ellie Fenwick": [
+     "Site visit at the Longridge Road job, decent size, three storey block. They're using our blocks all the way through which is nice to see.",
+     "Picked up on a new build at Chorley Old Road, 14 units. They're doing first fix from mid Feb, plumbing and insulation will come through us.",
+     "They're quoting a school refurb in Wakefield, decision due end of April. Asked me for indicative pricing on suspended ceiling grid and tiles.",
+     "He's still got the Beeston care home extension running but it's small beer, two lads on it and it finishes end of April.",
+     "They're tendering for the Doncaster school in September. If we're not in front of them by August we're not in it at all.",
+     "Priced up the Kirkstall Mill conversion for them - 47 apartments, first fix due late spring. Sent budget figures over Thursday, chasing Monday.",
+     "Popped in unannounced this morning, place was buzzing. Kate Osei straight over with a drawing in his hand asking what we could do on 200 sheets of 12.5mm board for a job starting March.",
+     "Asked me twice about lead times on structural steel. Something bigger going on than he's letting on."
+    ],
+    "Tom Aldridge": [
+     "They're going after more housing association repairs work. If they land it there'll be steady small-order volume, kitchens and bathrooms.",
+     "They want a price on 200 lengths of 47x100 C24 for the Radcliffe job. Quote due back by Friday.",
+     "They've picked up the barn conversion at Nether Fenley, 14 week programme starting mid March. Should be decent timber and insulation pull-through.",
+     "Longmoor Road barn conversion is the one live enquiry, private client, slow to sign. He reckons June start if it happens at all.",
+     "Wharf Lane plots 6 to 9 are on hold until the developer sorts the drainage adoption. That was his bread and butter through the winter.",
+     "He's tendering for a school refurb in Sutton, closes 12th March. Long shot but I said I'd help with a materials schedule.",
+     "They're on the Kirkstall Road flats job, six blocks, started April. Not a single order off us for it. That hurts.",
+     "Doing the Meadowbrook Rise site at Kettering, 34 plots, first fix starting Feb. They've asked us to quote timber and fixings only, drainage and below ground going elsewhere as usual.",
+     "They've quoted a small block of four flats off Healey Lane, decision expected April. Would be a decent aggregates job if it lands."
+    ],
+    "Samir Haq": [
+     "Quoted 62 sheets of 12.5mm standard board plus scrim and beads for the Ashwell Road flats. Expect the order Thursday.",
+     "Good news, they landed the care home job at Whitefield. Starts April, ten week programme.",
+     "They quoted a school refurb in Rochdale, find out in three weeks. Would be a decent chunk of plasterboard and metal stud if it lands.",
+     "Two new vans on the drive, both signwritten. They've clearly won something decent and aren't shouting about what yet."
+    ]
+   }
+  },
+  {
+   "topic": "expansion",
+   "question": "anyone opening a new branch or expanding",
+   "relevant": {
+    "Dani Brooks": [
+     "He's thinking about a small trade counter at the front of their unit for the local sparks and plumbers. Long shot but I'd like to supply it if it happens.",
+     "Mo Osei mentioned they've taken on two more vans, so delivery windows may need looking at. Nothing urgent but worth flagging to transport.",
+     "They're pushing into loft conversions this year. Steels, joists and Velux, worth getting the Velux rep alongside me on the next call.",
+     "Noticed they've bought a second Transit tipper. Growth is real, not just talk.",
+     "They've taken on two more bricklayers since Christmas, now running three gangs. Volume should follow."
+    ],
+    "Samir Haq": [
+     "They've started doing more groundworks off their own bat. Opportunity on drainage and MOT type 1 if we can get the haulage right.",
+     "New unit on the industrial estate at Sandbach signed off, moving in October. More storage means bigger drops.",
+     "They've bought a small yard off the bypass, exchange next month. Means proper storage and bigger drops, potentially full loads.",
+     "Mentioned they're expanding into groundworks in 2026, taking on two gangs. Big opportunity but only if we're back in favour."
+    ],
+    "Ellie Fenwick": [
+     "PPE spend has crept up with the extra lads. Suggested a standing monthly order for gloves, hi vis and safety boots.",
+     "New Transit tipper on the fleet, sign written. Business is clearly going well, he was pleased with himself about it.",
+     "Talked through the electrical range extension. Interested but not urgent, said come back after Easter when the new unit is up and running.",
+     "Head count up to 14 from 11 last year. Two new apprentices through the CITB route, both on site with Gary."
+    ],
+    "Tom Aldridge": [
+     "They've bought a second Manitou telehandler, second hand off a Doncaster dealer. Yard is getting tight now, mentioned they may need to look at storage racking.",
+     "Steve in the office mentioned they're outgrowing the unit at Farnworth. Looking at a bigger yard within 12 months, might mean a bulk storage conversation.",
+     "Their new yard at Castleford has more space, so they can take bulk. That changes what we can offer them.",
+     "Long chat about the expansion plans, wants a second yard over towards Featherstone within 18 months. Ambitious but he's serious about it."
+    ]
+   }
+  },
+  {
+   "topic": "quiet",
+   "question": "which accounts have gone quiet or slowed down",
+   "relevant": {
+    "Samir Haq": [
+     "Nothing to report other than they're busy. Two skips in the yard and a full board of jobs on the wall.",
+     "Told him about the account rebate tiers and he laughed, said he'd struggle to hit tier one this year. Fair point, don't push that again.",
+     "Good rapport still there, he made me a brew and we talked about Forest for twenty minutes. Relationship is fine, it's the workload that's the problem.",
+     "Rang Monday, went to voicemail. Rang Thursday, voicemail again. Tried the mobile Friday morning and he picked up then said he was driving.",
+     "He keeps asking for prices but hasn't placed anything meaningful yet. Need to convert one of these quotes soon or we're just doing free estimating."
+    ],
+    "Ellie Fenwick": [
+     "Bagged cement usage up sharply, now taking a pallet a fortnight rather than a month.",
+     "Spend up again on last quarter, mostly driven by plumbing. Nothing to fix here, just keep showing up.",
+     "Spend down again this month, roughly half what he was doing this time last year. He knows it, I know it, neither of us made a big thing of it.",
+     "Says the private clients are all haggling now and half of them go silent after the quote. Nine quotes out, one taken.",
+     "Popped in Tues morning, Dave was on the phone to a QS sounding fed up. Two of the four jobs he had penciled in for spring have gone quiet.",
+     "Sean Okafor said the worst part is turning work down two years ago and chasing scraps now. Genuine feeling in it.",
+     "Karen in the office says they've stopped ordering ahead and are buying week to week now. Worth quoting tighter on the regular lines.",
+     "Nobody knew who I was on reception. That tells you how long it's been."
+    ],
+    "Tom Aldridge": [
+     "Third quarter running they've beaten the same period last year. Steady rather than spiky, which I prefer.",
+     "Order value per drop is climbing, average around 1,400 now against 900 last spring. Sensible growth, not a spike.",
+     "Called in at 9am, Rosa Osei on the phone to a supplier but waved me through, said trade's been solid all quarter and no complaints on service.",
+     "Called in 9.20am, Dave Whitlock (yard manager) says timber offtake up again on last month, mainly C16 4x2 for the Kingsmead estate.",
+     "Fixings spend is lower than it should be for their volume. Suspect they're picking up screws and anchors locally, chase it.",
+     "Picked up a pallet of 100mm blocks and that was his only order in a fortnight. Told me it feels like going backwards.",
+     "Their storage yard on Hucknall Road is half empty, no stock sat about at all. Everything is buy as needed now.",
+     "Fixings and consumables are the only line growing. Suggests they're finishing work, not starting it.",
+     "He said if it doesn't pick up by summer he'll have to think hard about the second van and the yard lease.",
+     "Longmoor Road barn conversion is the one live enquiry, private client, slow to sign. He reckons June start if it happens at all.",
+     "Sand and cement still going out steady. It's the electrical spend that's evaporated.",
+     "Wharf Lane plots 6 to 9 are on hold until the developer sorts the drainage adoption. That was his bread and butter through the winter.",
+     "Still buying all his plasterboard off us, that hasn't shifted. Insulation is where the volume has dropped off a cliff.",
+     "Sent quote for the fixings package 12 days ago, no response, no acknowledgement. Chased twice.",
+     "Ordered nothing at all in Q1. Same period last year was over 30k. Alarm bells.",
+     "Warehouse lad Callum reckons they've been running low on our PPE lines and just not reordering. Might be an easy way back in.",
+     "Sent the insulation quote 10 days ago and heard nothing. Chased today, he'd not opened it, phone full of emails. Ring don't email.",
+     "Big change in tone from six months ago when I couldn't get past the gate. They want quotes on everything at the minute.",
+     "Off to Lanzarote for a fortnight from the 2nd, nothing will move while he's away. Diarised to get back on him mid month."
+    ],
+    "Dani Brooks": [
+     "Quiet fortnight coming as they've a gap between jobs. Expect the order rate to dip briefly then pick up from the 20th.",
+     "Sean the foreman was in the yard, said they've laid off one of the agency lads and the other is down to three days.",
+     "He's chasing £14k off a developer that's 90 days overdue. That's the real reason spend is down, not lack of loyalty.",
+     "Their timber usage has gone up if anything, they've won two more housing plots off Barratt. So it's not that the work's dried up.",
+     "Alex Marsh's dad had a stroke in Feb and he's been up and down to Hull most weekends. Might just be that he's got bigger things on. Go gently.",
+     "Popped in Tuesday, Alex Marsh out on site all day, girl on the desk said he's not been in the office much. Left card, no callback yet.",
+     "Tried to book a lunch, got a no. Tried a site visit, got a maybe. Not much to work with.",
+     "Third visit running where nobody's ordered anything since the March plasterboard drop. Something's gone wrong and no one will say what.",
+     "Quiet since the pricing letter went out in October. I reckon that was the trigger even though nobody's said it outright.",
+     "They're carrying about 20 rolls of loft insulation left over from a job and won't buy more till it's gone."
+    ]
+   }
+  },
+  {
+   "topic": "commitment",
+   "question": "what have we promised anyone that I need to follow up",
+   "relevant": {
+    "Dani Brooks": [
+     "Karl Deeming, yard foreman, wants the 8am drop kept as is - says anything later and his lads are stood about. Passed to transport to protect that slot.",
+     "Dave Enright (contracts manager) has taken on the Kirkstall Road flats phase 2, 34 plots, starts mid March. Wants a call on plasterboard and metal stud nearer the time.",
+     "They want everything on one consolidated statement rather than per site. Told accounts, should be sorted from next month.",
+     "Site visit at Bury, they're on the roof of a warehouse conversion. Talked single ply and edge trim, sending over spec Thursday.",
+     "Talked about a stock holding arrangement on their regular insulation sizes. Interested but wants to see the numbers.",
+     "Sharon on the trade counter asked if we can start splitting the invoices by site ref - they're running three jobs now and accounts is getting in a muddle. Passed to Lisa in credit control.",
+     "Discussed the price increase letter coming in April. Took it well, just wants a heads up on the timber lines specifically.",
+     "Asked for a copy of the fire door datasheet, building control chasing them on the Leeds conversion. Emailed same afternoon.",
+     "Sample of the composite decking left with them for the Otley bungalow extension. Client picking colour end of next week.",
+     "Yard manager mentioned a short delivery on 40 lengths of 47x100 C24 back in Feb that never got credited. Need to chase Hayley in accounts and go back with an answer.",
+     "Follow up on the drainage quote I promised, 110mm underground, they'll need it for Ryhill."
+    ],
+    "Samir Haq": [
+     "He wants a quote on 60 lengths of 110 underground pipe plus bends for the Tarvin job. Promised it by Friday.",
+     "Next visit end of March. Bring the tool promo, the portal login sorted, and a price on the Radcliffe timber package.",
+     "Talked through the electrical range extension. He'll look at it properly after the bank holiday, said ring him week of the 12th.",
+     "Alex Marsh mentioned his lad Ryan starts his apprenticeship in September, wants him on the account for collections. Told him I'd sort a card.",
+     "Talked through the new online ordering portal, he's keen but wants a walkthrough. Booked in for the 22nd, 9am at their office.",
+     "Overall a good account being half used. Plan is quarterly review with Kev and Sharon together, aim to book it before end of month.",
+     "Wants a trade counter card for each of the four lads so they can collect without ringing him. Sorted with the branch, cards ready Friday."
+    ],
+    "Ellie Fenwick": [
+     "Talked through EV charging install work, they're getting asked about it more. Not our area really but I said I'd find out what we stock.",
+     "Karl asked about a mixer forks attachment for the telehandler. Sent him a link, might be a hire not a sale.",
+     "They're quoting a school refurb in Wakefield, decision due end of April. Asked me for indicative pricing on suspended ceiling grid and tiles.",
+     "Talked through the electrical range extension. Interested but not urgent, said come back after Easter when the new unit is up and running.",
+     "Rachel P wants a formal review meeting with someone senior, not just me. Asked for our regional manager to attend.",
+     "Dean asked about hire on a floor saw for two days end of Feb. Passed to the hire desk, need to chase.",
+     "Offered a stock check and rack survey for the fixings container. She didn't say no, which is progress.",
+     "Priced up the Kirkstall Mill conversion for them - 47 apartments, first fix due late spring. Sent budget figures over Thursday, chasing Monday."
+    ],
+    "Tom Aldridge": [
+     "They want a price on 200 lengths of 47x100 C24 for the Radcliffe job. Quote due back by Friday.",
+     "Mark the foreman asked about the DeWalt promo, wants the 18v combi kit. Sent him the deal sheet after.",
+     "Asked about pallet returns, they've got about 20 stacked up. Arranged collection with transport for next Tuesday.",
+     "Action, get the school refurb schedule over by 5th March, chase the sale or return answer, and ring him week after next just to check in with no ask attached.",
+     "He's tendering for a school refurb in Sutton, closes 12th March. Long shot but I said I'd help with a materials schedule.",
+     "Diarised to go back in three weeks with a proper written proposal rather than another chat. Last roll of the dice really.",
+     "Mentioned our next day cut to size service on timber, Dean's ears pricked up. Get a demo booked.",
+     "Site visit at Marsh Lane arranged for the 14th, he wants me to walk it with him and spec the roofing. Take the Marley samples and the pitch chart."
+    ]
+   }
+  },
+  {
+   "topic": "site_logistics",
+   "question": "anything about site access, timings or how they want deliveries",
+   "relevant": {
+    "Dani Brooks": [
+     "Karl Deeming, yard foreman, wants the 8am drop kept as is - says anything later and his lads are stood about. Passed to transport to protect that slot.",
+     "Mo Osei mentioned they've taken on two more vans, so delivery windows may need looking at. Nothing urgent but worth flagging to transport.",
+     "Site visit at Hollow Lane with Martin Kelso, the site manager. Very tidy operation, everything stacked and covered. Easy to deliver to."
+    ],
+    "Samir Haq": [
+     "Nothing needed this visit. Quick ten minutes, order placed for delivery Wednesday am, before 10 as always.",
+     "They store nothing on site overnight since the theft at their Pontefract job in November. All deliveries need to be timed for a man being there.",
+     "Their van driver Kev broke his wrist, off for six weeks. May need more of their stuff delivered rather than collected in the meantime.",
+     "Dean the driver knows their yard well now, gets in and out with no fuss. Worth keeping him on the run.",
+     "He's tight on yard space at the unit, so wants call-off deliveries rather than one big drop. Explained we can hold stock for them."
+    ],
+    "Ellie Fenwick": [
+     "Their office is above a chippy on Bridge Street, parking is a nightmare. Note to self, use the Co-op car park and walk round."
+    ],
+    "Tom Aldridge": [
+     "Their storeman Pete is a proper stickler for delivery notes being signed correctly. Make sure the drivers know.",
+     "Site cabin at Thornhill Grange got broken into over Christmas, lost a couple of Makitas. They're twitchy about leaving anything on site now."
+    ]
+   }
+  },
+  {
+   "topic": "personal",
+   "question": "anything personal worth remembering about a contact",
+   "relevant": {
+    "Dani Brooks": [
+     "Rang ahead but he was on site so I went out to him, muddy boots job. Good rapport, he likes that we come out to the work rather than sitting in the office.",
+     "Easy going relationship, Mo Osei takes my calls first time. Don't waste that, only ring when there's something worth saying.",
+     "Priya Pike off on holiday to Portugal the last two weeks of July, Gary covering. Don't chase anything in that window.",
+     "Good rapport now, we're past the formal stage. He rings me direct rather than the branch when something's urgent.",
+     "Alex Marsh's dad had a stroke in Feb and he's been up and down to Hull most weekends. Might just be that he's got bigger things on. Go gently."
+    ],
+    "Ellie Fenwick": [
+     "Gary is doing his SSSTS in March, asked if we run any toolbox talk style training. Might be worth the manufacturer rep doing a session.",
+     "Rosa Whitfield mentioned his daughter's wedding in July, taking two weeks off around it. Make sure someone else is briefed before then.",
+     "Ivy Whitfield's wife had a knee operation in January, all fine now. Remember to ask."
+    ],
+    "Samir Haq": [
+     "Nia Kaur is a Grimsby Town fan, season ticket. Useful bit of small talk, he lights up.",
+     "Personal note - his wife Karen runs the accounts side from home, always polite on the phone. Send a Christmas card to both.",
+     "Alex Marsh away in Lanzarote first two weeks of August. Deal with Sharon or Karl in that window.",
+     "Alex Marsh's lad plays for Bolton Wanderers under 14s, mentions it every visit. Ask how he got on.",
+     "Alex Marsh mentioned his lad Ryan starts his apprenticeship in September, wants him on the account for collections. Told him I'd sort a card.",
+     "Good rapport still there, he made me a brew and we talked about Forest for twenty minutes. Relationship is fine, it's the workload that's the problem."
+    ],
+    "Tom Aldridge": [
+     "He likes a text rather than a call, replies within minutes. Stopped ringing him and it's improved things.",
+     "Danny Pike is a Leeds season ticket holder, east stand. Worth an invite to the hospitality day if we get tickets.",
+     "Ryan the apprentice is doing his level 2 at West Notts, Dave's paying for it himself. Nice detail, ask next visit.",
+     "Danny Marsh mentioned in passing he plays golf with a lad from Ridgemount. Ottley Golf Club. That's the relationship I'm up against.",
+     "Remember his name is Gareth not Gary. Corrected me politely the first time, twice would be bad.",
+     "Off to Lanzarote for a fortnight from the 2nd, nothing will move while he's away. Diarised to get back on him mid month."
+    ]
+   }
+  }
+ ]
+}
