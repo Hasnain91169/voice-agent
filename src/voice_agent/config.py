@@ -225,10 +225,14 @@ class Settings(BaseSettings):
     barge_in_min_rms: int = Field(default=750, gt=0)
 
     # --- Echo control and barge-in ---
-    barge_in: bool = True
+    barge_in: bool = False
     #: A higher bar to interrupt the agent than to start a normal turn: a false
     #: positive here cuts the agent off mid-word, which is worse than a slow start.
     barge_in_frames: int = Field(default=10, gt=0)
+    #: Minimum duration of a candidate utterance before it is transcribed and
+    #: allowed to make an interruption decision. This is audio duration, not
+    #: wall-clock time, so a quiet syllable does not reset the requirement.
+    barge_in_min_ms: int = Field(default=500, ge=0)
     #: Caller audio is dropped entirely for this long after the agent stops, to
     #: swallow the tail of our own voice returning down the line.
     post_tts_guard_ms: int = Field(default=250, ge=0)

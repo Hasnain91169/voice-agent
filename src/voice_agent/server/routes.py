@@ -32,6 +32,30 @@ def _ctx(request: Request) -> AppState:
     return request.app.state.ctx  # type: ignore[no-any-return]
 
 
+async def _readiness(ctx: AppState) -> tuple[bool, dict[str, object]]:
+    checks = await ctx.providers.health()
+    failed = [f"{name}: {result.detail}" for name, result in checks.items() if not result.ok]
+    ok = ctx.ready and ctx.cache.ready and not failed
+    return ok, {
+        "ok": ok,
+        "detail": "; ".join(failed) if failed else "",
+        "providers": {
+            "asr": ctx.providers.asr.name,
+            "tts": ctx.providers.tts.name,
+            "llm": ctx.providers.llm.name,
+            "agent": ctx.turns.name,
+        },
+        "provider_health": {
+            name: {
+                "ok": result.ok,
+                "detail": result.detail,
+                "latency_ms": result.latency_ms,
+            }
+            for name, result in checks.items()
+        },
+    }
+
+
 @router.get("/")
 def index() -> FileResponse:
     return FileResponse(STATIC_DIR / "demo.html")
@@ -71,15 +95,10 @@ async def health(request: Request) -> JSONResponse:
     honest behaviour, not a nicety.
     """
     ctx = _ctx(request)
+    ok, readiness = await _readiness(ctx)
     body = {
-        "ok": ctx.ready,
+        **readiness,
         "profile": str(ctx.settings.profile),
-        "providers": {
-            "asr": ctx.providers.asr.name,
-            "tts": ctx.providers.tts.name,
-            "llm": ctx.providers.llm.name,
-            "agent": ctx.turns.name,
-        },
         "model": ctx.model_id,
         "prompt_cache": {
             "ready": ctx.cache.ready,
@@ -87,7 +106,7 @@ async def health(request: Request) -> JSONResponse:
         },
         "active_sessions": ctx.active,
     }
-    return JSONResponse(body, status_code=200 if ctx.ready else 503)
+    return JSONResponse(body, status_code=200 if ok else 503)
 
 
 @router.get("/health/{component}")
@@ -156,8 +175,9 @@ async def set_model(request: Request) -> JSONResponse:
 async def create_session(request: Request) -> JSONResponse:
     """Issue a short-lived token for the media socket."""
     ctx = _ctx(request)
-    if not ctx.ready:
-        return JSONResponse({"error": "warming up"}, status_code=503)
+    ok, readiness = await _readiness(ctx)
+    if not ok:
+        return JSONResponse({"error": readiness["detail"] or "warming up"}, status_code=503)
     token = issue_token(ctx.session_secret, ttl_s=ctx.settings.session_token_ttl_s)
     return JSONResponse(
         {
@@ -174,8 +194,9 @@ async def ws_browser(websocket: WebSocket, token: str = Query(default="")) -> No
     """Media socket for the browser demo."""
     ctx: AppState = websocket.app.state.ctx
 
-    if not ctx.ready:
-        await websocket.close(code=1013, reason="warming up")
+    ok, readiness = await _readiness(ctx)
+    if not ok:
+        await websocket.close(code=1013, reason=str(readiness["detail"] or "warming up"))
         return
     # Checked before accepting: an unauthenticated peer should never reach the
     # point of being able to send audio.

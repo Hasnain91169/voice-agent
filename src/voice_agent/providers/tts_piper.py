@@ -27,6 +27,7 @@ from collections.abc import AsyncIterator
 from pathlib import Path
 from typing import Any
 
+from voice_agent.agent import locale
 from voice_agent.audio import wav
 from voice_agent.audio.framing import Frame  # noqa: F401  (documents the shared format)
 from voice_agent.config import BYTES_PER_FRAME, SAMPLE_RATE, Settings
@@ -81,7 +82,8 @@ class PiperTTS:
                 "Piper is not configured. Run `python scripts/fetch_models.py`, "
                 "or set VA_PIPER_BIN and VA_PIPER_VOICE."
             )
-        voices = {lang: v for lang in settings.languages if (v := settings.voice_for(lang))}
+        voice_languages = set(settings.languages) | set(locale.SUPPORTED)
+        voices = {lang: v for lang in voice_languages if (v := settings.voice_for(lang))}
         return cls(binary=settings.piper_bin, voice=settings.piper_voice, voices=voices)
 
     def use_language(self, language: str) -> None:

@@ -20,6 +20,7 @@ arithmetic and the wording, and the model repeats what it was given.
 
 from __future__ import annotations
 
+import re
 from collections.abc import Iterator
 from contextlib import contextmanager
 from contextvars import ContextVar
@@ -52,6 +53,37 @@ def normalise(detected: str | None) -> Language:
     if detected and detected.lower()[:2] in SUPPORTED:
         return detected.lower()[:2]  # type: ignore[return-value]
     return DEFAULT
+
+
+_GERMAN_REQUEST = re.compile(
+    r"\b("
+    r"deutsch|auf deutsch|in deutsch|german|in german|german version|"
+    r"speak german|sprich deutsch|rede deutsch"
+    r")\b",
+    re.IGNORECASE,
+)
+_ENGLISH_REQUEST = re.compile(
+    r"\b("
+    r"english|in english|english version|speak english|"
+    r"englisch|auf englisch|in englisch|sprich englisch|rede englisch"
+    r")\b",
+    re.IGNORECASE,
+)
+
+
+def requested(text: str) -> Language | None:
+    """Return an explicit language switch requested in the utterance.
+
+    The fast local demo uses ``small.en`` by default, so genuine German speech is
+    often transcribed as odd English. A phrase like "Deutsch version" is still
+    enough intent to switch the response language without paying for
+    multilingual detection on every turn.
+    """
+    if _GERMAN_REQUEST.search(text):
+        return "de"
+    if _ENGLISH_REQUEST.search(text):
+        return "en"
+    return None
 
 
 @contextmanager

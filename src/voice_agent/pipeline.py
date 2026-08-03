@@ -25,6 +25,7 @@ import asyncio
 import contextlib
 import logging
 import time
+from dataclasses import dataclass
 from typing import Any
 
 from voice_agent.agent import grounding, locale, prompts
@@ -32,15 +33,19 @@ from voice_agent.agent.runner import TurnSource
 from voice_agent.audio import wav
 from voice_agent.audio.framing import Frame
 from voice_agent.audio.vad import (
-    ConsecutiveTrigger,
     SpeechEnded,
     UtteranceDetector,
     calibrate,
 )
 from voice_agent.config import BYTES_PER_FRAME, FRAME_MS, Settings
 from voice_agent.events import Emitter, EventSink
+from voice_agent.interruptions import (
+    InterruptionAssessment,
+    InterruptionDecision,
+    assess,
+)
 from voice_agent.prompts_cache import PromptCache
-from voice_agent.providers.base import TextDelta, ToolCall
+from voice_agent.providers.base import TextDelta, ToolCall, Transcript
 from voice_agent.providers.registry import Providers
 from voice_agent.session import Session, SpokenTracker, TurnMetrics
 from voice_agent.text import ClauseAssembler, clean_for_speech
@@ -63,6 +68,16 @@ MIN_UTTERANCE_MS = 450
 
 #: Sentinel closing the playback queue.
 _END = None
+
+
+@dataclass(frozen=True, slots=True)
+class BargeInCandidate:
+    """A complete caller utterance accepted for processing after cancellation."""
+
+    utterance: SpeechEnded
+    transcript: Transcript
+    assessment: InterruptionAssessment
+    asr_ms: float
 
 
 class Pipeline:
@@ -88,6 +103,7 @@ class Pipeline:
         self._emit = Emitter(events)
         self._detector: UtteranceDetector | None = None
         self._consecutive_empty = 0
+        self._preferred_language: locale.Language | None = None
 
     # ------------------------------------------------------------------ call
 
@@ -99,17 +115,28 @@ class Pipeline:
             log.info("[%s] barge-in armed", self._session.id)
 
         greeting = self._cache.get("greeting")
+        pending = None
         if greeting:
-            await self._speak_cached("greeting", greeting)
+            pending = await self._speak_cached("greeting", greeting)
 
         while True:
-            utterance = await self._listen()
-            if utterance is None:
-                log.info(
-                    "[%s] transport closed after %d turns", self._session.id, self._session.turns
+            if pending is None:
+                utterance = await self._listen()
+                if utterance is None:
+                    log.info(
+                        "[%s] transport closed after %d turns",
+                        self._session.id,
+                        self._session.turns,
+                    )
+                    return
+                pending = await self._handle_utterance(utterance)
+            else:
+                candidate = pending
+                pending = await self._handle_utterance(
+                    candidate.utterance,
+                    transcript=candidate.transcript,
+                    asr_ms=candidate.asr_ms,
                 )
-                return
-            await self._handle_utterance(utterance)
 
     async def _calibrate(self) -> None:
         """Measure the ambient noise floor before trusting any threshold.
@@ -194,19 +221,27 @@ class Pipeline:
 
     # ----------------------------------------------------------------- turn
 
-    async def _handle_utterance(self, utterance: SpeechEnded) -> None:
+    async def _handle_utterance(
+        self,
+        utterance: SpeechEnded,
+        *,
+        transcript: Transcript | None = None,
+        asr_ms: float | None = None,
+    ) -> BargeInCandidate | None:
         metrics = TurnMetrics(endpoint_ms=float(self._settings.stop_hang_ms))
         turn_start = time.monotonic()
 
-        asr_start = time.perf_counter()
-        try:
-            transcript = await self._providers.asr.transcribe(utterance.pcm)
-        except Exception:
-            log.exception("[%s] ASR failed", self._session.id)
-            metrics.note("asr_error")
-            await self._speak_cached("error", self._cache.get("error", locale.current()))
-            return
-        metrics.asr_ms = (time.perf_counter() - asr_start) * 1000.0
+        if transcript is None:
+            asr_start = time.perf_counter()
+            try:
+                transcript = await self._providers.asr.transcribe(utterance.pcm)
+            except Exception:
+                log.exception("[%s] ASR failed", self._session.id)
+                metrics.note("asr_error")
+                return await self._speak_cached("error", self._cache.get("error", locale.current()))
+            metrics.asr_ms = (time.perf_counter() - asr_start) * 1000.0
+        else:
+            metrics.asr_ms = asr_ms or 0.0
 
         if transcript.is_empty or transcript.confidence < MIN_TRANSCRIPT_CONFIDENCE:
             # A blip is not somebody talking. A cough, a door, a knock on the
@@ -216,13 +251,17 @@ class Pipeline:
             # nothing to have misheard, so say nothing at all.
             if utterance.duration_ms < MIN_UTTERANCE_MS:
                 log.debug("[%s] ignoring %dms blip", self._session.id, utterance.duration_ms)
-                return
-            await self._handle_unheard(transcript.confidence, metrics)
-            return
+                return None
+            return await self._handle_unheard(transcript.confidence, metrics)
 
         self._consecutive_empty = 0
         self._session.turns += 1
-        language = locale.normalise(transcript.language)
+        requested_language = locale.requested(transcript.text)
+        if requested_language is not None:
+            self._preferred_language = requested_language
+        language = requested_language or self._preferred_language or locale.normalise(
+            transcript.language
+        )
         metrics.language = language
         log.info(
             "[%s] heard %s (%.0f%%, rms=%.0f): %s",
@@ -247,7 +286,7 @@ class Pipeline:
         # the case this exists for.
         with locale.use(language):
             self._use_voice(language)
-            spoken = await self._respond(transcript.text, metrics, turn_start)
+            spoken, pending = await self._respond(transcript.text, metrics, turn_start)
 
         # The single crossing point into conversation state, in one direction.
         # `spoken` is what the caller actually heard, which after an interruption
@@ -279,6 +318,7 @@ class Pipeline:
             events=list(metrics.events),
         )
         log.info("[%s] turn %d %s", self._session.id, self._session.turns, metrics.summary())
+        return pending
 
     def _use_voice(self, language: str) -> None:
         """Point the synthesiser at this language's voice, if it can switch.
@@ -291,7 +331,9 @@ class Pipeline:
         if switch is not None:
             switch(language)
 
-    async def _handle_unheard(self, confidence: float, metrics: TurnMetrics) -> None:
+    async def _handle_unheard(
+        self, confidence: float, metrics: TurnMetrics
+    ) -> BargeInCandidate | None:
         """Nothing usable was transcribed.
 
         The turn is deliberately *not* advanced and nothing is committed to
@@ -307,11 +349,13 @@ class Pipeline:
             else "clarifier"
         )
         log.info("[%s] unheard x%d -> %s", self._session.id, self._consecutive_empty, name)
-        await self._speak_cached(name, self._cache.get(name))
+        return await self._speak_cached(name, self._cache.get(name))
 
     # -------------------------------------------------------------- respond
 
-    async def _respond(self, user_text: str, metrics: TurnMetrics, turn_start: float) -> str:
+    async def _respond(
+        self, user_text: str, metrics: TurnMetrics, turn_start: float
+    ) -> tuple[str, BargeInCandidate | None]:
         """Generate, speak, and return what the caller actually heard."""
         queue: asyncio.Queue[bytes | None] = asyncio.Queue()
         tracker = SpokenTracker()
@@ -330,25 +374,31 @@ class Pipeline:
         speaking: asyncio.Future[Any] = asyncio.gather(producer, player)
         watcher = asyncio.create_task(self._watch_for_barge_in(), name="barge-in")
         racing: set[asyncio.Future[Any]] = {speaking, watcher}
+        pending: BargeInCandidate | None = None
 
         try:
             done, _ = await asyncio.wait(racing, return_when=asyncio.FIRST_COMPLETED)
-            if watcher in done and not speaking.done():
-                # Cancel generation, synthesis and playback together.
-                metrics.barged_in = True
-                metrics.note("barge_in")
-                # The moment worth seeing: playback cancelled mid-clause. What
-                # was actually heard is settled just below, once the tracker has
-                # mapped played bytes back to words.
-                self._emit("barge_in", played_ms=self._session.played_ms)
-                log.info(
-                    "[%s] barge-in at %dms of speech",
-                    self._session.id,
-                    self._session.played_ms,
-                )
-                speaking.cancel()
-                with contextlib.suppress(asyncio.CancelledError):
-                    await speaking
+            if watcher in done:
+                pending = watcher.result()
+                if not speaking.done():
+                    # Cancel generation, synthesis and playback together. The
+                    # browser clears its queue only after this accepted event.
+                    metrics.barged_in = True
+                    metrics.note("barge_in")
+                    self._emit(
+                        "barge_in",
+                        played_ms=self._session.played_ms,
+                        reason=pending.assessment.reason,
+                        text=pending.transcript.text,
+                    )
+                    log.info(
+                        "[%s] barge-in at %dms of speech",
+                        self._session.id,
+                        self._session.played_ms,
+                    )
+                    speaking.cancel()
+                    with contextlib.suppress(asyncio.CancelledError):
+                        await speaking
         finally:
             watcher.cancel()
             with contextlib.suppress(asyncio.CancelledError):
@@ -362,7 +412,7 @@ class Pipeline:
         spoken = tracker.spoken(self._session.played_bytes)
         metrics.generated_chars = len(tracker.full_text)
         metrics.spoken_chars = len(spoken)
-        return spoken
+        return spoken, pending
 
     async def _produce(
         self,
@@ -589,45 +639,99 @@ class Pipeline:
 
     # -------------------------------------------------------------- barge-in
 
-    async def _watch_for_barge_in(self) -> None:
-        """Return once the caller has clearly started speaking over the agent.
+    async def _watch_for_barge_in(self) -> BargeInCandidate:
+        """Return only after a speech candidate has been semantically accepted.
 
-        A higher bar than starting a normal turn: a false positive cuts the
-        agent off mid-word, which is worse than a slightly slow interruption.
-        Both the frame count and the energy threshold are raised.
+        Playback continues while the candidate is transcribed and assessed.
+        Energy is evidence that speech should be inspected, not permission to
+        cancel the answer.
         """
         if not self._settings.barge_in:
             await asyncio.Event().wait()  # never fires; cancelled with the turn
 
-        trigger = ConsecutiveTrigger(self._settings.barge_in_frames)
-        # Two independent bars, both of which must be cleared. The relative one
-        # adapts to a noisy line; the absolute one is what stops the agent's own
-        # voice — leaking past imperfect echo cancellation at a level well above
-        # a near-zero measured floor — from reading as an interruption.
         threshold = max(
             float(self._settings.barge_in_min_rms),
             self._session.thresholds.start * self._settings.echo_threshold_factor,
         )
-
+        candidate_thresholds = type(self._session.thresholds)(
+            floor=self._session.thresholds.floor,
+            start=threshold,
+            stop=max(self._session.thresholds.stop, threshold * 0.35),
+        )
+        detector = UtteranceDetector(
+            candidate_thresholds,
+            onset_frames=self._settings.barge_in_frames,
+            stop_hang_ms=self._settings.stop_hang_ms,
+            max_utterance_s=self._settings.max_utterance_s,
+        )
+        # Two independent bars, both of which must be cleared. The relative one
+        # adapts to a noisy line; the absolute one is what stops the agent's own
+        # voice — leaking past imperfect echo cancellation at a level well above
+        # a near-zero measured floor — from reading as an interruption.
         async for frame in self._session.channel.frames():
             if self._session.echo.suppressed(frame.received_at):
                 continue
-            if trigger.push(frame.rms, threshold):
-                log.debug(
-                    "[%s] barge-in trigger rms=%.0f threshold=%.0f",
-                    self._session.id,
-                    frame.rms,
-                    threshold,
+            event = detector.push(frame)
+            if not isinstance(event, SpeechEnded):
+                continue
+            if event.duration_ms < self._settings.barge_in_min_ms:
+                self._emit(
+                    "barge_candidate",
+                    decision=InterruptionDecision.IGNORE,
+                    reason="below_minimum_duration",
+                    duration_ms=event.duration_ms,
                 )
-                return
+                continue
+
+            asr_start = time.perf_counter()
+            try:
+                transcript = await self._providers.asr.transcribe(event.pcm)
+            except Exception:
+                log.exception("[%s] interruption candidate ASR failed", self._session.id)
+                self._emit(
+                    "barge_candidate",
+                    decision=InterruptionDecision.IGNORE,
+                    reason="asr_error",
+                    duration_ms=event.duration_ms,
+                )
+                continue
+            asr_ms = (time.perf_counter() - asr_start) * 1000.0
+            assessment = assess(transcript.text, transcript.confidence)
+            self._emit(
+                "barge_candidate",
+                decision=assessment.decision,
+                reason=assessment.reason,
+                text=transcript.text,
+                confidence=round(transcript.confidence, 3),
+                duration_ms=event.duration_ms,
+                asr_ms=round(asr_ms),
+            )
+            if assessment.decision is InterruptionDecision.INTERRUPT:
+                log.info(
+                    "[%s] semantic barge-in accepted (%s): %s",
+                    self._session.id,
+                    assessment.reason,
+                    transcript.text,
+                )
+                return BargeInCandidate(event, transcript, assessment, asr_ms)
+            log.debug(
+                "[%s] semantic barge-in rejected (%s): %s",
+                self._session.id,
+                assessment.reason,
+                transcript.text,
+            )
+
+        raise asyncio.CancelledError
 
     # ------------------------------------------------------------ utilities
 
-    async def _speak_cached(self, name: str, audio: bytes | None) -> None:
+    async def _speak_cached(
+        self, name: str, audio: bytes | None
+    ) -> BargeInCandidate | None:
         """Play one pre-synthesised line, interruptible like any other speech."""
         if not audio:
             log.warning("[%s] cached line %r unavailable", self._session.id, name)
-            return
+            return None
         queue: asyncio.Queue[bytes | None] = asyncio.Queue()
         await queue.put(audio)
         await queue.put(_END)
@@ -635,18 +739,28 @@ class Pipeline:
         player = asyncio.create_task(self._play(queue, metrics, time.monotonic()))
         watcher = asyncio.create_task(self._watch_for_barge_in())
         racing: set[asyncio.Future[Any]] = {player, watcher}
+        pending: BargeInCandidate | None = None
         try:
             done, _ = await asyncio.wait(racing, return_when=asyncio.FIRST_COMPLETED)
-            if watcher in done and not player.done():
-                player.cancel()
-                with contextlib.suppress(asyncio.CancelledError):
-                    await player
+            if watcher in done:
+                pending = watcher.result()
+                if not player.done():
+                    self._emit(
+                        "barge_in",
+                        played_ms=self._session.played_ms,
+                        reason=pending.assessment.reason,
+                        text=pending.transcript.text,
+                    )
+                    player.cancel()
+                    with contextlib.suppress(asyncio.CancelledError):
+                        await player
         finally:
             watcher.cancel()
             with contextlib.suppress(asyncio.CancelledError):
                 await watcher
             self._session.end_playback()
             self._session.channel.drain()
+        return pending
 
 
 async def run_call(

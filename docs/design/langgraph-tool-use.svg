@@ -1,0 +1,62 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="980" height="360" viewBox="0 0 980 360" role="img" aria-labelledby="title desc">
+  <title id="title">LangGraph tool-use flow</title>
+  <desc id="desc">A field rep utterance is routed through a LangGraph agent, tool selection, business data tools, and grounded spoken response.</desc>
+  <defs>
+    <marker id="arrow" markerWidth="10" markerHeight="10" refX="7" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L0,6 L8,3 z" fill="#34d399"/>
+    </marker>
+    <style>
+      text { font-family: Inter, Segoe UI, Arial, sans-serif; }
+      .bg { fill: #0b0f0e; }
+      .panel { fill: #111614; stroke: #1e2724; stroke-width: 2; }
+      .active { fill: #12231f; stroke: #34d399; stroke-width: 2; }
+      .label { fill: #e6efeb; font-size: 18px; font-weight: 800; }
+      .small { fill: #8fa39c; font-size: 13px; }
+      .code { fill: #34d399; font-family: ui-monospace, Cascadia Mono, Consolas, monospace; font-size: 13px; }
+      .line { stroke: #34d399; stroke-width: 3; marker-end: url(#arrow); fill: none; }
+      .muted { stroke: #284039; stroke-width: 2; fill: none; }
+    </style>
+  </defs>
+  <rect class="bg" width="980" height="360" rx="18"/>
+  <text x="40" y="48" class="label" font-size="24">LangGraph tool-use loop</text>
+  <text x="40" y="74" class="small">The model does not freewheel over CRM facts. It chooses a typed capability, gets a spoken result, then answers from that result.</text>
+
+  <rect class="panel" x="40" y="124" width="170" height="94" rx="12"/>
+  <text class="label" x="62" y="160">Rep asks</text>
+  <text class="small" x="62" y="184">"Which accounts</text>
+  <text class="small" x="62" y="202">are slipping?"</text>
+
+  <rect class="active" x="260" y="104" width="180" height="134" rx="12"/>
+  <text class="label" x="284" y="142">LangGraph</text>
+  <text class="small" x="284" y="166">stateful agent node</text>
+  <text class="small" x="284" y="190">tool-call delta</text>
+  <text class="code" x="284" y="214">find_accounts_at_risk</text>
+
+  <rect class="panel" x="500" y="70" width="190" height="72" rx="12"/>
+  <text class="label" x="522" y="104">CRM activity</text>
+  <text class="small" x="522" y="124">last contact, notes</text>
+
+  <rect class="panel" x="500" y="162" width="190" height="72" rx="12"/>
+  <text class="label" x="522" y="196">ERP orders</text>
+  <text class="small" x="522" y="216">cadence, spend trend</text>
+
+  <rect class="panel" x="500" y="254" width="190" height="72" rx="12"/>
+  <text class="label" x="522" y="288">Web intent</text>
+  <text class="small" x="522" y="308">portal + quotes</text>
+
+  <rect class="active" x="750" y="124" width="190" height="94" rx="12"/>
+  <text class="label" x="774" y="160">Grounded reply</text>
+  <text class="small" x="774" y="184">tool result phrased</text>
+  <text class="small" x="774" y="202">for speech</text>
+
+  <path class="line" d="M210 171 H252"/>
+  <path class="line" d="M440 171 C470 171 462 106 492 106"/>
+  <path class="line" d="M440 171 H492"/>
+  <path class="line" d="M440 171 C470 171 462 290 492 290"/>
+  <path class="line" d="M690 106 C728 106 708 171 742 171"/>
+  <path class="line" d="M690 198 H742"/>
+  <path class="line" d="M690 290 C728 290 708 171 742 171"/>
+
+  <path class="muted" d="M845 218 C845 272 350 314 350 244"/>
+  <text class="small" x="394" y="304">conversation state keeps only what was actually heard</text>
+</svg>

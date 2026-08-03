@@ -1,0 +1,65 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="980" height="380" viewBox="0 0 980 380" role="img" aria-labelledby="title desc">
+  <title id="title">Data and insight layer</title>
+  <desc id="desc">ERP, CRM, web behaviour and visit notes feed derived sales insights such as churn risk, opportunities and account summaries.</desc>
+  <defs>
+    <marker id="arrow" markerWidth="10" markerHeight="10" refX="7" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L0,6 L8,3 z" fill="#34d399"/>
+    </marker>
+    <style>
+      text { font-family: Inter, Segoe UI, Arial, sans-serif; }
+      .bg { fill: #0b0f0e; }
+      .box { fill: #111614; stroke: #1e2724; stroke-width: 2; }
+      .core { fill: #12231f; stroke: #34d399; stroke-width: 2; }
+      .label { fill: #e6efeb; font-size: 18px; font-weight: 800; }
+      .small { fill: #8fa39c; font-size: 13px; }
+      .line { stroke: #34d399; stroke-width: 3; marker-end: url(#arrow); fill: none; }
+      .dash { stroke: #284039; stroke-width: 2; stroke-dasharray: 7 8; fill: none; }
+    </style>
+  </defs>
+  <rect class="bg" width="980" height="380" rx="18"/>
+  <text x="40" y="48" class="label" font-size="24">Business insight layer</text>
+  <text x="40" y="74" class="small">The useful answer is not in one system. It appears when orders, contact history, web behaviour and notes cross.</text>
+
+  <rect class="box" x="40" y="112" width="170" height="82" rx="12"/>
+  <text class="label" x="64" y="146">ERP orders</text>
+  <text class="small" x="64" y="170">spend, cadence</text>
+
+  <rect class="box" x="40" y="222" width="170" height="82" rx="12"/>
+  <text class="label" x="64" y="256">CRM history</text>
+  <text class="small" x="64" y="280">visits, calls, owners</text>
+
+  <rect class="box" x="275" y="112" width="170" height="82" rx="12"/>
+  <text class="label" x="299" y="146">Web intent</text>
+  <text class="small" x="299" y="170">portal + quote signals</text>
+
+  <rect class="box" x="275" y="222" width="170" height="82" rx="12"/>
+  <text class="label" x="299" y="256">Visit notes</text>
+  <text class="small" x="299" y="280">BM25 retrieval</text>
+
+  <rect class="core" x="515" y="130" width="190" height="156" rx="14"/>
+  <text class="label" x="544" y="168">Derived logic</text>
+  <text class="small" x="544" y="194">own-rhythm cadence</text>
+  <text class="small" x="544" y="218">revenue trend</text>
+  <text class="small" x="544" y="242">peer-safe gaps</text>
+  <text class="small" x="544" y="266">explained risk score</text>
+
+  <rect class="box" x="775" y="86" width="160" height="58" rx="12"/>
+  <text class="label" x="798" y="121">Risk sweep</text>
+
+  <rect class="box" x="775" y="164" width="160" height="58" rx="12"/>
+  <text class="label" x="798" y="199">Patch summary</text>
+
+  <rect class="box" x="775" y="242" width="160" height="58" rx="12"/>
+  <text class="label" x="798" y="277">Next pitch</text>
+
+  <path class="line" d="M210 153 H507"/>
+  <path class="line" d="M210 263 H507"/>
+  <path class="line" d="M445 153 H507"/>
+  <path class="line" d="M445 263 H507"/>
+  <path class="line" d="M705 190 C748 190 730 115 767 115"/>
+  <path class="line" d="M705 208 H767"/>
+  <path class="line" d="M705 226 C748 226 730 271 767 271"/>
+
+  <path class="dash" d="M360 304 C454 350 616 350 856 304"/>
+  <text class="small" x="414" y="344">guardrails: no peer names, no prices, rep-scoped lookup</text>
+</svg>

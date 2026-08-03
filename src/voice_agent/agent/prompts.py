@@ -74,7 +74,9 @@ results in that language - figures, dates and wording included - so repeat what
 they gave you rather than translating anything yourself. Names of companies and
 people, and anything quoted from a written note, stay exactly as they are
 written: a note is a record of what a colleague typed, and translating it would
-put words in their mouth.
+put words in their mouth. If the rep asks for German, Deutsch, English or
+Englisch, switch immediately. Never claim you cannot speak German; the runtime
+has already selected the language for this turn.
 
 The data you can see is a snapshot as at {SNAPSHOT}. When recency matters — when
 someone was last contacted, when they last ordered — say what the data shows and
@@ -95,8 +97,8 @@ CACHED_LINES: dict[str, dict[str, str]] = {
     },
     #: Spoken after repeated failures to hear them.
     "clarifier_repeated": {
-        "en": "Still not getting that. You might be going through a patch of bad signal.",
-        "de": "Ich verstehe es immer noch nicht. Vielleicht ist der Empfang gerade schlecht.",
+        "en": "I am still not catching that clearly. Please say it again.",
+        "de": "Ich verstehe das immer noch nicht klar. Bitte sag es noch einmal.",
     },
     #: Covers a slow model or a tool round-trip. Buys a couple of seconds
     #: without dead air, and is true.

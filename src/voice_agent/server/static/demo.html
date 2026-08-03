@@ -329,6 +329,8 @@
 
 <script>
 const SAMPLE_RATE = 16000;
+const SPEECH_WORDS_PER_MINUTE = 155;
+const SPEECH_HOLD_SAFETY_MS = 650;
 const el = (id) => document.getElementById(id);
 let socket, ctx, micStream, source, workletNode, playHead = 0, playing = false;
 const wave = new Float32Array(180);
@@ -337,6 +339,8 @@ let currentLanguage = 'en';
 let evalSummary = null;
 let healthState = { ok: false, detail: 'checking' };
 let toolPopoverTimer = null;
+let suppressPlayback = false;
+let speechHoldUntil = 0;
 
 const COPY = {
   en: {
@@ -407,6 +411,10 @@ const COPY = {
     status_error: 'connection error',
     status_switching: 'switching model',
     barge_armed: 'armed',
+    barge_candidate: 'checking speech',
+    barge_continuing: 'acknowledgement, continuing',
+    barge_ignored: 'ignored',
+    barge_accepted: 'interruption accepted',
     barge_cancelled: 'cancelled',
     running: 'running',
     none: 'none',
@@ -488,6 +496,10 @@ const COPY = {
     status_error: 'Verbindungsfehler',
     status_switching: 'Modell wird gewechselt',
     barge_armed: 'bereit',
+    barge_candidate: 'Sprache wird geprüft',
+    barge_continuing: 'Bestätigung, spricht weiter',
+    barge_ignored: 'ignoriert',
+    barge_accepted: 'Unterbrechung angenommen',
     barge_cancelled: 'abgebrochen',
     running: 'läuft',
     none: 'keine',
@@ -564,12 +576,20 @@ class Capture extends AudioWorkletProcessor {
     this.play = [];
     this.playPos = 0;
     this.playRatio = ${SAMPLE_RATE} / sampleRate;
+    this.keepAlive = 0;
     this.capturePos = 0;
     this.captureRatio = sampleRate / ${SAMPLE_RATE};
     this.port.onmessage = ({ data }) => {
+      if (data.clearPlayback) {
+        this.play = [];
+        this.playPos = 0;
+        this.keepAlive = 0;
+        return;
+      }
       if (!data.playback) return;
       const pcm = new Int16Array(data.playback);
       for (let i = 0; i < pcm.length; i++) this.play.push(pcm[i] / 0x8000);
+      this.keepAlive = Math.max(this.keepAlive, sampleRate * 2);
     };
   }
 
@@ -613,7 +633,11 @@ class Capture extends AudioWorkletProcessor {
     const channels = outputs[0] || [];
     const frames = channels[0]?.length || 0;
     for (let i = 0; i < frames; i++) {
-      const sample = this.nextPlaybackSample();
+      let sample = this.nextPlaybackSample();
+      if (!this.play.length && sample === 0 && this.keepAlive > 0) {
+        sample = 1e-8;
+        this.keepAlive--;
+      }
       for (const channel of channels) {
         channel[i] = sample;
       }
@@ -705,6 +729,19 @@ function speakInto(text) {
   el('transcript').scrollTop = el('transcript').scrollHeight;
 }
 
+function estimateSpeechMs(text) {
+  const words = (text.match(/\b[\w'£%-]+\b/g) || []).length;
+  const commas = (text.match(/[,;:]/g) || []).length;
+  const sentences = (text.match(/[.!?]/g) || []).length;
+  const spoken = words * (60000 / SPEECH_WORDS_PER_MINUTE);
+  return spoken + commas * 120 + sentences * 220 + SPEECH_HOLD_SAFETY_MS;
+}
+
+function extendSpeechHold(text) {
+  speechHoldUntil = Math.max(speechHoldUntil, Date.now() + estimateSpeechMs(text));
+  if (!playing) { playing = true; setStatus('status_speaking', 'live'); setPhase('tts'); }
+}
+
 function closeBubble(cut) {
   if (openAgentBody && cut) {
     const mark = document.createElement('span');
@@ -755,6 +792,8 @@ function onEvent(event) {
       break;
 
     case 'asr':
+      clearPlaybackQueue();
+      suppressPlayback = true;
       setLanguage(event.language);
       activate('asr');
       setPhase('asr');
@@ -767,6 +806,8 @@ function onEvent(event) {
       break;
 
     case 'turn_start':
+      clearPlaybackQueue();
+      suppressPlayback = false;
       activate('llm');
       setPhase('tool');
       el('v-tool').textContent = '';
@@ -777,6 +818,7 @@ function onEvent(event) {
     case 'clause':
       activate('tts');
       setPhase('tts');
+      extendSpeechHold(event.text);
       speakInto(event.text);
       break;
 
@@ -789,9 +831,19 @@ function onEvent(event) {
       logEvent('tool', event.name + ' ' + JSON.stringify(event.arguments));
       break;
 
+    case 'barge_candidate':
+      el('m-barge').textContent = event.decision === 'continue'
+        ? t('barge_continuing')
+        : event.decision === 'interrupt'
+          ? t('barge_candidate')
+          : t('barge_ignored');
+      logEvent('barge-in', `${event.decision} — ${event.reason}` + (event.text ? ` — ${event.text}` : ''));
+      break;
+
     case 'barge_in':
-      el('m-barge').textContent = t('barge_cancelled');
-      logEvent('barge-in', `cancelled after ${event.played_ms} ms of speech`);
+      clearPlaybackQueue();
+      el('m-barge').textContent = t('barge_accepted');
+      logEvent('barge-in', `accepted after ${event.played_ms} ms of speech — ${event.text || event.reason}`);
       break;
 
     case 'grounding': {
@@ -808,7 +860,7 @@ function onEvent(event) {
     case 'turn_complete': {
       setLanguage(event.language);
       activate(null);
-      setPhase('listening');
+      finishPlaybackWhenReady();
       hideToolPopover();
       const cut = event.barged_in && event.spoken_chars < event.generated_chars;
       // The bubble has been filling clause by clause; this only closes it. If
@@ -841,6 +893,8 @@ function onEvent(event) {
 
 function schedule(buffer) {
   if (!ctx || !workletNode) return;
+  if (suppressPlayback) return;
+  if (ctx.state !== 'running') ctx.resume();
   const pcm = new Int16Array(buffer);
   let peak = 0;
   for (let i = 0; i < pcm.length; i++) {
@@ -855,12 +909,30 @@ function schedule(buffer) {
   workletNode.port.postMessage({ playback: pcm.buffer }, [pcm.buffer]);
 
   if (!playing) { playing = true; setStatus('status_speaking', 'live'); setPhase('tts'); }
+  finishPlaybackWhenReady();
+}
+
+function finishPlaybackWhenReady() {
   clearTimeout(schedule.idle);
-  schedule.idle = setTimeout(() => {
+  const audioDue = ctx ? (playHead - ctx.currentTime) * 1000 + 120 : 0;
+  const speechDue = speechHoldUntil - Date.now();
+  const due = Math.max(audioDue, speechDue, 0);
+  if (due > 0) {
+    schedule.idle = setTimeout(finishPlaybackWhenReady, due);
+  } else {
     playing = false;
     setStatus('status_listening', 'live');
     setPhase('listening');
-  }, (playHead - now) * 1000 + 120);
+  }
+}
+
+function clearPlaybackQueue() {
+  if (!workletNode) return;
+  workletNode.port.postMessage({ clearPlayback: true });
+  playHead = ctx ? ctx.currentTime : 0;
+  playing = false;
+  speechHoldUntil = 0;
+  clearTimeout(schedule.idle);
 }
 
 async function start() {
@@ -940,12 +1012,14 @@ async function start() {
 }
 
 function stop() {
+  suppressPlayback = false;
   if (socket) { try { socket.close(); } catch {} socket = null; }
   if (workletNode) { workletNode.disconnect(); workletNode = null; }
   if (source) { source.disconnect(); source = null; }
   if (micStream) { micStream.getTracks().forEach((t) => t.stop()); micStream = null; }
   if (ctx) { ctx.close(); ctx = null; }
   playHead = 0; playing = false;
+  speechHoldUntil = 0;
   el('start').disabled = false;
   el('stop').disabled = true;
   // Re-enabled here rather than in the button handler, because stop() also runs

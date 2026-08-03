@@ -7,6 +7,7 @@ from pathlib import Path
 import pytest
 
 from voice_agent.config import LatencyBudget, Profile, Settings
+from voice_agent.providers.tts_piper import PiperTTS
 
 
 def build(**overrides: object) -> Settings:
@@ -102,6 +103,11 @@ class TestLatencyBudget:
 
 
 class TestDerivedValues:
+    def test_barge_in_is_off_by_default_for_the_browser_demo(self) -> None:
+        settings = build()
+        assert settings.barge_in is False
+        assert settings.barge_in_min_ms == 500
+
     def test_millisecond_settings_expose_seconds_for_asyncio(self) -> None:
         settings = build(stop_hang_ms=250, post_tts_guard_ms=300)
         assert settings.stop_hang_s == 0.25
@@ -187,6 +193,16 @@ class TestVoicePerLanguage:
         voice = settings.voice_for("de")
         assert voice is not None
         assert voice.stem == "de_DE-thorsten-medium"
+
+    def test_piper_loads_installed_switch_voices_even_when_asr_is_english_only(
+        self, tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+    ) -> None:
+        settings = self._settings(tmp_path, monkeypatch)
+        assert settings.languages == ("en",)
+
+        tts = PiperTTS.from_settings(settings)
+
+        assert tts._voices["de"].stem == "de_DE-thorsten-medium"
 
     def test_an_uninstalled_language_falls_back_rather_than_failing(
         self, tmp_path: Path, monkeypatch: pytest.MonkeyPatch

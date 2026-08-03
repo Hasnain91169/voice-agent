@@ -17,6 +17,8 @@ The source of truth is the editable SVG/HTML/Mermaid file beside each PNG. PNGs 
 | Asset | PNG export | Intended use |
 |---|---|---|
 | [Repository hero/banner](repo-hero-banner.svg) | [repo-hero-banner.png](repo-hero-banner.png) | README top banner and GitHub social preview. |
+| [LangGraph tool-use flow](langgraph-tool-use.svg) | - | README visual tour and agent/tool-use explanation. |
+| [Business insight layer](data-insight-layer.svg) | - | README visual tour and domain/data explanation. |
 | [Full real-time audio architecture](realtime-audio-architecture.svg) | [realtime-audio-architecture.png](realtime-audio-architecture.png) | README architecture section and technical slide. |
 | [Turn/cancel-scope timeline](turn-cancel-scope-timeline.svg) | [turn-cancel-scope-timeline.png](turn-cancel-scope-timeline.png) | Slide explaining latency budget and cancellation boundary. |
 | [Barge-in and spoken-memory visual](barge-in-spoken-memory.svg) | [barge-in-spoken-memory.png](barge-in-spoken-memory.png) | README commitment section and interview slide. |

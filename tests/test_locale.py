@@ -65,6 +65,23 @@ def test_an_unsupported_language_falls_back_rather_than_half_translating() -> No
     assert locale.normalise("zh") == "en"
 
 
+@pytest.mark.parametrize(
+    ("text", "expected"),
+    [
+        ("Deutsch version please", "de"),
+        ("Can you say that in German?", "de"),
+        ("Sprich Deutsch mit mir", "de"),
+        ("Back to English please", "en"),
+        ("Bitte auf Englisch", "en"),
+        ("Summarise my accounts", None),
+    ],
+)
+def test_explicit_language_requests_override_recogniser_text(
+    text: str, expected: locale.Language | None
+) -> None:
+    assert locale.requested(text) == expected
+
+
 def test_a_missing_message_raises_rather_than_leaking_its_key() -> None:
     """A key read aloud to a customer is worse than a crash in a test."""
     with pytest.raises(KeyError):

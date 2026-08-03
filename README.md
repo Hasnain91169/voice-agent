@@ -13,6 +13,45 @@ The browser dashboard uses the same event stream to show what is happening now:
 listening, recognising speech, reasoning or using tools, and speaking. When ASR
 detects German, the dashboard chrome switches to German for the next state update.
 
+## Visual tour
+
+### Live dashboard
+
+![Browser dashboard showing transcript, pipeline stages, suggestions and verification metrics](docs/design/dashboard-mockup.png)
+
+The demo page is not a skin over a black box. It exposes ASR confidence,
+detected language, tool calls, first-token latency, first-audio latency,
+barge-in state, grounding checks and the exact websocket events flowing through
+the call.
+
+### LangGraph tool use
+
+![LangGraph tool-use flow from rep utterance to selected business tool and grounded spoken answer](docs/design/langgraph-tool-use.svg)
+
+The model chooses typed tools rather than inventing CRM facts. Tool outputs are
+already phrased for speech, so the final response can repeat the numbers and
+dates without reformatting them.
+
+### Data and insight layer
+
+![ERP, CRM, web behaviour and visit notes feeding derived sales insights](docs/design/data-insight-layer.svg)
+
+The business value comes from derived signals: reorder cadence against an
+account's own rhythm, revenue trend, peer-safe category gaps, intent signals and
+retrieval over visit notes.
+
+### Real-time audio architecture
+
+![Real-time audio architecture with socket ownership, VAD, ASR, LangGraph, TTS and playback](docs/design/realtime-audio-architecture.png)
+
+### Barge-in and spoken memory
+
+![Barge-in cancellation and spoken-memory diagram](docs/design/barge-in-spoken-memory.png)
+
+### Evaluation harness
+
+![Evaluation architecture showing simulated callers, audio loopback, judge and grounding checks](docs/design/evaluation-architecture-dashboard.png)
+
 > Every number below is measured on the hardware named beside it. Where a
 > measurement contradicts a design assumption, the measurement is what gets
 > written down — including the places where it says a target was wrong, a
@@ -503,10 +542,13 @@ Everything runs locally and costs nothing. For cloud providers, copy
 `.env.example` to `.env` and set the keys. The tool-using scenarios need a
 frontier model; the local 7B scores one correct tool call in three.
 
-**On laptop speakers the agent may interrupt itself.** Browser echo cancellation
-is tuned for the speaker-to-microphone path and leaks at volume. Raise
-`VA_BARGE_IN_MIN_RMS` until it stops; the server logs the effective thresholds
-on every call.
+**Turn-taking is deliberately conservative.** When enabled with
+`VA_BARGE_IN=true`, the server waits for at least 500 ms of candidate speech,
+transcribes it, and checks whether it is a new request, correction, or explicit
+stop command. Acknowledgements such as “okay”, “yes”, “ja”, and “genau” do not
+cut off the answer. Browser microphone activity never clears playback locally;
+only an accepted server decision can do that. Raise `VA_BARGE_IN_MIN_RMS` for a
+particularly noisy microphone; the effective threshold is logged on every call.
 
 ## Testing
 
