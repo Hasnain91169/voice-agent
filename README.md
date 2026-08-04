@@ -13,6 +13,9 @@ The browser dashboard uses the same event stream to show what is happening now:
 listening, recognising speech, reasoning or using tools, and speaking. When ASR
 detects German, the dashboard chrome switches to German for the next state update.
 
+For a code-level walkthrough, call lifecycle, debugging map and interview-ready
+explanation, read the [complete project guide](docs/PROJECT_GUIDE.md).
+
 ## Visual tour
 
 ### Live dashboard
@@ -308,9 +311,14 @@ unit tests would have stayed green.
 
 ## Measured
 
+These measurements are hardware-specific, not platform-independent promises.
+The component table below was recorded on Windows 11 with an RTX 5070. CPU-only
+machines, including Intel Macs, should use their own measurements when setting a
+latency budget.
+
 ### Components
 
-`uv run python -m bench` — RTX 5070, Windows 11, p50 of five runs after a
+`uv run python -m bench` — Windows 11, RTX 5070, p50 of five runs after a
 discarded warm-up.
 
 | Component | Operation | p50 | Budget |
@@ -342,6 +350,42 @@ Three findings that changed the design rather than confirming it:
 
 The voice is `en_GB-alba-medium`, picked on measurement: fastest English
 candidate on a real clause, and British, which a UK builders' merchant wants.
+
+## Platform support
+
+The browser, FastAPI server, SQLite memory, LangGraph workflow and Piper
+integration are cross-platform. The local model path changes with the hardware:
+
+| Host | ASR | Local LLM | Practical status |
+|---|---|---|---|
+| Windows/Linux with NVIDIA GPU | faster-whisper with CUDA | Ollama with GPU acceleration | Fastest measured profile |
+| Intel Mac | faster-whisper on CPU with `int8` | Ollama on CPU | Runs locally, but slower; use a smaller model or a cloud LLM for responsiveness |
+| Apple Silicon Mac | faster-whisper on CPU with `int8` in the current adapter | Ollama with Metal acceleration | Runs locally; ASR Metal/Core ML support is a future provider improvement |
+
+CTranslate2 provides macOS wheels for both x86-64 and ARM64, but its GPU path
+is NVIDIA CUDA rather than Apple Metal. See the [CTranslate2 hardware
+support](https://opennmt.net/CTranslate2/hardware_support.html) notes. The
+model-fetching script selects a native Piper binary for both `Darwin/x86_64`
+and `Darwin/arm64`; the binaries come from the [Piper
+releases](https://github.com/rhasspy/piper/releases).
+
+For the current Ollama macOS application, use macOS Sonoma 14 or newer. Ollama
+can use Apple GPU acceleration on Apple Silicon, while Intel Macs use the CPU;
+see the [official Ollama macOS requirements](https://docs.ollama.com/macos).
+Some older Intel MacBooks cannot officially upgrade to Sonoma, so check the
+operating-system version before treating local Ollama as an option.
+
+An Intel MacBook with 16 GB RAM is the practical minimum I would use for the
+full local demo. An 8 GB machine can still run the application, but it is more
+comfortable with English-only `base.en` or `tiny.en` ASR and a smaller Ollama
+model. These are practical recommendations rather than measured guarantees;
+run the benchmark on the target Mac before publishing a latency claim.
+
+The most promising Apple Silicon ASR improvement is a provider backed by
+[whisper.cpp](https://github.com/ggml-org/whisper.cpp), which supports Metal and
+Core ML on Apple hardware while retaining Intel support. The repository does
+not currently include that provider, so Apple Silicon uses the same CPU ASR
+adapter as Intel today.
 
 ### Models
 
@@ -525,22 +569,43 @@ because every one of them looked like a working measurement:
 
 ## Quick start
 
-Needs [uv](https://docs.astral.sh/uv/) and [Ollama](https://ollama.com) with a
-model pulled (`ollama pull qwen2.5:7b`).
+Needs [uv](https://docs.astral.sh/uv/) and, for the default local profile,
+[Ollama](https://ollama.com) with a model pulled (`ollama pull qwen2.5:7b`).
+Python 3.12 is required. On macOS, the current Ollama application requires
+Sonoma 14 or newer.
 
 ```bash
-uv sync --extra dev --extra local --extra agent   # add --extra cuda for GPU ASR
+uv sync --extra dev --extra local --extra agent   # add --extra cuda only on NVIDIA hosts
 uv run python scripts/fetch_models.py             # Piper binary + a voice
 uv run voice-agent
 ```
+
+For an Intel Mac or another CPU-only machine, start with this `.env` profile:
+
+```dotenv
+VA_WHISPER_DEVICE=cpu
+VA_WHISPER_COMPUTE_TYPE=int8
+VA_WHISPER_MODEL=base.en
+VA_WHISPER_CPU_THREADS=4
+VA_LLM_MAX_TOKENS=90
+```
+
+Use the existing `small.en` default when English accuracy matters more than
+latency. For German detection, use the multilingual `small` model and configure
+a German Piper voice; an English-only model such as `small.en` cannot detect
+German reliably. A smaller Ollama model such as `qwen2.5:3b` can reduce CPU
+latency on an Intel Mac, with a likely reduction in tool-use reliability.
 
 Open <http://127.0.0.1:8000>, click **Start call**, and talk. The first start is
 slow — models load and every fixed line is pre-synthesised — and `/health`
 returns 503 until that finishes, deliberately.
 
-Everything runs locally and costs nothing. For cloud providers, copy
-`.env.example` to `.env` and set the keys. The tool-using scenarios need a
-frontier model; the local 7B scores one correct tool call in three.
+The default local profile runs locally and costs nothing. For cloud providers,
+copy `.env.example` to `.env` and set the keys. On a CPU-only Mac, using local
+ASR and TTS with the Anthropic LLM is a useful hybrid profile: the transcript
+and tool context leave the machine, but microphone audio remains local. The
+tool-using scenarios need a frontier model; the local 7B scores one correct
+tool call in three in the measured evaluation.
 
 **Turn-taking is deliberately conservative.** When enabled with
 `VA_BARGE_IN=true`, the server waits for at least 500 ms of candidate speech,
