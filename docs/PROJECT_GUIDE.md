@@ -619,73 +619,7 @@ The code default and `.env.example` both use the measured 450 ms endpoint. Check
 the effective value in the dashboard's calibration event before a demo,
 especially after experimenting with lower-latency values.
 
-## 18. Debugging by symptom
-
-| Symptom | What to inspect | Most likely area |
-|---|---|---|
-| Agent says a clarifier at call start | ASR confidence, utterance duration and calibration log | VAD thresholds or ambient noise |
-| Agent cuts off the caller | `stop_hang_ms`, overlaps in audio eval | Endpointing |
-| Agent stops its own answer | Barge candidate text, confidence and reason | Echo leakage or barge threshold |
-| "Okay" cuts off an answer | `barge_candidate` decision should be `continue` | Interruption classifier |
-| Last sentence plays on the next turn | Browser playback queue and `turn_complete` timing | AudioWorklet scheduling |
-| Audio plays in one ear | Worklet must write all output channels | Browser playback loop |
-| German request gets English speech | Installed voices, `VA_LANGUAGES`, Whisper model | Backend language configuration |
-| Dashboard changes language but voice does not | UI selection only changes dashboard copy | TTS/ASR runtime, not UI |
-| Model selector refuses to switch | Health log says a call is in progress | Deliberate process-wide model lock |
-| Tool repeats a lookup | Tool events and LangGraph round count | Prompt behavior or model quality |
-| Unsupported figure appears | Grounding panel and tool results | Model restatement or missing tool |
-| Browser cannot start a session | `/health` response | Provider warm-up or missing model |
-| WebSocket closes immediately | Token expiry or failed readiness | `/api/session` and security layer |
-
-When debugging audio, start with the event log rather than the transcript. The
-transcript shows what the model heard; the event stream shows why the pipeline
-made each transition.
-
-## 19. Common modification recipes
-
-### Add a new business tool
-
-1. Write an async handler in `agent/tools/sales.py` or a new module.
-2. Return short, speech-ready text.
-3. Wrap it in a `ToolSpec` with a strict JSON schema.
-4. Add it to `build_toolbox()`.
-5. Test scope, formatting, empty results and malformed arguments.
-6. Add an eval scenario that requires the tool.
-
-### Add another LLM provider
-
-1. Implement the `LLM` protocol in `providers/`.
-2. Convert provider events into `TextDelta` and complete `ToolCall` objects.
-3. Add construction branches to `providers/registry.py`.
-4. Add credentials and model settings to `config.py`.
-5. Verify warm-up, health, cancellation and tool-call ordering.
-6. Measure TTFT and tool success in `bench/models.py`.
-
-### Add another transport
-
-1. Implement `Transport` over 16 kHz mono PCM.
-2. Make `recv()` return bytes to `RxPump`; do not create another reader.
-3. Report whether the transport performs echo cancellation.
-4. Route a new session into the same `run_call()` function.
-5. Test disconnect, pacing, endian conversion and authentication.
-
-### Change turn-taking
-
-1. Change typed settings, not hidden constants.
-2. Add or update deterministic VAD tests.
-3. Run audio evals and record both latency and caller-overlap counts.
-4. Update published measurements only after repeated runs.
-
-### Add another language
-
-1. Add the language to `locale.SUPPORTED` and its message catalogue.
-2. Add all recovery lines in `prompts.CACHED_LINES`.
-3. Install and select a matching TTS voice.
-4. Use an ASR model capable of detecting it.
-5. Add formatting tests for money, dates and closed vocabularies.
-6. Run the multilingual synthesis-to-ASR benchmark.
-
-## 20. How to explain the project in an interview
+## 18. How to explain the project in an interview
 
 ### Thirty-second version
 
@@ -724,7 +658,7 @@ production deployment. Your production Vonage experience is separate evidence
 that you have shipped telephony. Keeping those claims separate makes both more
 credible.
 
-## 21. Recommended learning order
+## 19. Recommended learning order
 
 Read these files in sequence:
 
