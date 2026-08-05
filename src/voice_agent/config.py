@@ -225,7 +225,9 @@ class Settings(BaseSettings):
     barge_in_min_rms: int = Field(default=750, gt=0)
 
     # --- Echo control and barge-in ---
-    barge_in: bool = False
+    #: Enabled by default because the headline browser experience promises that
+    #: a caller can interrupt a response. Disable it explicitly for debugging.
+    barge_in: bool = True
     #: A higher bar to interrupt the agent than to start a normal turn: a false
     #: positive here cuts the agent off mid-word, which is worse than a slow start.
     barge_in_frames: int = Field(default=10, gt=0)

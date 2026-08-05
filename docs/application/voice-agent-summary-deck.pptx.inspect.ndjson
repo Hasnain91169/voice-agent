@@ -1,162 +1,120 @@
-{"kind":"deck","id":"pr/mg8ogu","name":"Deck"}
-{"kind":"layout","layoutId":"6fe55b83-1363-4343-a16d-c1b34116d04f","name":"Master","type":"master"}
-{"kind":"layout","layoutId":"cc0dbd70-e195-4773-864d-d6a7396a9da7","name":"Title Slide","type":"title"}
-{"kind":"slide","id":"sl/b439wh","slide":1,"title":"A measured voice-agent system, not a stitched-together demo","textShapes":3}
-{"kind":"textbox","id":"sh/q9k3ad8b","slide":1,"text":"A measured voice-agent system, not a stitched-together demo","textPreview":"A measured voice-agent system, not a stitched-together demo","textChars":59,"textLines":1,"bbox":[72,438,860,128]}
-{"kind":"textbox","id":"sh/radk3i9w","slide":1,"text":"Streaming audio, LangGraph tools, barge-in, spoken memory, and simulation-based evaluation.","textPreview":"Streaming audio, LangGraph tools, barge-in, spoken memory, and simulation-based evaluation.","textChars":91,"textLines":1,"bbox":[74,574,880,48]}
-{"kind":"textbox","id":"sh/0fmlgnqd","slide":1,"text":"Recording deck","textPreview":"Recording deck","textChars":14,"textLines":1,"bbox":[1028,578,180,32]}
-{"kind":"image","id":"im/gby54zyl","slide":1,"name":"","geometry":"roundRect","alt":"Repository hero banner","bbox":[0,0,1280,416]}
-{"kind":"notes","id":"nt/b439wh","slide":1,"text":"Open by separating this repo from a generic chatbot demo.\nEmphasise that the project is designed to be read, run, interrupted, and evaluated.\n[Sources] README.md lines 1-13; docs/design/repo-hero-banner.png."}
-{"kind":"slide","id":"sl/f2ob3m","slide":2,"title":"The hard part is the call, not just the model","textShapes":10}
-{"kind":"textbox","id":"sh/xg329cve","slide":2,"text":"The hard part is the call, not just the model","textPreview":"The hard part is the call, not just the model","textChars":45,"textLines":1,"bbox":[72,56,930,56]}
-{"kind":"shape","id":"sh/ads3exw3","slide":2,"bbox":[72,126,180,3]}
-{"kind":"textbox","id":"sh/be1k72do","slide":2,"text":"Most voice demos work until a real caller pauses, talks over the agent, or asks for something the backend must constrain.","textPreview":"Most voice demos work until a real caller pauses, talks over the agent, or asks for something the backend must constrain.","textChars":121,"textLines":1,"bbox":[72,156,760,78]}
-{"kind":"shape","id":"sh/k3ulk7u5","slide":2,"bbox":[96,285,8,8]}
-{"kind":"textbox","id":"sh/l432dcvq","slide":2,"text":"20ms audio frames arrive whether the model is ready or not.","textPreview":"20ms audio frames arrive whether the model is ready or not.","textChars":59,"textLines":1,"bbox":[118,278,698,44]}
-{"kind":"shape","id":"sh/y1c3ihwz","slide":2,"bbox":[96,353,8,8]}
-{"kind":"textbox","id":"sh/j2lkbmdk","slide":2,"text":"Endpointing trades latency against cutting people off.","textPreview":"Endpointing trades latency against cutting people off.","textChars":54,"textLines":1,"bbox":[118,346,698,44]}
-{"kind":"shape","id":"sh/07q18ne1","slide":2,"bbox":[96,421,8,8]}
-{"kind":"textbox","id":"sh/18j21svm","slide":2,"text":"Barge-in only works if reception and playback do not fight over the socket.","textPreview":"Barge-in only works if reception and playback do not fight over the socket.","textChars":75,"textLines":1,"bbox":[118,414,698,44]}
-{"kind":"shape","id":"sh/9sr61sv6","slide":2,"bbox":[96,489,8,8]}
-{"kind":"textbox","id":"sh/8ri5snu1","slide":2,"text":"Memory must record what was heard, not what was generated.","textPreview":"Memory must record what was heard, not what was generated.","textChars":58,"textLines":1,"bbox":[118,482,698,44]}
-{"kind":"shape","id":"sh/n69ozidg","slide":2,"bbox":[850,158,286,318]}
-{"kind":"textbox","id":"sh/m50nqdcv","slide":2,"text":"Design answer","textPreview":"Design answer","textChars":13,"textLines":1,"bbox":[880,194,220,30]}
-{"kind":"textbox","id":"sh/xwr65svi","slide":2,"text":"Keep the audio loop plain and measurable. Let LangGraph reason, but never own frame timing.","textPreview":"Keep the audio loop plain and measurable. Let LangGraph reason, but never own frame timing.","textChars":91,"textLines":1,"bbox":[880,250,218,156]}
-{"kind":"textbox","id":"sh/wvi5wnux","slide":2,"text":"voice-agent","textPreview":"voice-agent","textChars":11,"textLines":1,"bbox":[72,664,220,24]}
-{"kind":"textbox","id":"sh/vu9o3idc","slide":2,"text":"02","textPreview":"02","textChars":2,"textLines":1,"bbox":[1146,664,62,24]}
-{"kind":"notes","id":"nt/f2ob3m","slide":2,"text":"This slide frames the engineering problem before showing the architecture.\nTalk about real calls: pauses, interruptions, echo, and state consistency.\n[Sources] docs/architecture.md lines 7-10, 16-18, 50-63, 64-80."}
-{"kind":"slide","id":"sl/5iexdb","slide":3,"title":"One receive owner keeps the audio path honest","textShapes":5}
-{"kind":"textbox","id":"sh/1wju5cr2","slide":3,"text":"One receive owner keeps the audio path honest","textPreview":"One receive owner keeps the audio path honest","textChars":45,"textLines":1,"bbox":[72,48,960,54]}
-{"kind":"textbox","id":"sh/etsvuh8r","slide":3,"text":"RxPump owns inbound audio; downstream consumers read frames, not the socket.","textPreview":"RxPump owns inbound audio; downstream consumers read frames, not the socket.","textChars":76,"textLines":1,"bbox":[74,108,740,32]}
-{"kind":"textbox","id":"sh/srats7ql","slide":3,"text":"Cancel scope: LLM + TTS + playback","textPreview":"Cancel scope: LLM + TTS + playback","textChars":34,"textLines":1,"bbox":[790,590,374,32]}
-{"kind":"textbox","id":"sh/dsju1cr6","slide":3,"text":"voice-agent","textPreview":"voice-agent","textChars":11,"textLines":1,"bbox":[72,664,220,24]}
-{"kind":"textbox","id":"sh/q58bqx8f","slide":3,"text":"03","textPreview":"03","textChars":2,"textLines":1,"bbox":[1146,664,62,24]}
-{"kind":"image","id":"im/yp87a54n","slide":3,"name":"","geometry":"roundRect","alt":"Full real-time audio architecture","bbox":[50,160,1180,414]}
-{"kind":"notes","id":"nt/5iexdb","slide":3,"text":"Walk left to right: browser or future telephony transport, RxPump, frame channel, VAD, ASR, LangGraph, tools, TTS, playback.\nName the architectural boundary: framework reasoning outside the 20ms loop.\n[Sources] README.md lines 22-48; src/voice_agent/rx.py lines 112-140; src/voice_agent/agent/graph.py lines 6-12."}
-{"kind":"slide","id":"sl/3dixrv","slide":4,"title":"Barge-in is cancellation plus memory discipline","textShapes":8}
-{"kind":"textbox","id":"sh/8v6h03ut","slide":4,"text":"Barge-in is cancellation plus memory discipline","textPreview":"Barge-in is cancellation plus memory discipline","textChars":47,"textLines":1,"bbox":[72,52,990,54]}
-{"kind":"textbox","id":"sh/7uxgrydo","slide":4,"text":"Stopping audio is not enough; the conversation state must match what the caller actually heard.","textPreview":"Stopping audio is not enough; the conversation state must match what the caller actually heard.","textChars":95,"textLines":1,"bbox":[74,111,820,34]}
-{"kind":"shape","id":"sh/hkzixsbq","slide":4,"bbox":[842,188,288,228]}
-{"kind":"textbox","id":"sh/gjqh4nu5","slide":4,"text":"Measured","textPreview":"Measured","textChars":8,"textLines":1,"bbox":[874,222,210,30]}
-{"kind":"textbox","id":"sh/vih0vidk","slide":4,"text":"219-328ms","textPreview":"219-328ms","textChars":9,"textLines":1,"bbox":[874,268,220,44]}
-{"kind":"textbox","id":"sh/uhoz2dcz","slide":4,"text":"caller talking over -> last outbound frame","textPreview":"caller talking over -> last outbound frame","textChars":42,"textLines":1,"bbox":[876,318,210,56]}
-{"kind":"textbox","id":"sh/5ozi1sbm","slide":4,"text":"History matched heard text in 2 of 2 interrupted calls.","textPreview":"History matched heard text in 2 of 2 interrupted calls.","textChars":55,"textLines":1,"bbox":[112,535,880,38]}
-{"kind":"textbox","id":"sh/4nqh8nu1","slide":4,"text":"voice-agent","textPreview":"voice-agent","textChars":11,"textLines":1,"bbox":[72,664,220,24]}
-{"kind":"textbox","id":"sh/ylszidwz","slide":4,"text":"04","textPreview":"04","textChars":2,"textLines":1,"bbox":[1146,664,62,24]}
-{"kind":"image","id":"im/fixcbipk","slide":4,"name":"","geometry":"roundRect","alt":"Barge-in and spoken memory visual","bbox":[62,168,735,318]}
-{"kind":"notes","id":"nt/3dixrv","slide":4,"text":"Explain why full generated text cannot be blindly committed after an interruption.\nThis is the strongest technical differentiator: state remains caller-truthful after cancellation.\n[Sources] README.md lines 64-70 and 359-368; src/voice_agent/pipeline.py lines 325-365; src/voice_agent/session.py lines 30-80."}
-{"kind":"slide","id":"sl/q80bcr","slide":5,"title":"The demo domain looks like revenue work","textShapes":15}
-{"kind":"textbox","id":"sh/oji1wbi1","slide":5,"text":"The demo domain looks like revenue work","textPreview":"The demo domain looks like revenue work","textChars":39,"textLines":1,"bbox":[72,56,880,54]}
-{"kind":"textbox","id":"sh/ni9kn6hg","slide":5,"text":"A builders' merchant sales assistant combines ERP orders, CRM contact history, website behaviour, and visit notes.","textPreview":"A builders' merchant sales assistant combines ERP orders, CRM contact history, website behaviour, and visit notes.","textChars":114,"textLines":1,"bbox":[74,116,900,52]}
-{"kind":"shape","id":"sh/mh0ju10v","slide":5,"bbox":[74,220,256,210]}
-{"kind":"textbox","id":"sh/xob2tgzi","slide":5,"text":"ERP orders","textPreview":"ERP orders","textChars":10,"textLines":1,"bbox":[98,250,208,34]}
-{"kind":"textbox","id":"sh/wn210bix","slide":5,"text":"reorder cadence, spend trend, category gaps","textPreview":"reorder cadence, spend trend, category gaps","textChars":43,"textLines":1,"bbox":[98,312,202,82]}
-{"kind":"shape","id":"sh/bm9kr6hs","slide":5,"bbox":[360,220,256,210]}
-{"kind":"textbox","id":"sh/al0jy107","slide":5,"text":"CRM history","textPreview":"CRM history","textChars":11,"textLines":1,"bbox":[384,250,208,34]}
-{"kind":"textbox","id":"sh/ds7ihwze","slide":5,"text":"contacts, visits, calls, follow-up context","textPreview":"contacts, visits, calls, follow-up context","textChars":42,"textLines":1,"bbox":[384,312,202,82]}
-{"kind":"shape","id":"sh/sry1orit","slide":5,"bbox":[646,220,256,210]}
-{"kind":"textbox","id":"sh/epczyd47","slide":5,"text":"Web behaviour","textPreview":"Web behaviour","textChars":13,"textLines":1,"bbox":[670,250,208,34]}
-{"kind":"textbox","id":"sh/fql0rils","slide":5,"text":"interest signals for categories not yet bought","textPreview":"interest signals for categories not yet bought","textChars":46,"textLines":1,"bbox":[670,312,202,82]}
-{"kind":"shape","id":"sh/greh0nmx","slide":5,"bbox":[932,220,256,210]}
-{"kind":"textbox","id":"sh/1snits3i","slide":5,"text":"Free-text notes","textPreview":"Free-text notes","textChars":15,"textLines":1,"bbox":[956,250,208,34]}
-{"kind":"textbox","id":"sh/2twz2x43","slide":5,"text":"promises, competitors, complaints, injected text","textPreview":"promises, competitors, complaints, injected text","textChars":48,"textLines":1,"bbox":[956,312,202,82]}
-{"kind":"shape","id":"sh/3u50v2lo","slide":5,"bbox":[116,499,8,8]}
-{"kind":"textbox","id":"sh/oveh4n29","slide":5,"text":"Peers are never named; gap analysis returns aggregates only.","textPreview":"Peers are never named; gap analysis returns aggregates only.","textChars":60,"textLines":1,"bbox":[138,492,878,44]}
-{"kind":"shape","id":"sh/pwnixs3u","slide":5,"bbox":[116,547,8,8]}
-{"kind":"textbox","id":"sh/qxwj6xkf","slide":5,"text":"Prices are never quoted; no pricing tool exists.","textPreview":"Prices are never quoted; no pricing tool exists.","textChars":48,"textLines":1,"bbox":[138,540,878,44]}
-{"kind":"shape","id":"sh/by50z2l0","slide":5,"bbox":[116,595,8,8]}
-{"kind":"textbox","id":"sh/nmpgn21s","slide":5,"text":"Account lookup never leaves the configured rep's book.","textPreview":"Account lookup never leaves the configured rep's book.","textChars":54,"textLines":1,"bbox":[138,588,878,44]}
-{"kind":"textbox","id":"sh/mlgzux07","slide":5,"text":"voice-agent","textPreview":"voice-agent","textChars":11,"textLines":1,"bbox":[72,664,220,24]}
-{"kind":"textbox","id":"sh/9o7ypcjy","slide":5,"text":"05","textPreview":"05","textChars":2,"textLines":1,"bbox":[1146,664,62,24]}
-{"kind":"notes","id":"nt/q80bcr","slide":5,"text":"Use this slide to connect the project to Acto: ERP, CRM, behaviour, revenue signals, and action orchestration.\nEmphasise that guardrails are implemented in tools rather than delegated to prompting.\n[Sources] README.md lines 78-108; src/voice_agent/agent/tools/sales.py lines 1-20 and 60-65."}
-{"kind":"slide","id":"sl/p8gea8","slide":6,"title":"Retrieval is measured against how reps actually ask","textShapes":11}
-{"kind":"textbox","id":"sh/dk3ut4bm","slide":6,"text":"Retrieval is measured against how reps actually ask","textPreview":"Retrieval is measured against how reps actually ask","textChars":51,"textLines":1,"bbox":[72,52,980,54]}
-{"kind":"textbox","id":"sh/qhsvi9cv","slide":6,"text":"Two tasks are tracked separately: one-note lookup and topic sweep across a patch.","textPreview":"Two tasks are tracked separately: one-note lookup and topic sweep across a patch.","textChars":81,"textLines":1,"bbox":[74,112,830,32]}
-{"kind":"shape","id":"sh/rilcretg","slide":6,"bbox":[82,192,492,270]}
-{"kind":"textbox","id":"sh/4fadgzup","slide":6,"text":"Lookup","textPreview":"Lookup","textChars":6,"textLines":1,"bbox":[120,228,200,34]}
-{"kind":"textbox","id":"sh/pgjup4ba","slide":6,"text":"72%","textPreview":"72%","textChars":3,"textLines":1,"bbox":[120,282,160,58]}
-{"kind":"textbox","id":"sh/2dsbepcz","slide":6,"text":"recall@3 for paraphrased questions","textPreview":"recall@3 for paraphrased questions","textChars":34,"textLines":1,"bbox":[122,350,310,34]}
-{"kind":"shape","id":"sh/3e1cnut4","slide":6,"bbox":[646,192,492,270]}
-{"kind":"textbox","id":"sh/gbatcfut","slide":6,"text":"Sweep","textPreview":"Sweep","textChars":5,"textLines":1,"bbox":[684,228,200,34]}
-{"kind":"textbox","id":"sh/hcjulkbe","slide":6,"text":"73%","textPreview":"73%","textChars":3,"textLines":1,"bbox":[684,282,160,58]}
-{"kind":"textbox","id":"sh/18jqt87e","slide":6,"text":"hit@3 for competitor/topic searches","textPreview":"hit@3 for competitor/topic searches","textChars":35,"textLines":1,"bbox":[686,350,330,34]}
-{"kind":"textbox","id":"sh/g7a9k3qt","slide":6,"text":"AND search found 1 of 80 lookup probes; the shipped query expands terms because spoken questions are messy.","textPreview":"AND search found 1 of 80 lookup probes; the shipped query expands terms because spoken questions are messy.","textChars":107,"textLines":1,"bbox":[118,516,940,58]}
-{"kind":"textbox","id":"sh/f618ryp8","slide":6,"text":"voice-agent","textPreview":"voice-agent","textChars":11,"textLines":1,"bbox":[72,664,220,24]}
-{"kind":"textbox","id":"sh/e5srit8n","slide":6,"text":"06","textPreview":"06","textChars":2,"textLines":1,"bbox":[1146,664,62,24]}
-{"kind":"notes","id":"nt/p8gea8","slide":6,"text":"Explain why this is BM25/FTS5 rather than embeddings: small corpus, deterministic, fast, and enough to test the voice-agent behaviour.\nMention the bench command reproduced these numbers locally.\n[Sources] README.md lines 110-165; bench.retrieval local run; docs/architecture.md lines 150-177."}
-{"kind":"slide","id":"sl/a6b5ll","slide":7,"title":"The eval suite tests the agent and the voice system","textShapes":10}
-{"kind":"textbox","id":"sh/ovu10bmx","slide":7,"text":"The eval suite tests the agent and the voice system","textPreview":"The eval suite tests the agent and the voice system","textChars":51,"textLines":1,"bbox":[72,52,1030,54]}
-{"kind":"textbox","id":"sh/3ulk76ls","slide":7,"text":"Text mode is fast enough for reasoning regressions; audio mode exercises the real VAD, endpointer, echo gate, and barge-in.","textPreview":"Text mode is fast enough for reasoning regressions; audio mode exercises the real VAD, endpointer, echo gate, and barge-in.","textChars":123,"textLines":1,"bbox":[74,112,980,54]}
-{"kind":"shape","id":"sh/dkn2dg3u","slide":7,"bbox":[862,178,276,248]}
-{"kind":"textbox","id":"sh/cju14bm9","slide":7,"text":"Last recorded text eval","textPreview":"Last recorded text eval","textChars":23,"textLines":1,"bbox":[890,212,220,30]}
-{"kind":"textbox","id":"sh/bilkbqlo","slide":7,"text":"26 / 33","textPreview":"26 / 33","textChars":7,"textLines":1,"bbox":[890,260,190,52]}
-{"kind":"textbox","id":"sh/qhcj2l43","slide":7,"text":"three runs with claude-haiku-4-5","textPreview":"three runs with claude-haiku-4-5","textChars":32,"textLines":1,"bbox":[892,326,200,46]}
-{"kind":"shape","id":"sh/toji1w3a","slide":7,"bbox":[116,481,8,8]}
-{"kind":"textbox","id":"sh/sna1srm5","slide":7,"text":"Scenario YAML drives simulated caller behaviour.","textPreview":"Scenario YAML drives simulated caller behaviour.","textChars":48,"textLines":1,"bbox":[138,474,858,44]}
-{"kind":"shape","id":"sh/2hkbaxs7","slide":7,"bbox":[116,529,8,8]}
-{"kind":"textbox","id":"sh/3itsj29s","slide":7,"text":"Deterministic checks cover tools, facts, leaks, and refusal cases.","textPreview":"Deterministic checks cover tools, facts, leaks, and refusal cases.","textChars":66,"textLines":1,"bbox":[138,522,918,44]}
-{"kind":"shape","id":"sh/oj2tc7ad","slide":7,"bbox":[116,577,8,8]}
-{"kind":"textbox","id":"sh/pkbalcry","slide":7,"text":"Fault injection covers ASR blanking, LLM stalls, and TTS failures.","textPreview":"Fault injection covers ASR blanking, LLM stalls, and TTS failures.","textChars":66,"textLines":1,"bbox":[138,570,898,44]}
-{"kind":"textbox","id":"sh/qlkbehsj","slide":7,"text":"voice-agent","textPreview":"voice-agent","textChars":11,"textLines":1,"bbox":[72,664,220,24]}
-{"kind":"textbox","id":"sh/bmtcnm9o","slide":7,"text":"07","textPreview":"07","textChars":2,"textLines":1,"bbox":[1146,664,62,24]}
-{"kind":"image","id":"im/naxkb65o","slide":7,"name":"","geometry":"roundRect","alt":"Evaluation architecture dashboard","bbox":[62,180,760,238]}
-{"kind":"notes","id":"nt/a6b5ll","slide":7,"text":"Use this slide to show simulation-based testing, which Acto explicitly asks for.\nBe candid: 26/33 is not perfect, and that is part of the point. The system reports residual failures rather than hiding them.\n[Sources] evals/harness.py lines 1-15 and 102-166; evals/scenarios/*.yaml; src/voice_agent/server/static/eval-summary.json."}
-{"kind":"slide","id":"sl/2p54z7","slide":8,"title":"The project got stronger when measurements contradicted it","textShapes":7}
-{"kind":"textbox","id":"sh/250r25oj","slide":8,"text":"The project got stronger when measurements contradicted it","textPreview":"The project got stronger when measurements contradicted it","textChars":58,"textLines":1,"bbox":[72,52,1030,54]}
-{"kind":"shape","id":"sh/fips7q58","slide":8,"bbox":[116,437,8,8]}
-{"kind":"textbox","id":"sh/ehgrylon","slide":8,"text":"250ms endpointing looked fast, but cut callers off on 10 of 30 turns.","textPreview":"250ms endpointing looked fast, but cut callers off on 10 of 30 turns.","textChars":69,"textLines":1,"bbox":[138,430,938,44]}
-{"kind":"shape","id":"sh/14ra90ny","slide":8,"bbox":[116,491,8,8]}
-{"kind":"textbox","id":"sh/0ji90v6d","slide":8,"text":"First-audio once measured the last outbound frame and even went negative.","textPreview":"First-audio once measured the last outbound frame and even went negative.","textChars":73,"textLines":1,"bbox":[138,484,938,44]}
-{"kind":"shape","id":"sh/reps3qpw","slide":8,"bbox":[116,545,8,8]}
-{"kind":"textbox","id":"sh/qdgrulob","slide":8,"text":"A red-team note relayed a fake discount with all unit tests green.","textPreview":"A red-team note relayed a fake discount with all unit tests green.","textChars":66,"textLines":1,"bbox":[138,538,938,44]}
-{"kind":"textbox","id":"sh/ozi9wn2t","slide":8,"text":"The strongest claim is not “we measured it”; it is “we found where the measurement lied.”","textPreview":"The strongest claim is not “we measured it”; it is “we found where the measurement lied.”","textChars":89,"textLines":1,"bbox":[118,612,960,34]}
-{"kind":"textbox","id":"sh/90rq5s3e","slide":8,"text":"voice-agent","textPreview":"voice-agent","textChars":11,"textLines":1,"bbox":[72,664,220,24]}
-{"kind":"textbox","id":"sh/mxgrudk3","slide":8,"text":"08","textPreview":"08","textChars":2,"textLines":1,"bbox":[1146,664,62,24]}
-{"kind":"image","id":"im/wvadwzul","slide":8,"name":"","geometry":"roundRect","alt":"Endpointing tradeoff chart","bbox":[66,152,556,210]}
-{"kind":"image","id":"im/xwjepkv6","slide":8,"name":"","geometry":"roundRect","alt":"Measurement failures visual","bbox":[658,152,556,210]}
-{"kind":"notes","id":"nt/2p54z7","slide":8,"text":"This is the humility slide. It shows mature engineering judgement and gives you several interview stories.\nUse the endpointer story as the best trade-off example.\n[Sources] README.md lines 325-384 and 438-479; docs/architecture.md lines 209-238."}
-{"kind":"slide","id":"sl/bfndwi","slide":9,"title":"The video should prove three behaviours quickly","textShapes":15}
-{"kind":"textbox","id":"sh/ovutc729","slide":9,"text":"The video should prove three behaviours quickly","textPreview":"The video should prove three behaviours quickly","textChars":47,"textLines":1,"bbox":[72,56,940,54]}
-{"kind":"shape","id":"sh/3u1sj21o","slide":9,"bbox":[104,154,990,92]}
-{"kind":"textbox","id":"sh/2tsbaxk3","slide":9,"text":"1","textPreview":"1","textChars":1,"textLines":1,"bbox":[132,172,50,46]}
-{"kind":"textbox","id":"sh/1sjahcji","slide":9,"text":"Normal call","textPreview":"Normal call","textChars":11,"textLines":1,"bbox":[214,172,260,30]}
-{"kind":"textbox","id":"sh/grat872x","slide":9,"text":"Ask which accounts are slipping; show tool calls and grounded numbers.","textPreview":"Ask which accounts are slipping; show tool calls and grounded numbers.","textChars":70,"textLines":1,"bbox":[214,208,780,24]}
-{"kind":"shape","id":"sh/fq1sf21c","slide":9,"bbox":[104,262,990,92]}
-{"kind":"textbox","id":"sh/epsb6xk7","slide":9,"text":"2","textPreview":"2","textChars":1,"textLines":1,"bbox":[132,280,50,46]}
-{"kind":"textbox","id":"sh/lonudwjm","slide":9,"text":"Barge-in","textPreview":"Barge-in","textChars":8,"textLines":1,"bbox":[214,280,260,30]}
-{"kind":"textbox","id":"sh/0netkrih","slide":9,"text":"Interrupt mid-answer; show cancellation and truncated spoken history.","textPreview":"Interrupt mid-answer; show cancellation and truncated spoken history.","textChars":69,"textLines":1,"bbox":[214,316,780,24]}
-{"kind":"shape","id":"sh/2hcv6pwn","slide":9,"bbox":[104,370,990,92]}
-{"kind":"textbox","id":"sh/3ilczud8","slide":9,"text":"3","textPreview":"3","textChars":1,"textLines":1,"bbox":[132,388,50,46]}
-{"kind":"textbox","id":"sh/ojud8zet","slide":9,"text":"Adversarial note","textPreview":"Adversarial note","textChars":16,"textLines":1,"bbox":[214,388,260,30]}
-{"kind":"textbox","id":"sh/pk3u1kve","slide":9,"text":"Ask about a poisoned note; show the agent treats it as untrusted text.","textPreview":"Ask about a poisoned note; show the agent treats it as untrusted text.","textChars":70,"textLines":1,"bbox":[214,424,780,24]}
-{"kind":"shape","id":"sh/etsv25wr","slide":9,"bbox":[104,478,990,92]}
-{"kind":"textbox","id":"sh/fe1cvadc","slide":9,"text":"4","textPreview":"4","textChars":1,"textLines":1,"bbox":[132,496,50,46]}
-{"kind":"textbox","id":"sh/gfad4feh","slide":9,"text":"Eval dashboard","textPreview":"Eval dashboard","textChars":14,"textLines":1,"bbox":[214,496,260,30]}
-{"kind":"textbox","id":"sh/1g3uxkv2","slide":9,"text":"Close on recorded eval score, latency, and known remaining failures.","textPreview":"Close on recorded eval score, latency, and known remaining failures.","textChars":68,"textLines":1,"bbox":[214,532,780,24]}
-{"kind":"textbox","id":"sh/ypwve9wv","slide":9,"text":"voice-agent","textPreview":"voice-agent","textChars":11,"textLines":1,"bbox":[72,664,220,24]}
-{"kind":"textbox","id":"sh/za5w7edg","slide":9,"text":"09","textPreview":"09","textChars":2,"textLines":1,"bbox":[1146,664,62,24]}
-{"kind":"notes","id":"nt/bfndwi","slide":9,"text":"This is your recording plan. Keep the intro tight, then switch to the browser demo.\nDo not try to show every feature live. Prove the behaviours that Acto cares about most.\n[Sources] README.md quick start lines 481-513; src/voice_agent/server/static/demo.html."}
-{"kind":"slide","id":"sl/mpipej","slide":10,"title":"Make the README feel like a complete application packet","textShapes":14}
-{"kind":"textbox","id":"sh/f2x432tk","slide":10,"text":"Make the README feel like a complete application packet","textPreview":"Make the README feel like a complete application packet","textChars":55,"textLines":1,"bbox":[72,56,1040,54]}
-{"kind":"textbox","id":"sh/0365w7a5","slide":10,"text":"README artifacts","textPreview":"README artifacts","textChars":16,"textLines":1,"bbox":[96,152,400,32]}
-{"kind":"shape","id":"sh/1ofm5cba","slide":10,"bbox":[104,217,8,8]}
-{"kind":"textbox","id":"sh/qx43qxsn","slide":10,"text":"Live/local demo section with a realistic deployment note","textPreview":"Live/local demo section with a realistic deployment note","textChars":56,"textLines":1,"bbox":[126,210,478,44]}
-{"kind":"shape","id":"sh/ryd4z2t8","slide":10,"bbox":[104,279,8,8]}
-{"kind":"textbox","id":"sh/szmls7at","slide":10,"text":"Architecture diagram plus plain-English walkthrough","textPreview":"Architecture diagram plus plain-English walkthrough","textChars":51,"textLines":1,"bbox":[126,272,478,44]}
-{"kind":"shape","id":"sh/d0vm1cbe","slide":10,"bbox":[104,341,8,8]}
-{"kind":"textbox","id":"sh/itk3mxsr","slide":10,"text":"Evaluation report with command, score, failures, and sample transcripts","textPreview":"Evaluation report with command, score, failures, and sample transcripts","textChars":71,"textLines":1,"bbox":[126,334,478,44]}
-{"kind":"shape","id":"sh/3ud4vitc","slide":10,"bbox":[104,403,8,8]}
-{"kind":"textbox","id":"sh/v2twfal0","slide":10,"text":"Short video link and three-scenario demo script","textPreview":"Short video link and three-scenario demo script","textChars":47,"textLines":1,"bbox":[126,396,478,44]}
-{"kind":"textbox","id":"sh/a1kv6p4f","slide":10,"text":"Proof artifacts","textPreview":"Proof artifacts","textChars":15,"textLines":1,"bbox":[688,152,400,32]}
-{"kind":"shape","id":"sh/x4behk36","slide":10,"bbox":[696,217,8,8]}
-{"kind":"textbox","id":"sh/w32d8fml","slide":10,"text":"Production note: TMC/Vonage project covers live telephony","textPreview":"Production note: TMC/Vonage project covers live telephony","textChars":57,"textLines":1,"bbox":[718,210,458,44]}
-{"kind":"shape","id":"sh/j6tw3ulc","slide":10,"bbox":[696,279,8,8]}
-{"kind":"textbox","id":"sh/i5kvap4r","slide":10,"text":"CI badge for pytest, ruff, mypy","textPreview":"CI badge for pytest, ruff, mypy","textChars":31,"textLines":1,"bbox":[718,272,458,44]}
-{"kind":"shape","id":"sh/58ve5432","slide":10,"bbox":[696,341,8,8]}
-{"kind":"textbox","id":"sh/k72xczmx","slide":10,"text":"Implemented vs planned matrix","textPreview":"Implemented vs planned matrix","textChars":29,"textLines":1,"bbox":[718,334,458,44]}
-{"kind":"shape","id":"sh/za9w7q5s","slide":10,"bbox":[696,403,8,8]}
-{"kind":"textbox","id":"sh/y90vy547","slide":10,"text":"One-page application case study for Acto-style revenue workflows","textPreview":"One-page application case study for Acto-style revenue workflows","textChars":64,"textLines":1,"bbox":[718,396,458,44]}
-{"kind":"textbox","id":"sh/25oz6tov","slide":10,"text":"Positioning: this repo proves the architecture and eval discipline; TMC proves production telephony.","textPreview":"Positioning: this repo proves the architecture and eval discipline; TMC proves production telephony.","textChars":100,"textLines":1,"bbox":[112,612,940,36]}
-{"kind":"textbox","id":"sh/36xgfy5g","slide":10,"text":"voice-agent","textPreview":"voice-agent","textChars":11,"textLines":1,"bbox":[72,664,220,24]}
-{"kind":"textbox","id":"sh/orqh8361","slide":10,"text":"10","textPreview":"10","textChars":2,"textLines":1,"bbox":[1146,664,62,24]}
-{"kind":"notes","id":"nt/mpipej","slide":10,"text":"Use this as the close before the live demo. It tells the reviewer how to read the repository.\nMention Vercel carefully: a static showcase or cloud-provider version is reasonable; the full local-model stack remains best as local/browser.\n[Sources] README.md lines 519-546; project test and bench runs performed locally."}
+{"kind":"slide","id":"sl/y90nupkv","slide":1,"title":"A measured voice-agent system, not a stitched-together demo","textShapes":7}
+{"kind":"textbox","id":"sh/547294r6","slide":1,"text":"A measured voice-agent system, not a stitched-together demo","textPreview":"A measured voice-agent system, not a stitched-together demo","textChars":59,"textLines":1,"bbox":[72,438,860,128]}
+{"kind":"textbox","id":"sh/k3yl0zql","slide":1,"text":"Streaming audio, LangGraph tools, barge-in, spoken memory, and simulation-based evaluation.","textPreview":"Streaming audio, LangGraph tools, barge-in, spoken memory, and simulation-based evaluation.","textChars":91,"textLines":1,"bbox":[74,574,880,48]}
+{"kind":"textbox","id":"sh/7qp4be9c","slide":1,"text":"Project brief","textPreview":"Project brief","textChars":13,"textLines":1,"bbox":[1028,578,180,32]}
+{"kind":"shape","id":"sh/ts7md4r2","slide":1,"bbox":[272,174,176,47]}
+{"kind":"textbox","id":"sh/sryl4zqx","slide":1,"text":"Barge-in","textPreview":"Barge-in","textChars":8,"textLines":1,"bbox":[286,190,142,13]}
+{"kind":"textbox","id":"sh/fu94fe98","slide":1,"text":"p50 328ms","textPreview":"p50 328ms","textChars":9,"textLines":1,"bbox":[286,207,150,16]}
+{"kind":"shape","id":"sh/utg3698n","slide":1,"bbox":[656,174,136,47]}
+{"kind":"textbox","id":"sh/wn6dc7eh","slide":1,"text":"Tests","textPreview":"Tests","textChars":5,"textLines":1,"bbox":[670,190,108,13]}
+{"kind":"textbox","id":"sh/hofulsf2","slide":1,"text":"run suite","textPreview":"run suite","textChars":9,"textLines":1,"bbox":[670,207,116,16]}
+{"kind":"image","id":"im/ri9kvmxs","slide":1,"name":"","geometry":"roundRect","bbox":[0,0,1280,416]}
+{"kind":"notes","id":"nt/y90nupkv","slide":1,"text":""}
+{"kind":"slide","id":"sl/hwbqtkby","slide":2,"title":"The hard part is the call, not just the model","textShapes":10}
+{"kind":"textbox","id":"sh/bip8jmho","slide":2,"text":"The hard part is the call, not just the model","textPreview":"The hard part is the call, not just the model","textChars":45,"textLines":1,"bbox":[72,56,930,56]}
+{"kind":"shape","id":"sh/9072xkry","slide":2,"bbox":[72,126,180,3]}
+{"kind":"textbox","id":"sh/ozy1ofad","slide":2,"text":"Most voice demos work until a real caller pauses, talks over the agent, or asks for something the backend must constrain.","textPreview":"Most voice demos work until a real caller pauses, talks over the agent, or asks for something the backend must constrain.","textChars":121,"textLines":1,"bbox":[72,156,760,78]}
+{"kind":"shape","id":"sh/b29kza94","slide":2,"bbox":[96,285,8,8]}
+{"kind":"textbox","id":"sh/a10jqpsj","slide":2,"text":"20ms audio frames arrive whether the model is ready or not.","textPreview":"20ms audio frames arrive whether the model is ready or not.","textChars":59,"textLines":1,"bbox":[118,278,698,44]}
+{"kind":"shape","id":"sh/x4r21kru","slide":2,"bbox":[96,353,8,8]}
+{"kind":"textbox","id":"sh/w3i1sfa9","slide":2,"text":"Endpointing trades latency against cutting people off.","textPreview":"Endpointing trades latency against cutting people off.","textChars":54,"textLines":1,"bbox":[118,346,698,44]}
+{"kind":"shape","id":"sh/r65knqtk","slide":2,"bbox":[96,421,8,8]}
+{"kind":"textbox","id":"sh/q5wjelsz","slide":2,"text":"Barge-in only works if reception and playback do not fight over the socket.","textPreview":"Barge-in only works if reception and playback do not fight over the socket.","textChars":75,"textLines":1,"bbox":[118,414,698,44]}
+{"kind":"shape","id":"sh/ove9o7yd","slide":2,"bbox":[96,489,8,8]}
+{"kind":"textbox","id":"sh/9wnqhczy","slide":2,"text":"Memory must record what was heard, not what was generated.","textPreview":"Memory must record what was heard, not what was generated.","textChars":58,"textLines":1,"bbox":[118,482,698,44]}
+{"kind":"shape","id":"sh/mtwrmxg7","slide":2,"bbox":[850,158,286,318]}
+{"kind":"textbox","id":"sh/nu58f2hs","slide":2,"text":"Design answer","textPreview":"Design answer","textChars":13,"textLines":1,"bbox":[880,194,220,30]}
+{"kind":"textbox","id":"sh/wjy9sry9","slide":2,"text":"Keep the audio loop plain and measurable. Let LangGraph reason, but never own frame timing.","textPreview":"Keep the audio loop plain and measurable. Let LangGraph reason, but never own frame timing.","textChars":91,"textLines":1,"bbox":[880,250,218,156]}
+{"kind":"textbox","id":"sh/xk7qlczu","slide":2,"text":"voice-agent","textPreview":"voice-agent","textChars":11,"textLines":1,"bbox":[72,664,220,24]}
+{"kind":"textbox","id":"sh/ahwrqhgj","slide":2,"text":"02","textPreview":"02","textChars":2,"textLines":1,"bbox":[1146,664,62,24]}
+{"kind":"notes","id":"nt/hwbqtkby","slide":2,"text":""}
+{"kind":"slide","id":"sl/ofy9wn61","slide":3,"title":"One receive owner keeps the audio path honest","textShapes":5}
+{"kind":"textbox","id":"sh/pcjqtg36","slide":3,"text":"One receive owner keeps the audio path honest","textPreview":"One receive owner keeps the audio path honest","textChars":45,"textLines":1,"bbox":[72,48,960,54]}
+{"kind":"textbox","id":"sh/cza94vmx","slide":3,"text":"RxPump owns inbound audio; downstream consumers read frames, not the socket.","textPreview":"RxPump owns inbound audio; downstream consumers read frames, not the socket.","textChars":76,"textLines":1,"bbox":[74,108,740,32]}
+{"kind":"textbox","id":"sh/298ryl4v","slide":3,"text":"Cancel scope: LLM + TTS + playback","textPreview":"Cancel scope: LLM + TTS + playback","textChars":34,"textLines":1,"bbox":[790,590,374,32]}
+{"kind":"textbox","id":"sh/3ah8rqlg","slide":3,"text":"voice-agent","textPreview":"voice-agent","textChars":11,"textLines":1,"bbox":[72,664,220,24]}
+{"kind":"textbox","id":"sh/obq90bml","slide":3,"text":"03","textPreview":"03","textChars":2,"textLines":1,"bbox":[1146,664,62,24]}
+{"kind":"image","id":"im/rqxozmh4","slide":3,"name":"","geometry":"roundRect","bbox":[50,160.5,1180,413]}
+{"kind":"notes","id":"nt/ofy9wn61","slide":3,"text":""}
+{"kind":"slide","id":"sl/jyx0ra1s","slide":4,"title":"Barge-in is cancellation plus memory discipline","textShapes":8}
+{"kind":"textbox","id":"sh/5cva1cfq","slide":4,"text":"Barge-in is cancellation plus memory discipline","textPreview":"Barge-in is cancellation plus memory discipline","textChars":47,"textLines":1,"bbox":[72,52,990,54]}
+{"kind":"textbox","id":"sh/1cj2d8b6","slide":4,"text":"Stopping audio is not enough; the conversation state must match what the caller actually heard.","textPreview":"Stopping audio is not enough; the conversation state must match what the caller actually heard.","textChars":95,"textLines":1,"bbox":[74,111,820,34]}
+{"kind":"shape","id":"sh/rm1k7yt4","slide":4,"bbox":[842,188,288,228]}
+{"kind":"textbox","id":"sh/ql8jytsj","slide":4,"text":"Measured","textPreview":"Measured","textChars":8,"textLines":1,"bbox":[874,222,210,30]}
+{"kind":"textbox","id":"sh/doj29oba","slide":4,"text":"p50 328ms","textPreview":"p50 328ms","textChars":9,"textLines":1,"bbox":[874,268,220,44]}
+{"kind":"textbox","id":"sh/sna103ap","slide":4,"text":"caller talking over -> last outbound frame","textPreview":"caller talking over -> last outbound frame","textChars":42,"textLines":1,"bbox":[876,318,210,56]}
+{"kind":"textbox","id":"sh/3ihk3et8","slide":4,"text":"History matched heard text in 2 of 2 interrupted calls.","textPreview":"History matched heard text in 2 of 2 interrupted calls.","textChars":55,"textLines":1,"bbox":[112,535,880,38]}
+{"kind":"textbox","id":"sh/ih8ju9sn","slide":4,"text":"voice-agent","textPreview":"voice-agent","textChars":11,"textLines":1,"bbox":[72,664,220,24]}
+{"kind":"textbox","id":"sh/kbm987y5","slide":4,"text":"04","textPreview":"04","textChars":2,"textLines":1,"bbox":[1146,664,62,24]}
+{"kind":"image","id":"im/1gfm90ze","slide":4,"name":"","geometry":"roundRect","bbox":[62,198.38,735,257.25]}
+{"kind":"notes","id":"nt/jyx0ra1s","slide":4,"text":""}
+{"kind":"slide","id":"sl/i107q5of","slide":5,"title":"The demo domain looks like revenue work","textShapes":15}
+{"kind":"textbox","id":"sh/ud0ne10b","slide":5,"text":"The demo domain looks like revenue work","textPreview":"The demo domain looks like revenue work","textChars":39,"textLines":1,"bbox":[72,56,880,54]}
+{"kind":"textbox","id":"sh/dgbulwnm","slide":5,"text":"A builders' merchant sales assistant combines ERP orders, CRM contact history, website behaviour, and visit notes.","textPreview":"A builders' merchant sales assistant combines ERP orders, CRM contact history, website behaviour, and visit notes.","textChars":114,"textLines":1,"bbox":[74,116,900,52]}
+{"kind":"shape","id":"sh/cf2tcr61","slide":5,"bbox":[74,220,256,210]}
+{"kind":"textbox","id":"sh/z2tcnm5s","slide":5,"text":"ERP orders","textPreview":"ERP orders","textChars":10,"textLines":1,"bbox":[98,250,208,34]}
+{"kind":"textbox","id":"sh/yhkbe1o7","slide":5,"text":"reorder cadence, spend trend, category gaps","textPreview":"reorder cadence, spend trend, category gaps","textChars":43,"textLines":1,"bbox":[98,312,202,82]}
+{"kind":"shape","id":"sh/l4bupwny","slide":5,"bbox":[360,220,256,210]}
+{"kind":"textbox","id":"sh/032tgr6d","slide":5,"text":"CRM history","textPreview":"CRM history","textChars":11,"textLines":1,"bbox":[384,250,208,34]}
+{"kind":"textbox","id":"sh/n6dcr65o","slide":5,"text":"contacts, visits, calls, follow-up context","textPreview":"contacts, visits, calls, follow-up context","textChars":42,"textLines":1,"bbox":[384,312,202,82]}
+{"kind":"shape","id":"sh/m5kbi1oj","slide":5,"bbox":[646,220,256,210]}
+{"kind":"textbox","id":"sh/w32dkbuh","slide":5,"text":"Web behaviour","textPreview":"Web behaviour","textChars":13,"textLines":1,"bbox":[670,250,208,34]}
+{"kind":"textbox","id":"sh/x4vedgvm","slide":5,"text":"interest signals for categories not yet bought","textPreview":"interest signals for categories not yet bought","textChars":46,"textLines":1,"bbox":[670,312,202,82]}
+{"kind":"shape","id":"sh/ahkvi1cb","slide":5,"bbox":[932,220,256,210]}
+{"kind":"textbox","id":"sh/v2twb6dw","slide":5,"text":"Free-text notes","textPreview":"Free-text notes","textChars":15,"textLines":1,"bbox":[956,250,208,34]}
+{"kind":"textbox","id":"sh/k7mxovud","slide":5,"text":"promises, competitors, complaints, injected text","textPreview":"promises, competitors, complaints, injected text","textChars":48,"textLines":1,"bbox":[956,312,202,82]}
+{"kind":"shape","id":"sh/58vehgvy","slide":5,"bbox":[116,499,8,8]}
+{"kind":"textbox","id":"sh/i54fmlc7","slide":5,"text":"Peers are never named; gap analysis returns aggregates only.","textPreview":"Peers are never named; gap analysis returns aggregates only.","textChars":60,"textLines":1,"bbox":[138,492,878,44]}
+{"kind":"shape","id":"sh/j6dwfqds","slide":5,"bbox":[116,547,8,8]}
+{"kind":"textbox","id":"sh/sb6xsvu9","slide":5,"text":"Prices are never quoted; no pricing tool exists.","textPreview":"Prices are never quoted; no pricing tool exists.","textChars":48,"textLines":1,"bbox":[138,540,878,44]}
+{"kind":"shape","id":"sh/tcfel0vu","slide":5,"bbox":[116,595,8,8]}
+{"kind":"textbox","id":"sh/hgrmpwj2","slide":5,"text":"Account lookup never leaves the configured rep's book.","textPreview":"Account lookup never leaves the configured rep's book.","textChars":54,"textLines":1,"bbox":[138,588,878,44]}
+{"kind":"textbox","id":"sh/gfi5grih","slide":5,"text":"voice-agent","textPreview":"voice-agent","textChars":11,"textLines":1,"bbox":[72,664,220,24]}
+{"kind":"textbox","id":"sh/fe94nm1w","slide":5,"text":"05","textPreview":"05","textChars":2,"textLines":1,"bbox":[1146,664,62,24]}
+{"kind":"notes","id":"nt/i107q5of","slide":5,"text":""}
+{"kind":"slide","id":"sl/x8f69ofe","slide":6,"title":"Retrieval is measured against how reps actually ask","textShapes":11}
+{"kind":"textbox","id":"sh/5svutgni","slide":6,"text":"Retrieval is measured against how reps actually ask","textPreview":"Retrieval is measured against how reps actually ask","textChars":51,"textLines":1,"bbox":[72,52,980,54]}
+{"kind":"textbox","id":"sh/yhg7epsj","slide":6,"text":"Two tasks are tracked separately: one-note lookup and topic sweep across a patch.","textPreview":"Two tasks are tracked separately: one-note lookup and topic sweep across a patch.","textChars":81,"textLines":1,"bbox":[74,112,830,32]}
+{"kind":"shape","id":"sh/zi98nu94","slide":6,"bbox":[82,192,492,270]}
+{"kind":"textbox","id":"sh/87ipkzal","slide":6,"text":"Lookup","textPreview":"Lookup","textChars":6,"textLines":1,"bbox":[120,228,200,34]}
+{"kind":"textbox","id":"sh/98rqt4r6","slide":6,"text":"72%","textPreview":"72%","textChars":3,"textLines":1,"bbox":[120,282,160,58]}
+{"kind":"textbox","id":"sh/ml07i9sv","slide":6,"text":"recall@3 for paraphrased questions","textPreview":"recall@3 for paraphrased questions","textChars":34,"textLines":1,"bbox":[122,350,310,34]}
+{"kind":"shape","id":"sh/7m98ru9g","slide":6,"bbox":[646,192,492,270]}
+{"kind":"textbox","id":"sh/oryp8fah","slide":6,"text":"Sweep","textPreview":"Sweep","textChars":5,"textLines":1,"bbox":[684,228,200,34]}
+{"kind":"textbox","id":"sh/pc76hkr2","slide":6,"text":"73%","textPreview":"73%","textChars":3,"textLines":1,"bbox":[684,282,160,58]}
+{"kind":"textbox","id":"sh/h4bupgn6","slide":6,"text":"hit@3 for competitor/topic searches","textPreview":"hit@3 for competitor/topic searches","textChars":35,"textLines":1,"bbox":[686,350,330,34]}
+{"kind":"textbox","id":"sh/w32twb6l","slide":6,"text":"AND search found 1 of 80 lookup probes; the shipped query expands terms because spoken questions are messy.","textPreview":"AND search found 1 of 80 lookup probes; the shipped query expands terms because spoken questions are messy.","textChars":107,"textLines":1,"bbox":[118,516,940,58]}
+{"kind":"textbox","id":"sh/v2tcn650","slide":6,"text":"voice-agent","textPreview":"voice-agent","textChars":11,"textLines":1,"bbox":[72,664,220,24]}
+{"kind":"textbox","id":"sh/u1kbu1ov","slide":6,"text":"06","textPreview":"06","textChars":2,"textLines":1,"bbox":[1146,664,62,24]}
+{"kind":"notes","id":"nt/x8f69ofe","slide":6,"text":""}
+{"kind":"slide","id":"sl/gnmp4jqx","slide":7,"title":"The eval suite tests the agent and the voice system","textShapes":10}
+{"kind":"textbox","id":"sh/p8fih03e","slide":7,"text":"The eval suite tests the agent and the voice system","textPreview":"The eval suite tests the agent and the voice system","textChars":51,"textLines":1,"bbox":[72,52,1030,54]}
+{"kind":"textbox","id":"sh/cb2tkvap","slide":7,"text":"Text mode is fast enough for reasoning regressions; audio mode exercises the real VAD, endpointer, echo gate, and barge-in.","textPreview":"Text mode is fast enough for reasoning regressions; audio mode exercises the real VAD, endpointer, echo gate, and barge-in.","textChars":123,"textLines":1,"bbox":[74,112,980,54]}
+{"kind":"shape","id":"sh/ydkbm5sv","slide":7,"bbox":[862,178,276,248]}
+{"kind":"textbox","id":"sh/zedcfa9g","slide":7,"text":"Last recorded text eval","textPreview":"Last recorded text eval","textChars":23,"textLines":1,"bbox":[890,212,220,30]}
+{"kind":"textbox","id":"sh/kzmdova1","slide":7,"text":"25 / 33","textPreview":"25 / 33","textChars":7,"textLines":1,"bbox":[890,260,190,52]}
+{"kind":"textbox","id":"sh/l0vuh0rm","slide":7,"text":"three runs with claude-haiku-4-5","textPreview":"three runs with claude-haiku-4-5","textChars":32,"textLines":1,"bbox":[892,326,200,46]}
+{"kind":"shape","id":"sh/eh0ba1sr","slide":7,"bbox":[116,481,8,8]}
+{"kind":"textbox","id":"sh/fi9c369c","slide":7,"text":"Scenario YAML drives simulated caller behaviour.","textPreview":"Scenario YAML drives simulated caller behaviour.","textChars":48,"textLines":1,"bbox":[138,474,858,44]}
+{"kind":"shape","id":"sh/baxkjqlk","slide":7,"bbox":[116,529,8,8]}
+{"kind":"textbox","id":"sh/a9ojq5kz","slide":7,"text":"Deterministic checks cover tools, facts, leaks, and refusal cases.","textPreview":"Deterministic checks cover tools, facts, leaks, and refusal cases.","textChars":66,"textLines":1,"bbox":[138,522,918,44]}
+{"kind":"shape","id":"sh/xcz2l03q","slide":7,"bbox":[116,577,8,8]}
+{"kind":"textbox","id":"sh/cbq1sv25","slide":7,"text":"Fault injection covers ASR blanking, LLM stalls, and TTS failures.","textPreview":"Fault injection covers ASR blanking, LLM stalls, and TTS failures.","textChars":66,"textLines":1,"bbox":[138,570,898,44]}
+{"kind":"textbox","id":"sh/n6x0fqlo","slide":7,"text":"voice-agent","textPreview":"voice-agent","textChars":11,"textLines":1,"bbox":[72,664,220,24]}
+{"kind":"textbox","id":"sh/25ojml43","slide":7,"text":"07","textPreview":"07","textChars":2,"textLines":1,"bbox":[1146,664,62,24]}
+{"kind":"image","id":"im/j2xwvyhk","slide":7,"name":"","geometry":"roundRect","bbox":[62,180.25,760,237.5]}
+{"kind":"notes","id":"nt/gnmp4jqx","slide":7,"text":""}
+{"kind":"slide","id":"sl/fu1gfa1s","slide":8,"title":"The project got stronger when measurements contradicted it","textShapes":7}
+{"kind":"textbox","id":"sh/n6pwfmd8","slide":8,"text":"The project got stronger when measurements contradicted it","textPreview":"The project got stronger when measurements contradicted it","textChars":58,"textLines":1,"bbox":[72,52,1030,54]}
+{"kind":"shape","id":"sh/ri9g7uhw","slide":8,"bbox":[116,437,8,8]}
+{"kind":"textbox","id":"sh/6h0fypgb","slide":8,"text":"250ms endpointing looked fast, but cut callers off on 10 of 30 turns.","textPreview":"250ms endpointing looked fast, but cut callers off on 10 of 30 turns.","textChars":69,"textLines":1,"bbox":[138,430,938,44]}
+{"kind":"shape","id":"sh/tkby9kzm","slide":8,"bbox":[116,491,8,8]}
+{"kind":"textbox","id":"sh/sjix0zy1","slide":8,"text":"First-audio once measured the last outbound frame and even went negative.","textPreview":"First-audio once measured the last outbound frame and even went negative.","textChars":73,"textLines":1,"bbox":[138,484,938,44]}
+{"kind":"shape","id":"sh/je9g3ahk","slide":8,"bbox":[116,545,8,8]}
+{"kind":"textbox","id":"sh/id0fu50z","slide":8,"text":"A red-team note relayed a fake discount with all unit tests green.","textPreview":"A red-team note relayed a fake discount with all unit tests green.","textChars":66,"textLines":1,"bbox":[138,538,938,44]}
+{"kind":"textbox","id":"sh/o7ydoret","slide":8,"text":"The strongest claim is not “we measured it”; it is “we found where the measurement lied.”","textPreview":"The strongest claim is not “we measured it”; it is “we found where the measurement lied.”","textChars":89,"textLines":1,"bbox":[118,612,960,34]}
+{"kind":"textbox","id":"sh/98rehwve","slide":8,"text":"voice-agent","textPreview":"voice-agent","textChars":11,"textLines":1,"bbox":[72,664,220,24]}
+{"kind":"textbox","id":"sh/m5gvmhwn","slide":8,"text":"08","textPreview":"08","textChars":2,"textLines":1,"bbox":[1146,664,62,24]}
+{"kind":"image","id":"im/zqd8fe18","slide":8,"name":"","geometry":"roundRect","bbox":[66,166.65,556,180.7]}
+{"kind":"image","id":"im/ep47m9kn","slide":8,"name":"","geometry":"roundRect","bbox":[658,159.7,556,194.6]}
+{"kind":"notes","id":"nt/fu1gfa1s","slide":8,"text":""}

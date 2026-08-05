@@ -55,3 +55,20 @@ async def test_readiness_passes_when_all_providers_are_healthy() -> None:
 
     assert ok is True
     assert body["ok"] is True
+
+
+async def test_readiness_surfaces_conversation_only_degradation() -> None:
+    ctx = SimpleNamespace(
+        ready=True,
+        cache=SimpleNamespace(ready=True),
+        providers=Providers(llm_ok=True),
+        turns=SimpleNamespace(
+            name="direct",
+            degraded_reason="agent extra unavailable; running without tools",
+        ),
+    )
+
+    ok, body = await _readiness(ctx)  # type: ignore[arg-type]
+
+    assert ok is True
+    assert body["agent_warning"] == "agent extra unavailable; running without tools"

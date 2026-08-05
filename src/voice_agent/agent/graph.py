@@ -62,6 +62,7 @@ class AgentRunner:
     """Runs the graph for one turn and streams its text out."""
 
     name = "langgraph"
+    degraded_reason: str | None = None
 
     def __init__(
         self,

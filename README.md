@@ -13,8 +13,13 @@ The browser dashboard uses the same event stream to show what is happening now:
 listening, recognising speech, reasoning or using tools, and speaking. When ASR
 detects German, the dashboard chrome switches to German for the next state update.
 
-For a code-level walkthrough, call lifecycle, debugging map and interview-ready
-explanation, read the [complete project guide](docs/PROJECT_GUIDE.md).
+For a code-level walkthrough and call lifecycle explanation, read the
+[complete project guide](docs/PROJECT_GUIDE.md).
+
+For the application packet, see the
+[slide deck](docs/application/voice-agent-summary-deck.pptx),
+[slide montage](docs/application/voice-agent-summary-deck-montage.png), and
+[artifact checklist](docs/application/readme-artifact-checklist.md).
 
 ## Visual tour
 
@@ -596,18 +601,24 @@ a German Piper voice; an English-only model such as `small.en` cannot detect
 German reliably. A smaller Ollama model such as `qwen2.5:3b` can reduce CPU
 latency on an Intel Mac, with a likely reduction in tool-use reliability.
 
-Open <http://127.0.0.1:8000>, click **Start call**, and talk. The first start is
+Open <http://127.0.0.1:8000/demo>, click **Start call**, and talk. The first start is
 slow — models load and every fixed line is pre-synthesised — and `/health`
 returns 503 until that finishes, deliberately.
 
-The default local profile runs locally and costs nothing. For cloud providers,
-copy `.env.example` to `.env` and set the keys. On a CPU-only Mac, using local
-ASR and TTS with the Anthropic LLM is a useful hybrid profile: the transcript
+The default local profile runs locally and costs nothing. Copy `.env.example` to
+`.env` when you want to customise the run or use cloud providers. On a CPU-only
+Mac, using local ASR and TTS with the Anthropic LLM is a useful hybrid profile:
+the transcript
 and tool context leave the machine, but microphone audio remains local. The
 tool-using scenarios need a frontier model; the local 7B scores one correct
 tool call in three in the measured evaluation.
 
-**Turn-taking is deliberately conservative.** When enabled with
+`VA_SESSION_SECRET` is optional for a single local process. Set it to a stable,
+random value if you want signed media-session tokens to remain valid after a
+server restart; otherwise the server generates a fresh per-process secret and
+logs that sessions will not survive a restart.
+
+**Turn-taking is deliberately conservative and enabled by default.** With
 `VA_BARGE_IN=true`, the server waits for at least 500 ms of candidate speech,
 transcribes it, and checks whether it is a new request, correction, or explicit
 stop command. Acknowledgements such as “okay”, “yes”, “ja”, and “genau” do not
@@ -618,7 +629,8 @@ particularly noisy microphone; the effective threshold is logged on every call.
 ## Testing
 
 ```bash
-uv run pytest                                   # 279 tests
+uv run pytest
+uv run pytest --collect-only -q                 # verify the current test count
 uv run mypy                                     # strict
 uv run python -m bench.retrieval                # retrieval, both tasks
 uv run python -m evals --repeat 3               # behaviour, as a rate
@@ -636,6 +648,11 @@ the rechunker (Vonage sends the 10 ms slices it was written for) and the
 hardened systemd units are all in place, but wiring it up means a paid account
 and a live number, and the browser transport demonstrates the same pipeline for
 free. `transports/vonage.py` is the missing piece; nothing else changes.
+
+This is a cost and scope decision for this repository. A prior client
+engagement covered a Vonage voice-agent architecture built from scratch to
+pre-production; this public repo deliberately avoids client-specific IP and
+paid telephony costs.
 
 Also absent: Deepgram and ElevenLabs adapters (the protocols exist, the
 implementations do not), and a Dockerfile. German is implemented in the

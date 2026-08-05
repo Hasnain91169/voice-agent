@@ -76,4 +76,4 @@ def build_toolbox(db_path: Path, llm: LLM, *, rep: str) -> Toolbox:
     """
     from voice_agent.agent.tools import sales, sql
 
-    return Toolbox([*sales.build(db_path, rep), *sql.build(db_path, llm)])
+    return Toolbox([*sales.build(db_path, rep), *sql.build(db_path, llm, rep=rep)])

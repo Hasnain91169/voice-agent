@@ -103,9 +103,9 @@ class TestLatencyBudget:
 
 
 class TestDerivedValues:
-    def test_barge_in_is_off_by_default_for_the_browser_demo(self) -> None:
+    def test_barge_in_is_on_by_default_for_the_browser_demo(self) -> None:
         settings = build()
-        assert settings.barge_in is False
+        assert settings.barge_in is True
         assert settings.barge_in_min_ms == 500
 
     def test_millisecond_settings_expose_seconds_for_asyncio(self) -> None:

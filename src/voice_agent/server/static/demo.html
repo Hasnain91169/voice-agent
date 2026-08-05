@@ -43,7 +43,7 @@
           font-size: 13px; border-left: 2px solid transparent; }
   nav a.on { color: var(--ink); background: #16201d; border-left-color: var(--accent); }
   main { padding: 16px 20px 26px; display: flex; flex-direction: column; gap: 13px; min-width: 0; }
-  header { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+  header { position: relative; display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
   .grow { flex: 1; }
   select, button {
     font: inherit; border-radius: 8px; border: 1px solid var(--line);
@@ -74,6 +74,7 @@
   .pill { font-size: 12px; color: var(--dim); display: inline-flex; align-items: center; gap: 6px; }
   .dot { width: 7px; height: 7px; border-radius: 50%; background: var(--dim); }
   .dot.live { background: var(--accent); }
+  .dot.warn { background: var(--warn); }
   .dot.error { background: var(--bad); }
   .metrics { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 10px; }
   .metric { background: var(--panel); border: 1px solid var(--line); border-radius: 10px; padding: 10px 12px; }
@@ -183,6 +184,205 @@
   footer { display: flex; gap: 16px; flex-wrap: wrap; color: var(--dim); font-size: 11.5px; }
   footer b { color: #a9bdb6; font-weight: 500; }
 </style>
+<style id="reference-theme">
+  :root {
+    --bg: #070b0d;
+    --panel: #0d1317;
+    --panel-2: #10181d;
+    --panel-3: #131d22;
+    --line: #202b31;
+    --line-bright: #2a3940;
+    --ink: #edf4f2;
+    --dim: #829097;
+    --muted: #58666d;
+    --accent: #46e3aa;
+    --accent-soft: rgba(70, 227, 170, .12);
+    --warn: #f8c96a;
+    --bad: #fb6d76;
+    --mono: ui-monospace, "Cascadia Mono", Menlo, Consolas, monospace;
+  }
+  body {
+    grid-template-columns: 224px 1fr;
+    background:
+      radial-gradient(circle at 58% -20%, rgba(42, 75, 86, .22), transparent 38%),
+      #070b0d;
+    color: var(--ink);
+  }
+  nav {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    padding: 0 0 18px;
+    background: rgba(8, 13, 16, .92);
+    border-right: 1px solid var(--line);
+  }
+  .brand {
+    min-height: 74px;
+    padding: 0 26px;
+    border-bottom: 1px solid var(--line);
+    font-size: 18px;
+    letter-spacing: -.02em;
+  }
+  .brand svg { width: 24px; height: 24px; filter: drop-shadow(0 0 8px rgba(70,227,170,.45)); }
+  nav a {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin: 6px 14px;
+    padding: 11px 13px;
+    border: 1px solid transparent;
+    border-left: 2px solid transparent;
+    border-radius: 7px;
+    color: #a9b5b9;
+    font-size: 13px;
+  }
+  nav a::before {
+    content: "";
+    width: 15px;
+    height: 15px;
+    border: 1px solid currentColor;
+    border-radius: 4px;
+    opacity: .72;
+  }
+  nav a.on {
+    color: var(--accent);
+    background: linear-gradient(90deg, rgba(70,227,170,.12), rgba(70,227,170,.03));
+    border-color: rgba(70,227,170,.08);
+    border-left-color: var(--accent);
+    box-shadow: inset 0 0 18px rgba(70,227,170,.04);
+  }
+  nav .nav-section { margin: 28px 26px 9px; color: #536067; font-size: 10px; text-transform: uppercase; letter-spacing: .12em; }
+  nav .nav-meta { margin: auto 22px 0; padding: 14px; border: 1px solid var(--line); border-radius: 10px; background: rgba(16,24,29,.72); }
+  nav .nav-meta strong { display: block; font-size: 11px; color: #b6c2c5; margin-bottom: 9px; }
+  nav .nav-meta span { display: flex; justify-content: space-between; gap: 8px; color: var(--dim); font-size: 11px; padding: 4px 0; border-bottom: 1px solid rgba(32,43,49,.65); }
+  nav .nav-meta span:last-child { border-bottom: 0; }
+  nav .nav-meta b { color: var(--accent); font-weight: 600; }
+  main { padding: 18px 30px 24px; gap: 16px; }
+  header { min-height: 44px; gap: 10px; }
+  header > .pill:last-child { display: none; }
+  header .pill:first-child { color: #aab6ba; font-size: 12px; }
+  select, button { border-radius: 10px; background: var(--panel-2); border-color: var(--line-bright); }
+  select { min-width: 210px; max-width: 280px; padding: 9px 13px; }
+  .top-local, .top-session, .top-avatar { display: inline-flex; align-items: center; gap: 8px; border: 1px solid var(--line); background: var(--panel-2); color: #b8c3c6; border-radius: 11px; padding: 8px 12px; font-size: 12px; }
+  .top-local .dot { background: var(--accent); box-shadow: 0 0 10px rgba(70,227,170,.6); }
+  .top-session { min-width: 190px; justify-content: space-between; }
+  .top-session small { display: block; color: var(--muted); font-size: 10px; }
+  .top-icon { width: 38px; height: 38px; display: grid; place-items: center; padding: 0; color: #aebbc0; }
+  .top-avatar { width: 42px; height: 42px; justify-content: center; border-radius: 50%; font-size: 17px; position: relative; }
+  .top-avatar::after { content: ""; position: absolute; right: 1px; bottom: 2px; width: 8px; height: 8px; border: 2px solid var(--panel-2); border-radius: 50%; background: var(--accent); }
+  .top-session[aria-expanded="true"], .top-icon[aria-expanded="true"], .top-avatar[aria-expanded="true"] { border-color: var(--accent); color: var(--ink); }
+  .top-popover { position: absolute; z-index: 20; top: 54px; right: 0; width: 245px; padding: 12px; border: 1px solid var(--line-bright); border-radius: 10px; background: #10181c; box-shadow: 0 18px 42px rgba(0,0,0,.42); }
+  .top-popover[hidden] { display: none; }
+  .top-popover h3 { margin: 0 0 9px; color: var(--ink); font-size: 13px; }
+  .top-popover p { margin: 0; color: var(--dim); font-size: 12px; line-height: 1.5; }
+  .top-popover .menu-row { display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 8px 0; border-top: 1px solid var(--line); color: var(--dim); font-size: 12px; }
+  .top-popover .menu-row:first-of-type { border-top: 0; }
+  .top-popover select { min-width: 0; max-width: 125px; padding: 5px 7px; font-size: 11px; }
+  .top-popover button { width: 100%; margin-top: 9px; padding: 7px 9px; font-size: 11px; }
+  .top-popover .menu-action { color: var(--accent); background: rgba(70,227,170,.08); border-color: rgba(70,227,170,.28); }
+  .card, .metric { background: linear-gradient(145deg, rgba(16,24,29,.96), rgba(10,16,19,.98)); border-color: var(--line); border-radius: 12px; }
+  .stage {
+    position: relative;
+    display: grid;
+    grid-template-columns: 142px minmax(0, 1fr) 188px;
+    align-items: center;
+    gap: 22px;
+    min-height: 330px;
+    padding: 28px 30px 24px;
+    overflow: hidden;
+    background:
+      radial-gradient(circle at 15% 50%, rgba(70,227,170,.08), transparent 25%),
+      linear-gradient(145deg, #11191e, #0b1115 70%);
+    box-shadow: inset 0 1px 0 rgba(255,255,255,.025), 0 18px 52px rgba(0,0,0,.2);
+  }
+  .stage::after { content: ""; position: absolute; inset: 0; pointer-events: none; background: linear-gradient(115deg, transparent 20%, rgba(70,227,170,.035), transparent 70%); }
+  .stage > * { position: relative; z-index: 1; }
+  .orb { width: 116px; height: 116px; border-color: var(--accent); background: #0b1215; box-shadow: 0 0 0 1px rgba(70,227,170,.28), 0 0 24px rgba(70,227,170,.3), inset 0 0 22px rgba(70,227,170,.08); }
+  .orb.live { box-shadow: 0 0 0 1px var(--accent), 0 0 0 7px rgba(70,227,170,.08), 0 0 34px rgba(70,227,170,.46), inset 0 0 26px rgba(70,227,170,.1); animation: heroPulse 1.8s ease-in-out infinite; }
+  .orb svg { width: 42px; height: 42px; }
+  .stage h1 { font-size: 28px; letter-spacing: -.03em; }
+  .stage p { font-size: 14px; margin: 2px 0 13px; }
+  #wave { height: 78px; margin-top: 6px; opacity: .88; }
+  .hero-clock { margin-top: 2px; color: #9ca9ad; text-align: center; font-family: var(--mono); font-size: 13px; }
+  .hero-actions { grid-column: 2; display: flex; justify-content: center; gap: 14px; }
+  .hero-actions button { min-width: 148px; padding: 11px 18px; border-radius: 24px; }
+  .hero-actions button svg { vertical-align: -3px; margin-right: 6px; }
+  .go { background: var(--accent); color: #061b14; box-shadow: 0 8px 24px rgba(70,227,170,.16); }
+  .end { background: #e34c57; color: white; box-shadow: 0 8px 24px rgba(227,76,87,.14); }
+  .hero-health { align-self: start; justify-self: end; min-width: 170px; padding: 13px 14px; border: 1px solid var(--line-bright); border-radius: 12px; background: rgba(13,20,24,.86); }
+  .hero-health .health-title { display: flex; align-items: center; gap: 8px; color: var(--accent); font-size: 13px; font-weight: 700; }
+  .hero-health .health-detail { margin-top: 10px; color: var(--dim); font-size: 11px; line-height: 1.65; }
+  .hero-health .health-detail b { color: #b9c6c9; font-weight: 500; }
+  .language-hint { grid-column: 1 / -1; border-color: rgba(70,227,170,.16); background: rgba(20,42,35,.58); border-radius: 8px; padding: 8px 11px; font-size: 12px; }
+  .metrics { grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 10px; }
+  .metric { padding: 13px 14px; min-height: 72px; }
+  .metric span { color: var(--muted); letter-spacing: .08em; }
+  .metric b { color: #c9d5d6; font-size: 16px; margin-top: 3px; }
+  .metric b:not(:empty) { color: var(--accent); }
+  .activity-card { margin-top: 1px; }
+  .activity-card { padding: 15px 18px; }
+  .activity-card h2 { margin-bottom: 12px; }
+  .flow { gap: 8px; }
+  .flow-step { min-height: 56px; background: rgba(14,22,26,.75); border-color: var(--line); }
+  .flow-step.on { border-color: rgba(70,227,170,.58); background: rgba(20,48,40,.58); }
+  .suggestion-card { padding: 13px 18px; }
+  .suggestion-card h2 { margin-bottom: 8px; }
+  .suggestions span { border-radius: 7px; padding: 6px 9px; background: rgba(16,29,27,.82); border-color: #29443d; }
+  .grid { grid-template-columns: minmax(260px, 1.1fr) minmax(280px, 1.22fr) minmax(220px, .9fr) minmax(260px, 1.1fr); gap: 12px; }
+  .grid > .card { min-height: 390px; padding: 16px 17px; }
+  .card h2 { color: #cdd8d9; letter-spacing: .01em; text-transform: none; font-size: 14px; }
+  .grid > .card h2::after { content: ""; display: inline-block; width: 6px; height: 6px; margin-left: 8px; vertical-align: 2px; border-radius: 50%; background: var(--accent); box-shadow: 0 0 8px rgba(70,227,170,.55); }
+  .workspace-grid.focus-view { grid-template-columns: minmax(0, 1fr); }
+  .workspace-grid.focus-view > .page-panel { min-height: 510px; }
+  nav a[aria-current="page"]::before { background: currentColor; box-shadow: 0 0 10px rgba(70,227,170,.55); }
+  .scroll { max-height: 335px; }
+  .msg { margin-bottom: 14px; }
+  .msg .who { color: #a7b5b8; letter-spacing: .04em; }
+  .msg .body { border: 1px solid #1f3030; border-radius: 9px; padding: 10px 11px; background: rgba(28,56,50,.72); }
+  .msg.agent .body { background: rgba(28,35,41,.94); border-color: #26353b; }
+  .step { gap: 10px; padding: 10px 0; border-bottom-color: #1c282d; }
+  .step .name small { color: #728086; }
+  .step.on { background: rgba(24,60,49,.3); border-radius: 8px; padding-inline: 8px; }
+  .tick { width: 10px; height: 10px; border: 1px solid #46605b; background: transparent; }
+  .step.on .tick { background: var(--accent); border-color: var(--accent); }
+  .tool-popover-inner { background: #101a1e; }
+  .kv { padding: 8px 0; border-bottom: 1px solid rgba(32,43,49,.7); }
+  .kv:last-of-type { border-bottom: 0; }
+  #log { max-height: 335px; color: #b3c0c2; }
+  #log div { gap: 7px; padding: 3px 0; }
+  #log .t { color: #56666c; }
+  #log .k { min-width: 64px; color: var(--accent); }
+  footer { padding: 4px 2px 0; border-top: 1px solid var(--line); padding-top: 14px; }
+  @keyframes heroPulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.025); } }
+  @media (max-width: 1180px) {
+    body { grid-template-columns: 190px 1fr; }
+    main { padding-inline: 20px; }
+    .stage { grid-template-columns: 110px minmax(0, 1fr) 160px; }
+    .orb { width: 94px; height: 94px; }
+    .grid { grid-template-columns: repeat(2, minmax(280px, 1fr)); }
+  }
+  @media (max-width: 760px) {
+    body { display: block; }
+    nav { min-height: auto; padding-bottom: 7px; }
+    .brand { min-height: 58px; padding-inline: 18px; }
+    nav a, nav .nav-section, nav .nav-meta { display: none; }
+    main { padding: 13px 12px 20px; }
+    header { overflow: auto; flex-wrap: nowrap; }
+    header .grow { min-width: 8px; }
+    .top-session { display: none; }
+    .stage { grid-template-columns: 1fr; min-height: 0; padding: 24px 18px 18px; text-align: center; }
+    .orb { margin: 0 auto; }
+    .hero-health { justify-self: stretch; text-align: left; }
+    .hero-actions { grid-column: 1; flex-wrap: wrap; }
+    .hero-actions button { min-width: 132px; flex: 1; }
+    .language-hint { text-align: left; }
+    .metrics { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .metrics .metric:last-child { grid-column: 1 / -1; }
+    .flow { grid-template-columns: repeat(2, 1fr); }
+    .grid { grid-template-columns: 1fr; }
+    .grid > .card { min-height: 0; }
+  }
+</style>
 </head>
 <body>
 <nav>
@@ -190,19 +390,51 @@
     <svg width="18" height="18" viewBox="0 0 18 18"><rect x="1" y="6" width="2" height="6" rx="1" fill="#34d399"/><rect x="5" y="2" width="2" height="14" rx="1" fill="#34d399"/><rect x="9" y="4" width="2" height="10" rx="1" fill="#34d399"/><rect x="13" y="7" width="2" height="4" rx="1" fill="#34d399"/></svg>
     <span data-i18n="brand">Voice Agent</span>
   </div>
-  <a href="#" class="on" data-i18n="nav_agent">Agent</a>
-  <a href="/docs">API</a>
+  <div class="nav-section">Workspace</div>
+  <a href="#agent" class="on" data-page="agent" data-i18n="nav_agent">Agent</a>
+  <a href="#pipeline" data-page="pipeline" data-i18n="nav_pipeline">Pipeline</a>
+  <a href="#transcript" data-page="memory" data-i18n="nav_memory">Memory</a>
+  <a href="#tools" data-page="tools" data-i18n="nav_tools">Tools</a>
+  <a href="#evaluations" data-page="evaluations" data-i18n="nav_evaluations">Evaluations</a>
+  <a href="#logs" data-page="logs" data-i18n="nav_logs">Logs</a>
+  <div class="nav-section">System</div>
+  <a href="/docs">API docs</a>
+  <div class="nav-meta">
+    <strong>Runtime</strong>
+    <span>Audio <b>16 kHz</b></span>
+    <span>Frames <b>20 ms</b></span>
+    <span>Memory <b>On</b></span>
+  </div>
 </nav>
 
-<main>
+<main id="agent" data-page="agent">
   <header>
     <label class="pill" for="model" data-i18n="model">Model</label>
     <select id="model" disabled><option>loading…</option></select>
     <span class="grow"></span>
+    <span class="top-local"><span class="dot live"></span><span data-i18n="local">Local</span></span>
+    <button class="top-session" id="session-menu" type="button" aria-expanded="false" aria-controls="session-popover"><span><small data-i18n="session">Session</small><span id="session-name">voice-session</span></span><span aria-hidden="true">⌄</span></button>
+    <button class="top-icon" id="settings-menu" type="button" title="Settings" aria-label="Settings" aria-expanded="false" aria-controls="settings-popover">⚙</button>
+    <button class="top-avatar" id="assistant-menu" type="button" aria-label="AI assistant" aria-expanded="false" aria-controls="assistant-popover">AI</button>
     <span class="pill"><span class="dot" id="health-dot"></span><span id="health-text">checking…</span></span>
+    <div class="top-popover" id="session-popover" hidden>
+      <h3 data-i18n="session_options">Session options</h3>
+      <div class="menu-row"><span data-i18n="session_state">Current session</span><b id="session-state">ready</b></div>
+      <button class="menu-action" id="new-session" type="button" data-i18n="new_session">Start a fresh session</button>
+    </div>
+    <div class="top-popover" id="settings-popover" hidden>
+      <h3 data-i18n="settings_title">Dashboard settings</h3>
+      <label class="menu-row"><span data-i18n="dashboard_language">Dashboard language</span><select id="dashboard-language" aria-label="Dashboard language"><option value="auto" data-i18n="language_auto">Auto-detect</option><option value="en">English</option><option value="de">Deutsch</option></select></label>
+      <button id="clear-dashboard" type="button" data-i18n="clear_dashboard">Clear transcript and logs</button>
+    </div>
+    <div class="top-popover" id="assistant-popover" hidden>
+      <h3 data-i18n="assistant_title">AI assistant</h3>
+      <p data-i18n="assistant_detail">Local voice agent connected to the browser demo.</p>
+      <div class="menu-row"><span data-i18n="assistant_status">Status</span><b id="assistant-state">ready</b></div>
+    </div>
   </header>
 
-  <section class="card stage">
+  <section class="card stage page-shared">
     <div class="orb" id="orb">
       <svg width="26" height="26" viewBox="0 0 18 18"><rect x="1" y="6" width="2" height="6" rx="1" fill="#34d399"/><rect x="5" y="2" width="2" height="14" rx="1" fill="#34d399"/><rect x="9" y="4" width="2" height="10" rx="1" fill="#34d399"/><rect x="13" y="7" width="2" height="4" rx="1" fill="#34d399"/></svg>
     </div>
@@ -210,9 +442,15 @@
       <h1 data-i18n="brand">Voice Agent</h1>
       <p id="status">Idle — press start and speak</p>
       <canvas id="wave"></canvas>
+      <div class="hero-clock" id="call-clock">00:00:00</div>
     </div>
-    <div style="display:flex;flex-direction:column;gap:8px">
+    <div class="hero-health">
+      <div class="health-title"><span class="dot live" id="hero-health-dot"></span><span id="hero-health-text" data-i18n="live">Live</span></div>
+      <div class="health-detail"><span data-i18n="audio_quality">Audio quality</span><br><b data-i18n="excellent">Excellent</b><br><span>16 kHz Â· 20 ms</span></div>
+    </div>
+    <div class="hero-actions">
       <button class="go" id="start" data-i18n="start_call">Start call</button>
+      <button class="top-icon" type="button" title="Mute" aria-label="Mute">♩</button>
       <button class="end" id="stop" disabled data-i18n="end_call">End call</button>
     </div>
     <div class="language-hint">
@@ -221,7 +459,7 @@
     </div>
   </section>
 
-  <section class="metrics">
+  <section class="metrics page-shared">
     <div class="metric"><span>ASR</span><b id="m-asr">—</b></div>
     <div class="metric"><span data-i18n="first_token">First token</span><b id="m-ttft">—</b></div>
     <div class="metric" id="m-audio-card"><span data-i18n="first_audio">First audio</span><b id="m-audio">—</b></div>
@@ -229,7 +467,7 @@
     <div class="metric"><span data-i18n="barge_in">Barge-in</span><b id="m-barge">—</b></div>
   </section>
 
-  <section class="card">
+  <section class="card activity-card page-panel" data-page-panel="agent pipeline">
     <h2 data-i18n="activity_now">Happening now</h2>
     <div class="flow" aria-label="Live pipeline activity">
       <div class="flow-step" data-flow="listening">
@@ -251,7 +489,7 @@
     </div>
   </section>
 
-  <section class="card">
+  <section class="card suggestion-card page-panel" data-page-panel="agent">
     <h2 data-i18n="try_asking">Try asking</h2>
     <div class="suggestions" aria-label="Suggested voice prompts">
       <span data-i18n="ask_summary">Give me a summary of all my accounts.</span>
@@ -264,17 +502,17 @@
     </div>
   </section>
 
-  <section class="grid">
-    <div class="card">
+  <section class="grid workspace-grid">
+    <div class="card page-panel" data-page-panel="agent memory" id="transcript">
       <h2 data-i18n="live_transcript">Live transcript</h2>
-      <div class="scroll" id="transcript"></div>
+      <div class="scroll" id="transcript-feed"></div>
     </div>
 
-    <div class="card">
+    <div class="card page-panel" data-page-panel="agent pipeline tools" id="pipeline">
       <h2 data-i18n="pipeline">Pipeline</h2>
       <div class="step" data-step="asr"><i class="tick"></i><div class="name"><span data-i18n="speech_recognition">Speech recognition</span><small id="s-asr">faster-whisper</small></div><div class="val" id="v-asr"></div></div>
       <div class="step" data-step="llm"><i class="tick"></i><div class="name"><span data-i18n="reasoning">Reasoning</span><small data-i18n="reasoning_note">LangGraph, tool loop</small></div><div class="val" id="v-llm"></div></div>
-      <div class="step" data-step="tool"><i class="tick"></i><div class="name"><span data-i18n="tools">Tools</span><small id="s-tool">idle</small></div><div class="val" id="v-tool"></div></div>
+      <div class="step" id="tools" data-step="tool"><i class="tick"></i><div class="name"><span data-i18n="tools">Tools</span><small id="s-tool">idle</small></div><div class="val" id="v-tool"></div></div>
       <div class="step" data-step="tts"><i class="tick"></i><div class="name"><span data-i18n="speech_synthesis">Speech synthesis</span><small data-i18n="tts_note">Piper, per clause</small></div><div class="val" id="v-tts"></div></div>
       <div class="step" data-step="turn"><i class="tick"></i><div class="name"><span data-i18n="turn_taking">Turn-taking</span><small id="s-turn">calibrating…</small></div><div class="val" id="v-turn"></div></div>
       <div class="tool-popover" id="tool-popover" aria-live="polite">
@@ -292,8 +530,8 @@
       </div>
     </div>
 
-    <div class="card">
-      <h2 data-i18n="verification">Verification</h2>
+    <div class="card page-panel" data-page-panel="agent evaluations" id="evaluations">
+      <h2 data-i18n="verification">Evaluations</h2>
       <div class="kv"><span data-i18n="figures_spoken">Figures spoken</span><b id="g-spoken">—</b></div>
       <div class="kv"><span data-i18n="traced">Traced to a tool result</span><b id="g-traced">—</b></div>
       <div class="kv"><span data-i18n="untraced">Untraced</span><b id="g-untraced">—</b></div>
@@ -311,8 +549,8 @@
       </div>
     </div>
 
-    <div class="card">
-      <h2 data-i18n="events">Events</h2>
+    <div class="card page-panel" data-page-panel="agent logs" id="logs">
+      <h2 data-i18n="events">Events / Logs</h2>
       <div class="scroll" id="log"></div>
     </div>
   </section>
@@ -337,16 +575,40 @@ const wave = new Float32Array(180);
 let wavePos = 0;
 let currentLanguage = 'en';
 let evalSummary = null;
-let healthState = { ok: false, detail: 'checking' };
+let healthState = { ok: false, detail: 'checking', agentWarning: false };
 let toolPopoverTimer = null;
 let suppressPlayback = false;
 let speechHoldUntil = 0;
+let callStartedAt = 0;
+let clockTimer = null;
 
 const COPY = {
   en: {
     brand: 'Voice Agent',
     nav_agent: 'Agent',
+    nav_pipeline: 'Pipeline',
+    nav_memory: 'Memory',
+    nav_tools: 'Tools',
+    nav_evaluations: 'Evaluations',
+    nav_logs: 'Logs',
     model: 'Model',
+    local: 'Local',
+    session: 'Session',
+    session_options: 'Session options',
+    session_state: 'Current session',
+    new_session: 'Start a fresh session',
+    settings_title: 'Dashboard settings',
+    dashboard_language: 'Dashboard language',
+    language_auto: 'Auto-detect',
+    clear_dashboard: 'Clear transcript and logs',
+    assistant_title: 'AI assistant',
+    assistant_detail: 'Local voice agent connected to the browser demo.',
+    assistant_status: 'Status',
+    live: 'Live',
+    audio_quality: 'Audio quality',
+    excellent: 'Excellent',
+    asr_latency: 'ASR latency',
+    end_to_end: 'End-to-end',
     checking: 'checking…',
     start_call: 'Start call',
     end_call: 'End call',
@@ -421,6 +683,7 @@ const COPY = {
     no_models: 'no models available',
     server_unreachable: 'server unreachable',
     ready: 'ready',
+    agent_degraded: 'Tools unavailable — conversation-only mode',
     warming_up: 'warming up',
     unreachable: 'unreachable',
     eval_recorded: 'computed for a live call. Last recorded {date} with {command}.',
@@ -431,7 +694,29 @@ const COPY = {
   de: {
     brand: 'Sprachagent',
     nav_agent: 'Agent',
+    nav_pipeline: 'Pipeline',
+    nav_memory: 'Gedächtnis',
+    nav_tools: 'Tools',
+    nav_evaluations: 'Evaluierungen',
+    nav_logs: 'Protokolle',
     model: 'Modell',
+    local: 'Lokal',
+    session: 'Sitzung',
+    session_options: 'Sitzungsoptionen',
+    session_state: 'Aktuelle Sitzung',
+    new_session: 'Neue Sitzung starten',
+    settings_title: 'Dashboard-Einstellungen',
+    dashboard_language: 'Dashboard-Sprache',
+    language_auto: 'Automatisch erkennen',
+    clear_dashboard: 'Transkript und Protokolle leeren',
+    assistant_title: 'KI-Assistent',
+    assistant_detail: 'Lokaler Sprachagent, verbunden mit der Browser-Demo.',
+    assistant_status: 'Status',
+    live: 'Live',
+    audio_quality: 'Audioqualität',
+    excellent: 'Ausgezeichnet',
+    asr_latency: 'ASR-Latenz',
+    end_to_end: 'Ende-zu-Ende',
     checking: 'prüfe…',
     start_call: 'Anruf starten',
     end_call: 'Anruf beenden',
@@ -506,6 +791,7 @@ const COPY = {
     no_models: 'keine Modelle verfügbar',
     server_unreachable: 'Server nicht erreichbar',
     ready: 'bereit',
+    agent_degraded: 'Tools nicht verfügbar — nur Gesprächsmodus',
     warming_up: 'wärmt auf',
     unreachable: 'nicht erreichbar',
     eval_recorded: 'für einen Live-Anruf berechnet. Letzter Lauf am {date} mit {command}.',
@@ -525,14 +811,19 @@ function format(key, fields) {
 
 function setLanguage(language) {
   const next = String(language || 'en').toLowerCase().startsWith('de') ? 'de' : 'en';
-  if (next === currentLanguage) return;
   currentLanguage = next;
   document.documentElement.lang = next;
   document.querySelectorAll('[data-i18n]').forEach((node) => {
     node.textContent = t(node.dataset.i18n);
   });
+  const asrLabel = document.querySelector('.metrics .metric:first-child span');
+  if (asrLabel) asrLabel.textContent = t('asr_latency');
+  const endToEndLabel = document.querySelector('#m-audio-card span');
+  if (endToEndLabel) endToEndLabel.textContent = t('end_to_end');
   if (!el('v-tool').textContent) el('s-tool').textContent = t('idle');
   if (!el('tool-popover-args').dataset.live) el('tool-popover-args').textContent = t('tool_args_ready');
+  const languageSelect = el('dashboard-language');
+  if (languageSelect) languageSelect.value = localStorage.getItem('voice-agent-language') || 'auto';
   renderHealth();
   renderEvalSummary();
   setStatus(
@@ -541,6 +832,28 @@ function setLanguage(language) {
       : 'status_idle',
     socket && socket.readyState === WebSocket.OPEN ? 'live' : undefined,
   );
+}
+
+function renderClock() {
+  const elapsed = callStartedAt ? Math.floor((Date.now() - callStartedAt) / 1000) : 0;
+  const hours = String(Math.floor(elapsed / 3600)).padStart(2, '0');
+  const minutes = String(Math.floor((elapsed % 3600) / 60)).padStart(2, '0');
+  const seconds = String(elapsed % 60).padStart(2, '0');
+  el('call-clock').textContent = `${hours}:${minutes}:${seconds}`;
+}
+
+function startClock() {
+  clearInterval(clockTimer);
+  callStartedAt = Date.now();
+  renderClock();
+  clockTimer = setInterval(renderClock, 1000);
+}
+
+function stopClock() {
+  clearInterval(clockTimer);
+  clockTimer = null;
+  callStartedAt = 0;
+  renderClock();
 }
 
 function renderEvalSummary() {
@@ -555,15 +868,15 @@ function renderEvalSummary() {
 }
 
 function renderHealth() {
-  el('health-dot').className = 'dot ' + (healthState.ok ? 'live' : 'error');
-  if (healthState.ok) {
-    el('health-text').textContent = t('ready');
-  } else {
-    el('health-text').textContent =
+  const dotClass = 'dot ' + (healthState.agentWarning ? 'warn' : healthState.ok ? 'live' : 'error');
+  el('health-dot').className = dotClass;
+  el('hero-health-dot').className = dotClass;
+  const label = healthState.agentWarning ? t('agent_degraded') : healthState.ok ? t('ready') :
       healthState.detail === 'warming up' ? t('warming_up') :
       healthState.detail === 'checking' ? t('checking') :
       healthState.detail === 'unreachable' ? t('unreachable') : healthState.detail;
-  }
+  el('health-text').textContent = label;
+  el('hero-health-text').textContent = label;
 }
 
 const workletSource = `
@@ -665,6 +978,7 @@ registerProcessor('capture', Capture);
 function setStatus(key, kind) {
   el('status').textContent = t(key);
   el('orb').classList.toggle('live', kind === 'live');
+  updateTopStatus();
 }
 
 function setPhase(phase) {
@@ -672,6 +986,95 @@ function setPhase(phase) {
     node.classList.toggle('on', node.dataset.flow === phase);
   });
 }
+
+const topPopoverIds = ['session-popover', 'settings-popover', 'assistant-popover'];
+
+function closeTopPopovers() {
+  topPopoverIds.forEach((id) => {
+    el(id).hidden = true;
+    const trigger = document.querySelector(`[aria-controls="${id}"]`);
+    if (trigger) trigger.setAttribute('aria-expanded', 'false');
+  });
+}
+
+function toggleTopPopover(id) {
+  const popover = el(id);
+  const shouldOpen = popover.hidden;
+  closeTopPopovers();
+  popover.hidden = !shouldOpen;
+  const trigger = document.querySelector(`[aria-controls="${id}"]`);
+  if (trigger) trigger.setAttribute('aria-expanded', String(shouldOpen));
+}
+
+function updateTopStatus() {
+  const live = socket && socket.readyState === WebSocket.OPEN;
+  const state = live ? (playing ? t('status_speaking') : t('status_listening')) : t('ready');
+  el('assistant-state').textContent = state;
+  el('session-state').textContent = live ? t('status_listening') : t('ready');
+}
+
+['session-menu', 'settings-menu', 'assistant-menu'].forEach((id) => {
+  el(id).addEventListener('click', () => toggleTopPopover(el(id).getAttribute('aria-controls')));
+});
+
+document.addEventListener('click', (event) => {
+  if (!event.target.closest('.top-popover, #session-menu, #settings-menu, #assistant-menu')) {
+    closeTopPopovers();
+  }
+});
+
+document.addEventListener('keydown', (event) => {
+  if (event.key === 'Escape') closeTopPopovers();
+});
+
+el('dashboard-language').addEventListener('change', (event) => {
+  const value = event.target.value;
+  if (value === 'auto') localStorage.removeItem('voice-agent-language');
+  else localStorage.setItem('voice-agent-language', value);
+  setLanguage(value === 'auto' ? currentLanguage : value);
+});
+
+el('clear-dashboard').addEventListener('click', () => {
+  el('transcript-feed').replaceChildren();
+  el('log').replaceChildren();
+  closeTopPopovers();
+});
+
+el('new-session').addEventListener('click', () => {
+  const stamp = new Date().toISOString().slice(11, 19).replaceAll(':', '');
+  el('session-name').textContent = `voice-${stamp}`;
+  el('transcript-feed').replaceChildren();
+  el('log').replaceChildren();
+  logEvent('system', 'fresh dashboard session');
+  closeTopPopovers();
+});
+
+function showPage(page, updateHistory = false) {
+  const validPages = ['agent', 'pipeline', 'memory', 'tools', 'evaluations', 'logs'];
+  const next = validPages.includes(page) ? page : 'agent';
+  el('agent').dataset.page = next;
+  document.querySelectorAll('nav a[data-page]').forEach((link) => {
+    const active = link.dataset.page === next;
+    link.classList.toggle('on', active);
+    if (active) link.setAttribute('aria-current', 'page');
+    else link.removeAttribute('aria-current');
+  });
+  document.querySelectorAll('.page-panel').forEach((panel) => {
+    const pages = (panel.dataset.pagePanel || '').split(/\s+/);
+    panel.hidden = !pages.includes(next);
+  });
+  document.querySelector('.workspace-grid').classList.toggle('focus-view', next !== 'agent');
+  if (updateHistory) history.pushState({}, '', '#' + next);
+}
+
+document.querySelectorAll('nav a[data-page]').forEach((link) => {
+  link.addEventListener('click', (event) => {
+    event.preventDefault();
+    showPage(link.dataset.page, true);
+  });
+});
+window.addEventListener('popstate', () => showPage(location.hash.slice(1)));
+showPage(location.hash.slice(1));
 
 function showToolPopover(name, args) {
   const popover = el('tool-popover');
@@ -711,8 +1114,8 @@ function bubble(who) {
   const body = document.createElement('div');
   body.className = 'body';
   wrap.append(label, body);
-  el('transcript').append(wrap);
-  el('transcript').scrollTop = el('transcript').scrollHeight;
+  el('transcript-feed').append(wrap);
+  el('transcript-feed').scrollTop = el('transcript-feed').scrollHeight;
   return body;
 }
 
@@ -726,7 +1129,7 @@ function say(who, text) {
 function speakInto(text) {
   if (!openAgentBody) openAgentBody = bubble('agent');
   openAgentBody.textContent += (openAgentBody.textContent ? ' ' : '') + text;
-  el('transcript').scrollTop = el('transcript').scrollHeight;
+  el('transcript-feed').scrollTop = el('transcript-feed').scrollHeight;
 }
 
 function estimateSpeechMs(text) {
@@ -985,6 +1388,7 @@ async function start() {
 
       setStatus('status_listening', 'live');
       setPhase('listening');
+      startClock();
       el('stop').disabled = false;
       logEvent('system', 'connected — start speaking');
     };
@@ -1020,6 +1424,7 @@ function stop() {
   if (ctx) { ctx.close(); ctx = null; }
   playHead = 0; playing = false;
   speechHoldUntil = 0;
+  stopClock();
   el('start').disabled = false;
   el('stop').disabled = true;
   // Re-enabled here rather than in the button handler, because stop() also runs
@@ -1035,6 +1440,8 @@ el('start').addEventListener('click', start);
 el('stop').addEventListener('click', stop);
 
 // ───────────────────────────────────────────────────────────────── startup
+
+setLanguage('en');
 
 async function loadModels() {
   try {
@@ -1095,11 +1502,16 @@ el('model').addEventListener('change', async () => {
 fetch('/health')
   .then((r) => r.json().then((body) => ({ ok: r.ok, body })))
   .then(({ ok, body }) => {
-    healthState = { ok, detail: body.detail ?? 'warming up' };
+    healthState = {
+      ok,
+      detail: body.detail ?? 'warming up',
+      agentWarning: Boolean(body.agent_warning),
+    };
     renderHealth();
+    if (body.agent_warning) logEvent('warning', body.agent_warning);
   })
   .catch(() => {
-    healthState = { ok: false, detail: 'unreachable' };
+    healthState = { ok: false, detail: 'unreachable', agentWarning: false };
     renderHealth();
   });
 

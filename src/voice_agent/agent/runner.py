@@ -30,6 +30,8 @@ class TurnSource(Protocol):
 
     #: Named for logs and the health endpoint.
     name: str
+    #: Non-empty when the agent is running without its tool graph.
+    degraded_reason: str | None
 
     def stream(self, thread_id: str, user_text: str) -> AsyncIterator[LlmDelta]:
         """Stream the reply as deltas."""
@@ -57,10 +59,18 @@ class DirectTurnSource:
 
     name = "direct"
 
-    def __init__(self, llm: LLM, store: ConversationStore, *, system: str) -> None:
+    def __init__(
+        self,
+        llm: LLM,
+        store: ConversationStore,
+        *,
+        system: str,
+        degraded_reason: str | None = None,
+    ) -> None:
         self._llm = llm
         self._store = store
         self._system = system
+        self.degraded_reason = degraded_reason
 
     async def stream(self, thread_id: str, user_text: str) -> AsyncIterator[LlmDelta]:
         messages = [
@@ -93,8 +103,9 @@ def build_turn_source(
     would be the wrong trade.
     """
     if not settings.agent_enabled:
-        log.info("agent layer disabled by configuration")
-        return DirectTurnSource(llm, store, system=system)
+        reason = "agent layer disabled by VA_AGENT_ENABLED=false; running without tools"
+        log.warning("DEGRADED MODE: %s", reason)
+        return DirectTurnSource(llm, store, system=system, degraded_reason=reason)
 
     try:
         from voice_agent.agent.graph import AgentRunner
@@ -111,7 +122,9 @@ def build_turn_source(
         )
         return runner
     except ImportError as exc:
-        log.warning("agent extra not installed (%s); running without tools", exc)
-    except Exception:
-        log.exception("could not build the agent layer; running without tools")
-    return DirectTurnSource(llm, store, system=system)
+        reason = "agent extra unavailable; install the agent extra to enable tools"
+        log.error("DEGRADED MODE: %s (%s)", reason, exc)
+    except Exception as exc:
+        reason = f"agent layer failed to load; running without tools ({type(exc).__name__})"
+        log.exception("DEGRADED MODE: %s", reason)
+    return DirectTurnSource(llm, store, system=system, degraded_reason=reason)

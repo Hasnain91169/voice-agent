@@ -108,6 +108,52 @@ def test_demo_page_animates_the_live_pipeline() -> None:
     assert "setPhase('tts')" in html
 
 
+def test_demo_page_has_reference_console_layout() -> None:
+    html = DEMO.read_text(encoding="utf-8")
+
+    assert 'class="top-session"' in html
+    assert 'class="hero-health"' in html
+    assert 'id="call-clock"' in html
+    assert 'class="metrics page-shared"' in html
+    assert 'id="transcript-feed"' in html
+    assert 'id="pipeline"' in html
+    assert 'id="evaluations"' in html
+    assert 'id="logs"' in html
+    assert "function startClock()" in html
+    assert "function stopClock()" in html
+
+
+def test_demo_sidebar_switches_workspace_views() -> None:
+    html = DEMO.read_text(encoding="utf-8")
+
+    assert 'data-page="pipeline"' in html
+    assert 'data-page="memory"' in html
+    assert 'data-page="tools"' in html
+    assert 'data-page="evaluations"' in html
+    assert 'data-page="logs"' in html
+    assert 'data-page-panel="agent pipeline"' in html
+    assert 'data-page-panel="agent memory"' in html
+    assert "function showPage(page, updateHistory = false)" in html
+    assert "history.pushState({}, '', '#' + next);" in html
+    assert "window.addEventListener('popstate'" in html
+
+
+def test_demo_top_right_controls_are_interactive() -> None:
+    html = DEMO.read_text(encoding="utf-8")
+
+    assert 'id="session-menu"' in html
+    assert 'id="settings-menu"' in html
+    assert 'id="assistant-menu"' in html
+    assert 'id="session-popover"' in html
+    assert 'id="settings-popover"' in html
+    assert 'id="assistant-popover"' in html
+    assert "function toggleTopPopover(id)" in html
+    assert "document.addEventListener('keydown'" in html
+    assert "el('dashboard-language').addEventListener('change'" in html
+    assert "el('clear-dashboard').addEventListener('click'" in html
+    assert "el('new-session').addEventListener('click'" in html
+
+
 def test_demo_page_switches_dashboard_copy_for_german_asr() -> None:
     html = DEMO.read_text(encoding="utf-8")
 
@@ -142,6 +188,14 @@ def test_demo_page_links_a_favicon() -> None:
     html = DEMO.read_text(encoding="utf-8")
 
     assert '<link rel="icon" href="/favicon.svg" type="image/svg+xml" />' in html
+
+
+def test_demo_surfaces_a_missing_agent_layer() -> None:
+    html = DEMO.read_text(encoding="utf-8")
+
+    assert "agent_degraded: 'Tools unavailable" in html
+    assert "agentWarning: Boolean(body.agent_warning)" in html
+    assert "logEvent('warning', body.agent_warning)" in html
 
 
 def test_repeated_clarifier_does_not_blame_bad_signal() -> None:

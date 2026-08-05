@@ -13,13 +13,13 @@ Use the README as a complete application packet: a reviewer should be able to un
 | Sample transcripts | Lets reviewers inspect successful and failed scenarios quickly | Collapsible section after evaluation |
 | Implemented/planned matrix | Prevents overclaiming around Vonage, Deepgram, ElevenLabs, German, Docker, and Vercel | "What is built" before "What is not built" |
 | CI badge | Makes pytest, ruff, and mypy credibility visible | README header |
-| TMC production note | Separates production telephony evidence from this local/browser architecture project | "Production context" |
+| Prior telephony context | Separates a pre-production client engagement from this local/browser architecture project without naming the client or exposing client IP | "Production context" |
 
 ## Suggested positioning
 
 This repo should not apologise for being browser-first. Position it as:
 
-> This project is deliberately browser/local so the hard voice-agent behaviours are reproducible without a paid phone number: frame ownership, endpointing, barge-in, spoken memory, tool use, and audio-loopback evaluation. Production telephony evidence comes from my separate TMC project, where I built a Vonage voice agent from scratch and shipped it to production.
+> This project is deliberately browser/local so the hard voice-agent behaviours are reproducible without a paid phone number: frame ownership, endpointing, barge-in, spoken memory, tool use, and audio-loopback evaluation. A prior client engagement covered a Vonage voice-agent architecture built from scratch to pre-production; client-specific details and IP are intentionally not part of this public repo.
 
 ## Vercel note
 
@@ -38,9 +38,10 @@ Use Vercel for a hosted showcase page, README landing page, or cloud-provider va
 5. Ask about a poisoned note and show the untrusted-note refusal.
 6. End on the eval summary, known failures, and why they are useful.
 
-## Quick README fixes
+## Quick README checks
 
-- Update the test count from 212 to 268.
+- Do not treat the test count as a permanent product claim; verify it with
+  `uv run pytest --collect-only -q` before publishing.
 - Clarify German as code-supported/localisation-ready but not default-demo shipped unless multilingual ASR and German Piper voice assets are installed.
 - Clarify low-latency profile provider adapters as planned unless Deepgram, ElevenLabs, and OpenAI adapters are implemented.
-- Add a short "production telephony" note referencing the TMC Vonage project.
+- Add a short, client-agnostic note that prior telephony work reached pre-production; do not name the client or imply production ownership.

@@ -1,8 +1,8 @@
 # Voice Agent Project Guide
 
 This guide explains the project as a system rather than as a list of files. It
-is intended to help you understand the code, demonstrate it confidently, debug
-it, and explain the engineering decisions in an interview.
+is intended to help you understand the code, demonstrate it confidently, and
+explain the engineering decisions behind it.
 
 The shortest accurate description is:
 
@@ -48,7 +48,10 @@ multilingual ASR model and German Piper voice.
 ### What it deliberately does not do
 
 - It does not connect to a telephone network. The browser is the implemented
-  live transport; Vonage is intentionally absent from this repository.
+  live transport; Vonage is intentionally absent from this repository. This is
+  a cost and scope decision here. A prior client engagement covered a Vonage
+  voice-agent architecture built from scratch to pre-production; client IP is
+  intentionally outside this public repository.
 - Deepgram, ElevenLabs and OpenAI appear as planned provider choices, but their
   adapters are not implemented. The working providers are faster-whisper,
   Piper, Ollama and Anthropic for the LLM.
@@ -103,7 +106,9 @@ Startup proceeds as follows:
 1. `Settings` loads defaults, `.env` and `VA_...` environment variables.
 2. `providers/registry.py` builds one ASR, one TTS and one LLM provider.
 3. `build_turn_source()` builds the LangGraph agent and seeds the database. If
-   the agent extra cannot load, it falls back to a direct conversational model.
+   the agent extra cannot load, it logs a loud degraded-mode warning, exposes
+   the warning through `/health`, marks the dashboard as conversation-only, and
+   falls back to a direct conversational model.
 4. ASR, TTS and LLM providers warm concurrently.
 5. Fixed recovery lines are synthesized and cached for every configured
    language.
@@ -378,17 +383,19 @@ the rep to act.
 
 ### Safe SQL boundary
 
-The generic SQL tool uses three controls:
+The generic SQL tool uses four controls:
 
 1. SQLite is opened in read-only mode.
-2. Only one `SELECT` or `WITH` statement over allowlisted tables is accepted.
-3. Results are capped and execution is timed out.
+2. The generated SQL sees temporary views such as `my_accounts` and
+   `my_orders`, which are structurally filtered to the current rep's book.
+3. Only one `SELECT` or `WITH` statement over those scoped views is accepted;
+   the underlying base tables are not in the generated schema.
+4. Results are capped and execution is timed out.
 
-Important limitation: the specialized sales and note tools enforce the rep
-scope in their queries. The generic `query_business_data` tool does not
-automatically add a rep filter. Read-only is not the same as tenant isolation,
-so this tool should not be exposed to real multi-tenant data without enforced
-row-level scope.
+The boundary is asserted by a regression test that asks for another rep's
+account by name and receives no results. Read-only is still not a substitute
+for tenant isolation in a real deployment, but the demo's generic SQL tool now
+has an enforced rep scope rather than relying on the model to add a filter.
 
 ## 11. Retrieval over visit notes
 
@@ -470,8 +477,11 @@ together. `SpokenTracker` maps sent audio bytes back to generated clauses and
 commits only the words corresponding to played audio. This prevents the next
 turn from assuming the caller heard the rest of an abandoned answer.
 
-The code default for `barge_in` is `false`; `.env.example` enables it. The
-effective value therefore depends on the local `.env`.
+The code default for `barge_in` is `true`, matching the README headline
+experience. Set `VA_BARGE_IN=false` when debugging or when a particular audio
+environment needs interruptions disabled. The candidate still needs 500 ms of
+speech and a semantic interruption decision, so background noise and
+acknowledgements do not automatically cancel playback.
 
 ## 14. Failure behavior: never dead air
 
@@ -531,7 +541,9 @@ complete or that the model interpreted the data correctly.
 
 ### Unit and integration tests
 
-The repository currently collects 317 tests. They cover framing, VAD,
+The repository's suite is collected with `uv run pytest --collect-only -q`; the
+reported count should not be treated as a permanent product number. The suite
+covers framing, VAD,
 resampling, playback, interruption semantics, memory, tools, retrieval,
 localization, injection controls, WebSocket tokens, server health, grounding and
 dashboard structure.
@@ -584,7 +596,8 @@ Use percentiles and repeated runs rather than one impressive sample.
 ### Normal local setup
 
 ```powershell
-uv sync --extra dev --extra local --extra agent --extra cuda
+uv sync --extra dev --extra local --extra agent
+# Add --extra cuda on an NVIDIA host when GPU ASR is required.
 uv run python scripts/fetch_models.py
 uv run voice-agent
 ```
@@ -597,6 +610,10 @@ Then open:
 
 The local stack also expects Ollama to be running with a configured model such
 as `qwen2.5:7b`.
+
+Set `VA_SESSION_SECRET` to a stable random value for a long-lived local setup.
+When it is absent, the server generates an ephemeral per-process secret and
+logs that signed media-session tokens will not survive a restart.
 
 ### Settings with the greatest behavioral effect
 

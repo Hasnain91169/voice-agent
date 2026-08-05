@@ -36,9 +36,11 @@ async def _readiness(ctx: AppState) -> tuple[bool, dict[str, object]]:
     checks = await ctx.providers.health()
     failed = [f"{name}: {result.detail}" for name, result in checks.items() if not result.ok]
     ok = ctx.ready and ctx.cache.ready and not failed
+    agent_warning = getattr(ctx.turns, "degraded_reason", None)
     return ok, {
         "ok": ok,
         "detail": "; ".join(failed) if failed else "",
+        "agent_warning": agent_warning,
         "providers": {
             "asr": ctx.providers.asr.name,
             "tts": ctx.providers.tts.name,
