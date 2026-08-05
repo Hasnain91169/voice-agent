@@ -17,9 +17,8 @@ For a code-level walkthrough and call lifecycle explanation, read the
 [complete project guide](docs/PROJECT_GUIDE.md).
 
 For the application packet, see the
-[slide deck](docs/application/voice-agent-summary-deck.pptx),
-[slide montage](docs/application/voice-agent-summary-deck-montage.png), and
-[artifact checklist](docs/application/readme-artifact-checklist.md).
+[slide deck](docs/application/voice-agent-summary-deck.pptx) and
+[slide montage](docs/application/voice-agent-summary-deck-montage.png).
 
 ## Visual tour
 
