@@ -19,8 +19,7 @@ spoken-memory correction, provider warm-up, grounding and measurement.
 
 - For a five-minute overview, read sections 1 to 4.
 - To understand the implementation, read sections 5 to 13.
-- To run and debug it, use sections 14 to 17.
-- To prepare for a demo or interview, use sections 18 and 19.
+- To run it and understand its evidence, use sections 14 to 17.
 - Use the final glossary whenever an audio term is unfamiliar.
 
 ## 1. What the product does
@@ -618,65 +617,6 @@ as `qwen2.5:7b`.
 The code default and `.env.example` both use the measured 450 ms endpoint. Check
 the effective value in the dashboard's calibration event before a demo,
 especially after experimenting with lower-latency values.
-
-## 18. How to explain the project in an interview
-
-### Thirty-second version
-
-> I built a browser-based real-time voice agent for field sales reps. It uses
-> faster-whisper, a LangGraph tool loop over seeded CRM and ERP data, and Piper
-> TTS. The deeper work was the real-time layer: one task owns inbound audio,
-> VAD and endpointing are frame-based, a response is one cancellation scope,
-> and after barge-in the conversation stores only what the caller actually
-> heard. I also built text and audio-loopback evals, retrieval benchmarks and
-> live grounding telemetry.
-
-### The strongest technical story
-
-Lead with spoken memory during barge-in. Many demos stop audio but still commit
-the full generated answer. This project maps played bytes back to text and
-commits the truncated version, so the next turn reasons from the caller's actual
-experience.
-
-### The strongest trade-off story
-
-Lead with endpointing. A 250 ms hangover looked good for latency but caused the
-agent to speak over natural pauses. The project measured the trade across audio
-scenarios and moved the operational target to 450 ms.
-
-### The strongest evaluation story
-
-Explain that text evals cannot validate VAD, playback or barge-in. The audio
-loopback implements the same transport protocol as the browser and feeds real
-20 ms frames through the full pipeline. It measures first audio from outside
-the process and checks that interruption actually changed committed history.
-
-### Be candid about the boundary
-
-This repository is a reproducible local engineering demonstration, not the TMC
-production deployment. Your production Vonage experience is separate evidence
-that you have shipped telephony. Keeping those claims separate makes both more
-credible.
-
-## 19. Recommended learning order
-
-Read these files in sequence:
-
-1. `docs/PROJECT_GUIDE.md` - the mental model.
-2. `src/voice_agent/config.py` - the operating parameters.
-3. `src/voice_agent/transports/base.py` and `rx.py` - audio ownership.
-4. `src/voice_agent/audio/vad.py` - turn detection.
-5. `src/voice_agent/pipeline.py` - the live behavior.
-6. `src/voice_agent/session.py` - call state and spoken memory.
-7. `src/voice_agent/agent/graph.py` - reasoning and tool loop.
-8. `src/voice_agent/agent/tools/sales.py` - domain capabilities.
-9. `src/voice_agent/agent/retrieval.py` - note search.
-10. `src/voice_agent/server/static/demo.html` - browser audio and telemetry.
-11. `evals/harness.py` - end-to-end evidence.
-12. `docs/architecture.md` - the design arguments and measured lessons.
-
-Do not begin with provider adapters. They are important, but they are leaves on
-the architecture. The ownership and turn loop explain the system.
 
 ## Glossary
 
