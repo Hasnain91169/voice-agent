@@ -125,7 +125,9 @@ barge-in scenario where they match.
 which cancels the recovery, and the call spirals. Every failure branch plays
 something: a clarifier when nothing was transcribed, a holding line when the
 model stalls, an error line when a turn dies. All are synthesised at startup so
-no recovery path pays synthesis latency at the moment it fires.
+no recovery path pays synthesis latency at the moment it fires. The opening
+also has cached morning, afternoon and evening variants selected when a call
+starts.
 
 ## The domain
 

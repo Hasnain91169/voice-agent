@@ -32,11 +32,16 @@
   <text x="978" y="474" fill="#8ca098" font-family="Segoe UI, Arial, sans-serif" font-size="14" font-weight="500" letter-spacing="0" text-anchor="middle">650ms</text>
   <line x1="518" y1="140" x2="518" y2="440" stroke="#34d399" stroke-width="2" stroke-linecap="round" stroke-dasharray="6 6"/>
   <text x="518" y="124" fill="#34d399" font-family="Segoe UI, Arial, sans-serif" font-size="15" font-weight="500" letter-spacing="0" text-anchor="middle">shipped 450ms</text>
-  <rect x="1120" y="150" width="360" height="238" rx="12" fill="#111614" stroke="#26322f" opacity="1"/>
-  <text x="1145" y="184" fill="#e6efeb" font-family="Segoe UI, Arial, sans-serif" font-size="21" font-weight="700" letter-spacing="0" text-anchor="start">Read this as a product decision</text>
-  <text x="1145" y="220" fill="#fbbf24" font-family="Segoe UI, Arial, sans-serif" font-size="15" font-weight="500" letter-spacing="0" text-anchor="start">250ms: 624ms p50, but 10 of 30 overlaps</text>
-  <text x="1145" y="250" fill="#34d399" font-family="Segoe UI, Arial, sans-serif" font-size="15" font-weight="500" letter-spacing="0" text-anchor="start">450ms: 938ms p50, 2 of 32 overlaps</text>
-  <text x="1145" y="280" fill="#8ca098" font-family="Segoe UI, Arial, sans-serif" font-size="15" font-weight="500" letter-spacing="0" text-anchor="start">650ms: 1250ms p50, 1 of 34 overlaps</text>
-  <text x="1145" y="326" fill="#e6efeb" font-family="Segoe UI, Arial, sans-serif" font-size="15" font-weight="400" letter-spacing="0" text-anchor="start">Current external run: p50 719ms across 43 turns; 4 overlaps.</text>
-  <text x="1145" y="356" fill="#fbbf24" font-family="Segoe UI, Arial, sans-serif" font-size="15" font-weight="500" letter-spacing="0" text-anchor="start">Known weakness: p95 1250-1360ms is over the 1200ms target.</text>
+  <rect x="1120" y="124" width="360" height="372" rx="12" fill="#111614" stroke="#26322f" opacity="1"/>
+  <text x="1145" y="158" fill="#e6efeb" font-family="Segoe UI, Arial, sans-serif" font-size="24" font-weight="700" letter-spacing="0" text-anchor="start">Read this as a product</text>
+  <text x="1145" y="188" fill="#e6efeb" font-family="Segoe UI, Arial, sans-serif" font-size="24" font-weight="700" letter-spacing="0" text-anchor="start">decision</text>
+  <text x="1145" y="228" fill="#fbbf24" font-family="Segoe UI, Arial, sans-serif" font-size="24" font-weight="500" letter-spacing="0" text-anchor="start">250ms: 624ms p50</text>
+  <text x="1145" y="254" fill="#fbbf24" font-family="Segoe UI, Arial, sans-serif" font-size="24" font-weight="500" letter-spacing="0" text-anchor="start">10 of 30 overlaps</text>
+  <text x="1145" y="294" fill="#34d399" font-family="Segoe UI, Arial, sans-serif" font-size="24" font-weight="500" letter-spacing="0" text-anchor="start">450ms: 938ms p50</text>
+  <text x="1145" y="320" fill="#34d399" font-family="Segoe UI, Arial, sans-serif" font-size="24" font-weight="500" letter-spacing="0" text-anchor="start">2 of 32 overlaps</text>
+  <text x="1145" y="360" fill="#8ca098" font-family="Segoe UI, Arial, sans-serif" font-size="24" font-weight="400" letter-spacing="0" text-anchor="start">650ms: 1250ms p50</text>
+  <text x="1145" y="386" fill="#8ca098" font-family="Segoe UI, Arial, sans-serif" font-size="24" font-weight="400" letter-spacing="0" text-anchor="start">1 of 34 overlaps</text>
+  <text x="1145" y="426" fill="#e6efeb" font-family="Segoe UI, Arial, sans-serif" font-size="24" font-weight="400" letter-spacing="0" text-anchor="start">External run: p50 719ms</text>
+  <text x="1145" y="452" fill="#e6efeb" font-family="Segoe UI, Arial, sans-serif" font-size="24" font-weight="400" letter-spacing="0" text-anchor="start">43 turns; 4 overlaps</text>
+  <text x="1145" y="478" fill="#fbbf24" font-family="Segoe UI, Arial, sans-serif" font-size="24" font-weight="500" letter-spacing="0" text-anchor="start">Known weakness: p95 over target</text>
 </svg>

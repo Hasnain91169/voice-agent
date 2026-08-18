@@ -6,14 +6,16 @@ agent has already failed to respond, and now it pauses again while the fallback
 is generated.
 
 So the fixed lines are synthesised once at startup and held as PCM. Playing one
-costs a queue append. The set is small and bounded — five short lines — so this
-is a few hundred kilobytes, not a cache with an eviction policy.
+costs a queue append. The set is small and bounded — seven short lines,
+including three time-aware greetings — so this is a few hundred kilobytes, not
+a cache with an eviction policy.
 """
 
 from __future__ import annotations
 
 import logging
 from collections.abc import Sequence
+from datetime import datetime
 
 from voice_agent.agent import prompts
 from voice_agent.agent.prompts import CACHED_LINES
@@ -77,6 +79,10 @@ class PromptCache:
         one failure mode the whole cache exists to prevent.
         """
         return self._audio.get((language, name)) or self._audio.get(("en", name))
+
+    def greeting(self, language: str = "en", now: datetime | None = None) -> bytes | None:
+        """Return the cached greeting appropriate for the call's local time."""
+        return self.get(prompts.greeting_name(now), language)
 
     def duration_ms(self, name: str, language: str = "en") -> int:
         audio = self.get(name, language)

@@ -125,7 +125,7 @@ Shared process state lives in `AppState`:
 | `providers` | Warm ASR, TTS and LLM instances shared across calls |
 | `turns` | LangGraph or direct reasoning backend |
 | `store` | Direct-mode conversation memory |
-| `cache` | Pre-synthesized greeting and recovery audio |
+| `cache` | Pre-synthesized time-aware greetings and recovery audio |
 | `http` | Shared HTTP client for provider connections |
 | `session_secret` | Signs short-lived media socket tokens |
 | `active` | Number of live calls |
@@ -499,7 +499,9 @@ startup.
 | Tool fails | Return a short error to the graph so it can recover |
 | Provider not warm | Keep `/health` and session creation unavailable |
 
-The greeting is also cached and plays at the start of a call when available.
+The greeting is also cached in morning, afternoon and evening variants. The
+call selects the appropriate local-time variant when it starts, so a long-lived
+server does not keep saying "good morning" after the day changes.
 
 ## 15. Browser dashboard and event stream
 

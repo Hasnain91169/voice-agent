@@ -14,6 +14,8 @@ a delivery date, agreeing to a discount.
 
 from __future__ import annotations
 
+from datetime import datetime
+
 from voice_agent.agent.tools.db import REFERENCE_DATE
 
 #: The snapshot the data represents. Stated to the model so it can be honest
@@ -111,12 +113,46 @@ CACHED_LINES: dict[str, dict[str, str]] = {
         "en": "Sorry, something went wrong my end. Could you ask me again?",
         "de": "Entschuldigung, bei mir ist etwas schiefgelaufen. Fragst du noch einmal?",
     },
-    #: Optional opening line.
-    "greeting": {
-        "en": "Morning. What do you need?",
-        "de": "Morgen. Was brauchst du?",
+    #: Opening lines are all cached because the call may start at any hour.
+    "greeting_morning": {
+        "en": "Good morning. What do you need?",
+        "de": "Guten Morgen. Was brauchst du?",
+    },
+    "greeting_afternoon": {
+        "en": "Good afternoon. What do you need?",
+        "de": "Guten Tag. Was brauchst du?",
+    },
+    "greeting_evening": {
+        "en": "Good evening. What do you need?",
+        "de": "Guten Abend. Was brauchst du?",
     },
 }
+
+
+def greeting_period(now: datetime | None = None) -> str:
+    """Return the greeting period for the local time at call start."""
+    if now is None:
+        hour = datetime.now().astimezone().hour
+    elif now.tzinfo is None:
+        hour = now.hour
+    else:
+        hour = now.astimezone().hour
+
+    if 5 <= hour < 12:
+        return "morning"
+    if 12 <= hour < 18:
+        return "afternoon"
+    return "evening"
+
+
+def greeting_name(now: datetime | None = None) -> str:
+    """Return the cached line name for the current local time."""
+    return f"greeting_{greeting_period(now)}"
+
+
+def greeting(language: str = "en", now: datetime | None = None) -> str:
+    """Return a time-appropriate opening line in the requested language."""
+    return line(greeting_name(now), language)
 
 
 def line(name: str, language: str = "en") -> str:

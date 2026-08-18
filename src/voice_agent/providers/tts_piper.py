@@ -9,11 +9,12 @@ Two Piper flags make that possible. ``--json-input`` keeps the process reading
 requests as JSON lines instead of exiting after one, and ``--output_raw`` emits
 PCM as it is produced rather than writing a complete WAV file at the end.
 
-The cost is that raw output has no delimiter between utterances, so the end of a
-clause is detected by the stream going idle. That costs nothing on the latency
-that matters — audio is already flowing to the caller by then — it only delays
-when the *next* clause starts synthesising. Piper runs far faster than realtime,
-so serialising clauses still keeps the playback queue fed.
+Raw output has no protocol delimiter between utterances. Piper does, however,
+append an exact run of zero-valued samples when ``--sentence_silence`` is set.
+That run is used as an in-band end marker and removed before resampling, so an
+ordinary scheduler pause can never make the tail of one clause leak into the
+next. Piper runs far faster than realtime, so serialising clauses still keeps
+the playback queue fed.
 """
 
 from __future__ import annotations
@@ -39,9 +40,14 @@ log = logging.getLogger(__name__)
 #: promptly, large enough not to syscall per sample.
 _READ_BYTES = 4_096
 
-#: Silence on stdout that marks the end of an utterance. Piper produces audio
-#: continuously while synthesising, so a gap this long means it has finished.
-_IDLE_MS = 120
+#: Piper appends this much exact digital silence after each JSON request. It is
+#: an in-band utterance delimiter, removed before audio reaches the caller.
+_SENTENCE_SILENCE_MS = 200
+
+#: A safety net only. Normal completion is signalled by the silence marker; if
+#: output stalls before it arrives, retire the process so a delayed tail cannot
+#: contaminate the next request.
+_STREAM_STALL_TIMEOUT_S = 2.0
 
 #: How long to wait for the *first* audio of a clause before giving up.
 _FIRST_AUDIO_TIMEOUT_S = 20.0
@@ -66,8 +72,8 @@ class PiperTTS:
         self._lock = asyncio.Lock()
         self._native_rate = _read_voice_rate(voice)
         #: True while a clause's audio may still be unread — set before reading
-        #: and cleared only on normal completion, so a clause abandoned by
-        #: barge-in leaves it set and the next call knows to drain first.
+        #: and cleared only after its end marker, so a clause abandoned by
+        #: barge-in causes the process to be replaced before the next request.
         self._dirty = False
         #: Processes retired by a voice switch, kept only until they are
         #: reaped. Dropping the reference without waiting leaves asyncio to
@@ -131,14 +137,11 @@ class PiperTTS:
             "--json-input",
             "--length_scale",
             "0.95",
-            # Piper appends 200ms of silence to every utterance it synthesises.
-            # That is right for a whole sentence and wrong here, because a
-            # clause is not the end of a thought — the pipeline splits on
-            # commas, so a three-clause answer collected 600ms of dead air in
-            # the middle of one spoken sentence. Measured: clause splitting
-            # added 922ms of audio to a sentence that is 6.8s whole.
+            # Piper appends exact zero samples after each sentence. They are an
+            # output delimiter here and are removed before resampling, so this
+            # does not add an audible pause between pipeline clauses.
             "--sentence_silence",
-            "0.0",
+            str(_SENTENCE_SILENCE_MS / 1000.0),
             "-q",
             stdin=asyncio.subprocess.PIPE,
             stdout=asyncio.subprocess.PIPE,
@@ -159,18 +162,15 @@ class PiperTTS:
             return
 
         async with self._lock:
+            # A cancelled generator may leave both queued and not-yet-generated
+            # audio behind. There is no request id on raw stdout, so replacement
+            # is the only boundary that guarantees none of it reaches this turn.
+            if self._dirty:
+                log.info("restarting piper after an abandoned synthesis")
+                self._retire_process()
+
             process = await self._ensure_started()
             assert process.stdin is not None and process.stdout is not None
-
-            # Only drain when a previous clause was abandoned mid-stream, which
-            # leaves audio in the pipe that would otherwise be prepended to this
-            # one and played as the wrong words. Draining unconditionally would
-            # add the full idle window to *every* clause — measured at 255ms
-            # first-audio against 123ms without it, most of the TTS budget spent
-            # waiting for a pipe that is almost always already empty.
-            if self._dirty:
-                await self._drain(process)
-                self._dirty = False
 
             request = json.dumps({"text": clean}, ensure_ascii=False) + "\n"
             process.stdin.write(request.encode("utf-8"))
@@ -179,34 +179,47 @@ class PiperTTS:
 
             resampler = wav.StreamingResampler(self._native_rate, SAMPLE_RATE)
             trimmer = _EdgeTrimmer()
+            boundary = _PiperSentenceBoundary(
+                self._native_rate, marker_count=_sentence_marker_count(clean)
+            )
             started = False
             deadline = time.monotonic() + _FIRST_AUDIO_TIMEOUT_S
 
             while True:
-                timeout = _IDLE_MS / 1000.0 if started else 0.25
+                timeout = _STREAM_STALL_TIMEOUT_S if started else 0.25
                 try:
                     chunk = await asyncio.wait_for(
                         process.stdout.read(_READ_BYTES), timeout=timeout
                     )
                 except TimeoutError:
                     if started:
-                        break  # gap in the stream: the clause is finished
+                        log.warning(
+                            "piper output stalled before its sentence marker; "
+                            "retiring pid=%s",
+                            process.pid,
+                        )
+                        self._retire_process()
+                        break
                     if time.monotonic() > deadline:
+                        self._retire_process()
                         raise RuntimeError("piper produced no audio") from None
                     continue
 
                 if not chunk:  # process exited
+                    if self._process is process:
+                        self._process = None
+                    self._dirty = False
                     break
 
                 started = True
-                converted = resampler.process(chunk)
+                audio, complete = boundary.feed(chunk)
+                converted = resampler.process(audio)
                 if converted:
                     for piece in trimmer.feed(converted):
                         yield piece
-
-            # Reached only on normal completion; a cancelled generator leaves
-            # _dirty set so the next caller drains the abandoned tail.
-            self._dirty = False
+                if complete:
+                    self._dirty = False
+                    break
 
             tail = resampler.flush()
             if tail:
@@ -214,19 +227,6 @@ class PiperTTS:
                     yield piece
             for piece in trimmer.finish():
                 yield piece
-
-    async def _drain(self, process: asyncio.subprocess.Process) -> None:
-        """Discard any audio left over from an abandoned clause."""
-        assert process.stdout is not None
-        while True:
-            try:
-                chunk = await asyncio.wait_for(
-                    process.stdout.read(_READ_BYTES), timeout=_IDLE_MS / 1000.0
-                )
-            except TimeoutError:
-                return
-            if not chunk:
-                return
 
     async def warmup(self) -> None:
         """Start the process and synthesise once, before any caller waits on it."""
@@ -301,6 +301,79 @@ _SILENCE_RMS = 180
 #: leaves mid-sentence, and it is the same every time rather than whatever the
 #: model happened to generate.
 _TAIL_MS = 60
+
+
+class _PiperSentenceBoundary:
+    """Split one raw Piper utterance at its digital-silence marker.
+
+    Generated pauses contain low-amplitude waveform data; the marker Piper
+    appends is a run of literal zero samples. Short zero runs are held until
+    speech resumes and then emitted unchanged, preserving pauses inside a
+    clause. Only the full configured marker completes the request.
+    """
+
+    __slots__ = (
+        "_complete",
+        "_marker_bytes",
+        "_markers_left",
+        "_partial",
+        "_pending",
+        "_started",
+    )
+
+    def __init__(self, sample_rate: int, marker_count: int = 1) -> None:
+        self._marker_bytes = sample_rate * 2 * _SENTENCE_SILENCE_MS // 1000
+        self._markers_left = max(1, marker_count)
+        self._pending = bytearray()
+        self._partial = b""
+        self._started = False
+        self._complete = False
+
+    def feed(self, pcm: bytes) -> tuple[bytes, bool]:
+        if self._complete:
+            return b"", True
+
+        data = self._partial + pcm
+        if len(data) % 2:
+            self._partial = data[-1:]
+            data = data[:-1]
+        else:
+            self._partial = b""
+
+        out = bytearray()
+        for offset in range(0, len(data), 2):
+            sample = data[offset : offset + 2]
+            if sample == b"\x00\x00":
+                if self._started:
+                    self._pending += sample
+                    if len(self._pending) >= self._marker_bytes:
+                        self._pending.clear()
+                        self._markers_left -= 1
+                        self._started = False
+                        if self._markers_left == 0:
+                            self._complete = True
+                            return bytes(out), True
+                continue
+
+            self._started = True
+            if self._pending:
+                out += self._pending
+                self._pending.clear()
+            out += sample
+
+        return bytes(out), False
+
+
+def _sentence_marker_count(text: str) -> int:
+    """A safe upper bound for Piper's sentence splits.
+
+    Piper may treat abbreviations as one sentence or several, so counting every
+    terminal punctuation character can overestimate but cannot leave an extra
+    sentence unread. An overestimate hits the stall fallback and retires the
+    process after all audio was delivered; an underestimate could leak speech
+    into the next request.
+    """
+    return max(1, sum(character in ".!?" for character in text))
 
 
 class _EdgeTrimmer:

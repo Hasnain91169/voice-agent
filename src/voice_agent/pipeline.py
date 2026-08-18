@@ -114,7 +114,9 @@ class Pipeline:
         if self._settings.barge_in:
             log.info("[%s] barge-in armed", self._session.id)
 
-        greeting = self._cache.get("greeting")
+        # Pick from the pre-synthesised time variants at call start, rather
+        # than baking the server's startup hour into every later call.
+        greeting = self._cache.greeting(locale.current())
         pending = None
         if greeting:
             pending = await self._speak_cached("greeting", greeting)

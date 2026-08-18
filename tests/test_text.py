@@ -6,7 +6,11 @@ import numpy as np
 
 from voice_agent.audio import wav
 from voice_agent.config import SAMPLE_RATE
-from voice_agent.providers.tts_piper import _EdgeTrimmer
+from voice_agent.providers.tts_piper import (
+    _EdgeTrimmer,
+    _PiperSentenceBoundary,
+    _sentence_marker_count,
+)
 from voice_agent.text import ClauseAssembler, clean_for_speech
 
 
@@ -171,3 +175,58 @@ class TestEdgeTrimming:
         result = self._run(self._tone(200) + self._hush(150) + self._tone(200))
         spoken = len(result) / (SAMPLE_RATE * 2) * 1000
         assert spoken >= 540
+
+
+class TestPiperSentenceBoundary:
+    """The end marker must not mistake a synthesis pause for completion."""
+
+    _RATE = 1_000
+    _SPEECH = b"\x01\x00" * 40
+    _MARKER = b"\x00\x00" * 200
+
+    def test_full_marker_completes_without_emitting_silence(self) -> None:
+        boundary = _PiperSentenceBoundary(self._RATE)
+        audio, complete = boundary.feed(self._SPEECH + self._MARKER)
+
+        assert complete is True
+        assert audio == self._SPEECH
+
+    def test_short_internal_pause_is_preserved(self) -> None:
+        boundary = _PiperSentenceBoundary(self._RATE)
+        pause = b"\x00\x00" * 199
+
+        first, complete = boundary.feed(self._SPEECH + pause)
+        second, complete_after_speech = boundary.feed(self._SPEECH)
+
+        assert complete is False
+        assert complete_after_speech is False
+        assert first + second == self._SPEECH + pause + self._SPEECH
+
+    def test_marker_can_span_odd_sized_reads(self) -> None:
+        boundary = _PiperSentenceBoundary(self._RATE)
+        stream = self._SPEECH + self._MARKER
+        emitted: list[bytes] = []
+        complete = False
+
+        for offset in range(0, len(stream), 17):
+            audio, complete = boundary.feed(stream[offset : offset + 17])
+            emitted.append(audio)
+            if complete:
+                break
+
+        assert complete is True
+        assert b"".join(emitted) == self._SPEECH
+
+    def test_multi_sentence_request_waits_for_every_marker(self) -> None:
+        boundary = _PiperSentenceBoundary(self._RATE, marker_count=2)
+
+        first, complete_after_first = boundary.feed(self._SPEECH + self._MARKER)
+        second, complete_after_second = boundary.feed(self._SPEECH + self._MARKER)
+
+        assert complete_after_first is False
+        assert complete_after_second is True
+        assert first + second == self._SPEECH * 2
+
+    def test_marker_count_never_undercounts_abbreviation_stops(self) -> None:
+        assert _sentence_marker_count("Ask e.g. Alex now.") == 3
+        assert _sentence_marker_count("No punctuation") == 1

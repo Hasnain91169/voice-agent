@@ -1,6 +1,6 @@
 {"kind":"slide","id":"sl/y90nupkv","slide":1,"title":"A measured voice-agent system, not a stitched-together demo","textShapes":7}
 {"kind":"textbox","id":"sh/547294r6","slide":1,"text":"A measured voice-agent system, not a stitched-together demo","textPreview":"A measured voice-agent system, not a stitched-together demo","textChars":59,"textLines":1,"bbox":[72,438,860,128]}
-{"kind":"textbox","id":"sh/k3yl0zql","slide":1,"text":"Streaming audio, LangGraph tools, barge-in, spoken memory, and simulation-based evaluation.","textPreview":"Streaming audio, LangGraph tools, barge-in, spoken memory, and simulation-based evaluation.","textChars":91,"textLines":1,"bbox":[74,574,880,48]}
+{"kind":"textbox","id":"sh/k3yl0zql","slide":1,"text":"Streaming audio, LangGraph tools, barge-in, spoken memory, and simulation-based evaluation.","textPreview":"Streaming audio, LangGraph tools, barge-in, spoken memory, and simulation-based evaluation.","textChars":91,"textLines":1,"bbox":[72,574,880,48]}
 {"kind":"textbox","id":"sh/7qp4be9c","slide":1,"text":"Project brief","textPreview":"Project brief","textChars":13,"textLines":1,"bbox":[1028,578,180,32]}
 {"kind":"shape","id":"sh/ts7md4r2","slide":1,"bbox":[272,174,176,47]}
 {"kind":"textbox","id":"sh/sryl4zqx","slide":1,"text":"Barge-in","textPreview":"Barge-in","textChars":8,"textLines":1,"bbox":[286,190,142,13]}
@@ -8,7 +8,7 @@
 {"kind":"shape","id":"sh/utg3698n","slide":1,"bbox":[656,174,136,47]}
 {"kind":"textbox","id":"sh/wn6dc7eh","slide":1,"text":"Tests","textPreview":"Tests","textChars":5,"textLines":1,"bbox":[670,190,108,13]}
 {"kind":"textbox","id":"sh/hofulsf2","slide":1,"text":"run suite","textPreview":"run suite","textChars":9,"textLines":1,"bbox":[670,207,116,16]}
-{"kind":"image","id":"im/ri9kvmxs","slide":1,"name":"","geometry":"roundRect","bbox":[0,0,1280,416]}
+{"kind":"image","id":"im/5cze9svq","slide":1,"name":"","geometry":"roundRect","bbox":[0,0,1280,416]}
 {"kind":"notes","id":"nt/y90nupkv","slide":1,"text":""}
 {"kind":"slide","id":"sl/hwbqtkby","slide":2,"title":"The hard part is the call, not just the model","textShapes":10}
 {"kind":"textbox","id":"sh/bip8jmho","slide":2,"text":"The hard part is the call, not just the model","textPreview":"The hard part is the call, not just the model","textChars":45,"textLines":1,"bbox":[72,56,930,56]}
@@ -115,6 +115,6 @@
 {"kind":"textbox","id":"sh/o7ydoret","slide":8,"text":"The strongest claim is not “we measured it”; it is “we found where the measurement lied.”","textPreview":"The strongest claim is not “we measured it”; it is “we found where the measurement lied.”","textChars":89,"textLines":1,"bbox":[118,612,960,34]}
 {"kind":"textbox","id":"sh/98rehwve","slide":8,"text":"voice-agent","textPreview":"voice-agent","textChars":11,"textLines":1,"bbox":[72,664,220,24]}
 {"kind":"textbox","id":"sh/m5gvmhwn","slide":8,"text":"08","textPreview":"08","textChars":2,"textLines":1,"bbox":[1146,664,62,24]}
-{"kind":"image","id":"im/zqd8fe18","slide":8,"name":"","geometry":"roundRect","bbox":[66,166.65,556,180.7]}
-{"kind":"image","id":"im/ep47m9kn","slide":8,"name":"","geometry":"roundRect","bbox":[658,159.7,556,194.6]}
+{"kind":"image","id":"im/zqd8fe18","slide":8,"name":"","geometry":"roundRect","alt":"Endpointing trade-off chart with readable product decision summary","bbox":[72,159.7,556,180.7]}
+{"kind":"image","id":"im/ep47m9kn","slide":8,"name":"","geometry":"roundRect","bbox":[664,159.7,556,194.6]}
 {"kind":"notes","id":"nt/fu1gfa1s","slide":8,"text":""}
